@@ -17,7 +17,7 @@ export default class CharacterSelect extends Phaser.Scene {
     const { width, height } = this.cameras.main;
     const isPortrait = height > width;
 
-    // 1. Background Image (Beach Scene)
+    // 1. Background Image (Beach Scene)t
     const bg = this.add.image(width / 2, height / 2, 'menu_bg');
     const scaleX = width / bg.width;
     const scaleY = height / bg.height;
@@ -40,7 +40,7 @@ export default class CharacterSelect extends Phaser.Scene {
       stroke: '#000000',
       strokeThickness: 2
     }).setOrigin(0.5);
-    
+
     // Subtle float animation for title
     this.tweens.add({
       targets: title,
@@ -64,8 +64,8 @@ export default class CharacterSelect extends Phaser.Scene {
 
     this.selectionCards = [];
     if (isPortrait) {
-      this.createCharacterCard(width / 2, centerY - spacing/2, 'Male', 'male', 'male_select', cardScale);
-      this.createCharacterCard(width / 2, centerY + spacing/2, 'Female', 'female', 'female_select', cardScale);
+      this.createCharacterCard(width / 2, centerY - spacing / 2, 'Male', 'male', 'male_select', cardScale);
+      this.createCharacterCard(width / 2, centerY + spacing / 2, 'Female', 'female', 'female_select', cardScale);
     } else {
       this.createCharacterCard(width / 2 - 140 * cardScale, centerY, 'Male', 'male', 'male_select', cardScale);
       this.createCharacterCard(width / 2 + 140 * cardScale, centerY, 'Female', 'female', 'female_select', cardScale);
@@ -92,7 +92,7 @@ export default class CharacterSelect extends Phaser.Scene {
     cardBg.setStrokeStyle(2, 0xffffff, 0.4);
     cardBg.setName(spriteKey); // To identify which card is selected
     this.selectionCards.push(cardBg);
-    
+
     // Gradient overlay inside the card to help text contrast
     const cardOverlay = this.add.rectangle(0, 0, cardW, cardH, 0x000000, 0.2).setOrigin(0.5);
 
@@ -105,7 +105,7 @@ export default class CharacterSelect extends Phaser.Scene {
     }).setOrigin(0.5);
 
     const charSprite = this.add.sprite(0, 10 * scaleMul, spriteKey, 0);
-    
+
     // Fit sprite to card height (approx 140px safe height for sprite)
     const targetCharHeight = 130 * scaleMul;
     const charScale = targetCharHeight / charSprite.height;
@@ -114,7 +114,7 @@ export default class CharacterSelect extends Phaser.Scene {
     cardContainer.add([shadow, cardBg, cardOverlay, charSprite, nameText]);
 
     // Small selection indicator (hidden initially)
-    const indicator = this.add.circle(cardW/2 - 15, -cardH/2 + 15, 8, 0x14B8A6, 0).setOrigin(0.5);
+    const indicator = this.add.circle(cardW / 2 - 15, -cardH / 2 + 15, 8, 0x14B8A6, 0).setOrigin(0.5);
     indicator.setName('indicator');
     cardContainer.add(indicator);
 
@@ -135,13 +135,13 @@ export default class CharacterSelect extends Phaser.Scene {
 
     cardBg.on('pointerdown', () => {
       this.selectedChar = spriteKey;
-      
+
       // Update all cards and indicators
       this.selectionCards.forEach(card => {
         const isSelected = card.name === spriteKey;
         card.setFillStyle(0xffffff, isSelected ? 0.3 : 0.12);
         card.setStrokeStyle(isSelected ? 4 : 2, isSelected ? 0x14B8A6 : 0xffffff, isSelected ? 1 : 0.4);
-        
+
         // Find indicator in the parent container
         const parent = card.parentContainer as Phaser.GameObjects.Container;
         const ind = parent.getByName('indicator') as Phaser.GameObjects.Arc;
@@ -150,7 +150,7 @@ export default class CharacterSelect extends Phaser.Scene {
 
       // Character specific animation triggers
       if (animKey) {
-          charSprite.play(animKey);
+        charSprite.play(animKey);
       }
 
       // Activate Confirm Button
@@ -171,13 +171,13 @@ export default class CharacterSelect extends Phaser.Scene {
 
     // Center of footer area
     const footerY = height - (isPortrait ? 80 : 60);
-    this.confirmBtn = this.add.container(width / 2, footerY); 
+    this.confirmBtn = this.add.container(width / 2, footerY);
     this.confirmBtn.setAlpha(0).setScale(0.8);
 
     const btnBg = this.add.graphics();
     btnBg.fillStyle(0x14B8A6, 1);
-    btnBg.fillRoundedRect(-btnW/2, -btnH/2, btnW, btnH, 12);
-    
+    btnBg.fillRoundedRect(-btnW / 2, -btnH / 2, btnW, btnH, 12);
+
     const btnText = this.add.text(0, 0, 'CONFIRMAR E COMEÇAR', {
       fontFamily: 'Inter',
       fontSize: isPortrait ? '14px' : '16px',
@@ -198,11 +198,11 @@ export default class CharacterSelect extends Phaser.Scene {
     });
 
     this.confirmBtn.on('pointerover', () => {
-        this.tweens.add({ targets: this.confirmBtn, scale: 1.05, duration: 100 });
+      this.tweens.add({ targets: this.confirmBtn, scale: 1.05, duration: 100 });
     });
 
     this.confirmBtn.on('pointerout', () => {
-        this.tweens.add({ targets: this.confirmBtn, scale: 1, duration: 100 });
+      this.tweens.add({ targets: this.confirmBtn, scale: 1, duration: 100 });
     });
   }
 }
