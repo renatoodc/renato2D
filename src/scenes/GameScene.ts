@@ -34,7 +34,7 @@ export default class GameScene extends Phaser.Scene {
     const sourceImage = this.textures.get('calcadao').getSourceImage();
     const imageHeight = sourceImage && (sourceImage as HTMLImageElement).height > 0 ? (sourceImage as HTMLImageElement).height : 256;
     
-    // Tile horizontally across worldW
+    // Tile horizontally across world
     const boardwalk = this.add.tileSprite(0, calcadaoY, worldW, imageHeight, 'calcadao').setOrigin(0);
     boardwalk.scaleY = calcadaoHeight / imageHeight;
     boardwalk.setFlipY(true);
