@@ -9,18 +9,43 @@ export default class Preloader extends Phaser.Scene {
     this.load.image('menu_bg', '/assets/menu_bg.png');
     this.load.image('homem_img', '/assets/Homem.png');
     this.load.image('mulher_img', '/assets/Mulher.png');
+    this.load.image('renatao_img', '/assets/renatao.png');
+    
+    // Core Tiles restored from Git
     this.load.image('calcadao', '/assets/calcadao.png');
     this.load.image('sand', '/assets/sand_tile.png');
     this.load.image('water', '/assets/water_tile.png');
     
-    // Fallback graphics (use unique names)
-    const graphics = this.make.graphics({ x: 0, y: 0 });
-    graphics.fillStyle(0xe84393).fillRoundedRect(0, 0, 32, 48, 8).generateTexture('f_fb', 32, 48).clear();
-    graphics.fillStyle(0x3498db).fillRoundedRect(0, 0, 32, 48, 8).generateTexture('m_fb', 32, 48).clear();
+    // Other assets
+    this.load.image('orla', '/assets/orla grande com melhoramento.png');
+    this.load.image('rua_melhor', '/assets/nova rua reduzida.png');
+    this.load.image('predio', '/assets/ilhas gregas murado.png');
+    this.load.image('estacionamento', '/assets/extacio.png');
+    this.load.image('ferrari', '/assets/ferrari parada.png');
+    this.load.image('concha', '/assets/concha.png');
+    this.load.image('totem', '/assets/totem.png');
+    this.load.image('arvore_canteiro', '/assets/arvore canteiro.png');
+    this.load.image('ilhas_gregas_att', '/assets/ilha muro.png');
+    this.load.image('agua', '/assets/agua.png');
+    
+    // Welcome Scene Icons
+    this.load.image('welcome_rules', '/assets/welcome_rules.png');
+    this.load.image('welcome_game', '/assets/welcome_game.png');
+    this.load.image('welcome_visit', '/assets/welcome_visit.png');
+    this.load.image('welcome_bakery', '/assets/welcome_bakery.png');
+    this.load.image('welcome_wifi', '/assets/welcome_wifi.png');
+    
+    this.load.on('loaderror', (file: any) => {
+      console.error(`[PRELOADER] Error loading: ${file.key} from ${file.src}`);
+    });
+
+    // Fallbacks
+    const g = this.make.graphics({ x: 0, y: 0 });
+    g.fillStyle(0x3498db).fillRoundedRect(0, 0, 32, 48, 8).generateTexture('m_fb', 32, 48).clear();
+    g.fillStyle(0xe84393).fillRoundedRect(0, 0, 32, 48, 8).generateTexture('f_fb', 32, 48).clear();
   }
 
   create() {
-    // 1. Male Spritesheet (Homem.png: 4x3)
     if (this.textures.exists('homem_img')) {
       const img = this.textures.get('homem_img').getSourceImage() as HTMLImageElement;
       if (this.textures.exists('male')) this.textures.remove('male');
@@ -28,11 +53,8 @@ export default class Preloader extends Phaser.Scene {
         frameWidth: Math.floor(img.width / 4), 
         frameHeight: Math.floor(img.height / 3) 
       });
-    } else {
-        this.textures.addImage('male', this.textures.get('m_fb').getSourceImage() as any);
     }
 
-    // 2. Female Spritesheet (Mulher.png: 5x4)
     if (this.textures.exists('mulher_img')) {
       const img = this.textures.get('mulher_img').getSourceImage() as HTMLImageElement;
       if (this.textures.exists('female')) this.textures.remove('female');
@@ -40,37 +62,14 @@ export default class Preloader extends Phaser.Scene {
         frameWidth: Math.floor(img.width / 5), 
         frameHeight: Math.floor(img.height / 4) 
       });
-    } else {
-        this.textures.addImage('female', this.textures.get('f_fb').getSourceImage() as any);
     }
 
-    // Animations (using 'male' and 'female' as the final keys)
     this.createAnimations();
-
-    this.scene.start('CharacterSelect');
+    this.scene.start('WelcomeScene');
   }
 
   private createAnimations() {
-    if (!this.anims.exists('male_select')) {
-      this.anims.create({
-        key: 'male_select',
-        frames: this.anims.generateFrameNumbers('male', { start: 0, end: 11 }),
-        frameRate: 18,
-        repeat: 0,
-        yoyo: true
-      });
-    }
-
-    if (!this.anims.exists('female_select')) {
-      this.anims.create({
-        key: 'female_select',
-        frames: this.anims.generateFrameNumbers('female', { start: 0, end: 11 }),
-        frameRate: 15,
-        repeat: 0
-      });
-    }
-
-    if (!this.anims.exists('male_walk')) {
+    if (!this.anims.exists('male_walk') && this.textures.exists('male')) {
       this.anims.create({
         key: 'male_walk',
         frames: this.anims.generateFrameNumbers('male', { start: 0, end: 11 }),
@@ -78,12 +77,11 @@ export default class Preloader extends Phaser.Scene {
         repeat: -1
       });
     }
-
-    if (!this.anims.exists('female_walk')) {
+    if (!this.anims.exists('female_walk') && this.textures.exists('female')) {
       this.anims.create({
         key: 'female_walk',
         frames: this.anims.generateFrameNumbers('female', { start: 0, end: 11 }),
-        frameRate: 12,
+        frameRate: 15,
         repeat: -1
       });
     }

@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   private baseSpeed: number = 200;
-  private baseScale: number = 1.5;
+  public baseScale: number = 1.5;
 
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
     super(scene, x, y, texture);
@@ -12,7 +12,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     // Calculate base scale to standardize character height
     // We aim for a consistent visual height in the game
-    const targetHeight = 2.5 * 48; // Standardized height based on original 1.5 scale of a 48px sprite
+    const targetHeight = 3.5 * 48; // Standardized height based on 3.5 scale to match the massive 4096px background map
     this.baseScale = targetHeight / this.height;
     
     // Fine-tune adjustment for female character if it still feels off
@@ -27,6 +27,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.setSize(24, 24);
     body.setOffset(4, 24); // Feet collision for top-down
+  }
+
+  freeze(zoom: boolean = false) {
+    this.setVelocity(0, 0);
+    if (this.anims.isPlaying) this.stop();
+    this.setFrame(0);
+    this.setScale(zoom ? this.baseScale * 2.0 : this.baseScale);
+    if (zoom) this.setDepth(100001); // Bring to front over UI if needed, or just below UI
   }
 
   update(cursors: Phaser.Types.Input.Keyboard.CursorKeys, virtualJoystick?: { x: number, y: number }) {

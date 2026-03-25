@@ -106,10 +106,22 @@ export default class CharacterSelect extends Phaser.Scene {
 
     const charSprite = this.add.sprite(0, 10 * scaleMul, spriteKey, 0);
 
-    // Fit sprite to card height (approx 140px safe height for sprite)
-    const targetCharHeight = 130 * scaleMul;
-    const charScale = targetCharHeight / charSprite.height;
-    charSprite.setScale(charScale);
+    if (spriteKey === 'renatao_img') {
+      // Crop shoulders-up for the big portrait safely
+      const cropHeight = Math.min(charSprite.height, 350);
+      charSprite.setCrop(0, 0, charSprite.width, cropHeight);
+      
+      const targetCharHeight = 120 * scaleMul;
+      const charScale = targetCharHeight / (cropHeight || 1);
+      charSprite.setScale(charScale * 1.3); 
+      charSprite.setOrigin(0.5, 0);
+      charSprite.y = -40 * scaleMul; 
+    } else {
+      // Fit sprite to card height (approx 140px safe height for sprite)
+      const targetCharHeight = 130 * scaleMul;
+      const charScale = targetCharHeight / charSprite.height;
+      charSprite.setScale(charScale);
+    }
 
     cardContainer.add([shadow, cardBg, cardOverlay, charSprite, nameText]);
 

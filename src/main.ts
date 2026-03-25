@@ -4,6 +4,7 @@ import Preloader from './scenes/Preloader';
 import CharacterSelect from './scenes/CharacterSelect';
 import GameScene from './scenes/GameScene';
 import UIScene from './scenes/UIScene';
+import WelcomeScene from './scenes/WelcomeScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -25,7 +26,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false
     }
   },
-  scene: [Preloader, CharacterSelect, GameScene, UIScene]
+  scene: [Preloader, WelcomeScene, CharacterSelect, GameScene, UIScene]
 };
 
 export default new Phaser.Game(config);
