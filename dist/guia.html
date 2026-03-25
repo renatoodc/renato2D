@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Local - Refúgio em Itapuã</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e64d5d;
+            --secondary: #ff8a95;
+            --dark: #333333;
+            --light: #ffffff;
+            --bg: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--light);
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: -30px auto 40px;
+            padding: 0 20px;
+        }
+
+        .category-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 40px 0 20px;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border-left: 5px solid var(--primary);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: #666;
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+
+        .card .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--light);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        .card .btn:hover {
+            background-color: var(--dark);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: var(--light);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: transform 0.2s, background 0.2s;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            background-color: var(--bg);
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+            .grid { grid-template-columns: 1fr; }
+            .back-btn { top: 10px; left: 10px; padding: 8px 15px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="back-btn" onclick="window.close()">← VOLTAR AO JOGO</button>
+
+<header>
+    <h1>Refúgio em Itapuã</h1>
+    <p>Guia Local Exclusivo - Explore o melhor de Vila Velha e Vitória durante sua estadia.</p>
+</header>
+
+<div class="container">
+    
+    <section class="category-section">
+        <h2 class="section-title">🏛️ Histórico e Cultural</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>📍 Convento da Penha</h3>
+                <p>O maior símbolo do estado, no topo de um penhasco com vista deslumbrante. Passeio obrigatório!</p>
+                <a href="https://www.google.com/maps/search/Convento+da+Penha" target="_blank" class="btn">Ver no Maps</a>
+            </div>
+            <div class="card">
+                <h3>📍 Farol Santa Luzia</h3>
+                <p>Marco de 1870 com peças da Escócia. Cenário espetacular para fotos na entrada da Baía de Vitória.</p>
+                <a href="https://www.google.com/maps/search/Farol+Santa+Luzia+Vila+Velha" target="_blank" class="btn">Ver no Maps</a>
+            </div>
+            <div class="card">
+                <h3>📍 Fábrica Garoto</h3>
+                <p>Viagem ao mundo dos doces. Possui museu interativo e loja icônica. Requer agendamento para o tour.</p>
+                <a href="https://www.garoto.com.br/chocotour" target="_blank" class="btn">Agendar Tour</a>
+            </div>
+            <div class="card">
+                <h3>📍 Igreja do Rosário</h3>
+                <p>Marco religioso mais antigo em funcionamento no Brasil. Tesouro da época da colonização.</p>
+                <a href="https://www.google.com/maps/search/Igreja+Matriz+Nossa+Senhora+do+Rosário+Prainha" target="_blank" class="btn">Ver no Maps</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="category-section">
+        <h2 class="section-title">🏖️ Melhores Praias</h2>
+        <div class="grid">
+            <div class="card" style="border-left-color: #4da6ff;">
+                <h3>📍 Praia de Itapuã</h3>
+                <p>A poucos passos de casa! Ambiente familiar e partida para as Ilhas Pituã e Itatiaia.</p>
+                <a href="https://www.google.com/maps/search/Praia+de+Itapuã+Vila+Velha" target="_blank" class="btn" style="background-color: #4da6ff;">Ver no Maps</a>
+            </div>
+            <div class="card" style="border-left-color: #4da6ff;">
+                <h3>📍 Praia da Sereia</h3>
+                <p>Verdadeira piscina natural. Protegida por recifes, é perfeita para crianças e Stand-up Paddle.</p>
+                <a href="https://www.google.com/maps/search/Praia+da+Sereia+Vila+Velha" target="_blank" class="btn" style="background-color: #4da6ff;">Ver no Maps</a>
+            </div>
+            <div class="card" style="border-left-color: #4da6ff;">
+                <h3>📍 Praia da Costa</h3>
+                <p>A mais famosa da cidade. Extenso calçadão, quiosques e águas claras ideais para banho.</p>
+                <a href="https://www.google.com/maps/search/Praia+da+Costa+Vila+Velha" target="_blank" class="btn" style="background-color: #4da6ff;">Ver no Maps</a>
+            </div>
+            <div class="card" style="border-left-color: #4da6ff;">
+                <h3>📍 Praia Secreta</h3>
+                <p>Refúgio fotogênico escondido. Águas cristalinas e rústicas próximo ao Farol Santa Luzia.</p>
+                <a href="https://www.google.com/maps/search/Praia+Secreta+Vila+Velha" target="_blank" class="btn" style="background-color: #4da6ff;">Ver no Maps</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="category-section">
+        <h2 class="section-title">🌳 Natureza</h2>
+        <div class="grid">
+            <div class="card" style="border-left-color: #2eb85c;">
+                <h3>📍 Morro do Moreno</h3>
+                <p>Mirante natural espetacular. Ideal para assistir ao pôr do sol com vista 360º da baía.</p>
+                <a href="https://www.google.com/maps/search/Morro+do+Moreno+Vila+Velha" target="_blank" class="btn" style="background-color: #2eb85c;">Ver no Maps</a>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    &copy; 2026 Refúgio em Itapuã - Vila Velha, ES
+</footer>
+
+</body>
+</html>

@@ -264,6 +264,17 @@ export default class GameScene extends Phaser.Scene {
     this.cursors = this.input.keyboard!.createCursorKeys();
     this.input.keyboard!.on('keydown-SPACE', this.handleInteract, this);
     this.events.on('joystickMove', (d:any) => this.virtualJoystick = d);
+
+    // NPC Traffic Timer (Every 1 minute)
+    this.time.addEvent({
+      delay: 60000,
+      callback: this.spawnNPCFerrari,
+      callbackScope: this,
+      loop: true
+    });
+    
+    // Initial spawn
+    this.spawnNPCFerrari();
   }
 
   update() {
@@ -439,5 +450,19 @@ export default class GameScene extends Phaser.Scene {
       this.selectionBox.lineStyle(3, 0xffffff).strokeRect(b.x, b.y, b.width, b.height);
       this.selectionBox.fillStyle(0xffffff).fillCircle(o.x, o.y, 6).setDepth(20001);
     }
+  }
+
+  private spawnNPCFerrari() {
+    console.log("[NPC] Spawning Ferrari...");
+    const npc = this.physics.add.image(0, 9024, 'ferrari');
+    npc.setOrigin(0.5, 1).setScale(0.5).setDepth(20).setFlipX(true);
+    npc.setVelocityX(500); // 500 pixels per second
+    
+    // Auto-destroy when out of bounds (+ some margin)
+    this.events.on('update', () => {
+      if (npc.active && npc.x > 4100) {
+          npc.destroy();
+      }
+    });
   }
 }

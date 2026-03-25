@@ -3,6 +3,42 @@ import Phaser from 'phaser';
 export default class WelcomeScene extends Phaser.Scene {
   private hasReadRules: boolean = false;
   private gameButton!: Phaser.GameObjects.Container;
+  private modalContainer: Phaser.GameObjects.Container | null = null;
+
+  // Centralized content for the user to edit
+  private ICON_DATA: any = {
+    'welcome_rules': {
+      title: '📝 REGRAS DA CASA',
+      content: `1. Silêncio e Convivência:
+Lei do Silêncio: Respeitar o silêncio entre 22h e 08h. O edifício é estritamente residencial e familiar. Multas aplicadas pelo condomínio por excesso de barulho serão de responsabilidade do hóspede.
+
+Proibido Festas/Eventos: Não é permitida a realização de eventos ou reuniões com pessoas que não constem na reserva.
+
+2. Ocupação e Visitas:
+Limite de Hóspedes: A capacidade máxima é de 8 pessoas. Apenas hóspedes registrados podem pernoitar. Visitas: Consultar o anfitrião no chat do Airbnb sobre visitas diurnas.
+
+3. Energia e Ventilação:
+Consumo Consciente: Ao sair, certifique-se de desligar todas as luzes e ventiladores. Como o apartamento é bem ventilado, manter as janelas abertas durante o dia ajuda a manter o frescor.
+
+4. Cuidados com o Imóvel:
+Fumo: É estritamente proibido fumar dentro do imóvel. Areia de Praia: Retirar o excesso ainda na rua/praia. Isso ajuda a manter a limpeza e o bom funcionamento dos ralos. Lixo: O descarte deve ser feito diariamente nos coletores do condomínio.
+
+5. Check-out e Chaves:
+Horário: O check-out deve ser respeitado para limpeza. O acesso é via check-in remoto, garantindo sua autonomia.`
+    },
+    'welcome_game': {
+      title: '🎮 GAME PARA CASHBACK',
+      content: 'Aproveite nosso jogo exclusivo para ganhar cashback na sua próxima estadia!'
+    },
+    'welcome_visit': {
+      title: '📍 GUIA LOCAL',
+      content: 'Clique para abrir nosso Guia Local exclusivo com as melhores praias, pontos turísticos e dicas de Vila Velha!'
+    },
+    'welcome_bakery': {
+      title: '🥐 PADARIAS E CAFÉS',
+      content: 'Confira as melhores opções de café da manhã próximas a você.'
+    }
+  };
 
   constructor() {
     super('WelcomeScene');
@@ -35,16 +71,16 @@ export default class WelcomeScene extends Phaser.Scene {
     const startY = height * 0.48;
 
     const items = [
-      { label: 'REGRAS DA CASA', texture: 'welcome_rules', callback: () => this.unlockGame() },
+      { label: 'REGRAS DA CASA', texture: 'welcome_rules', callback: () => this.showModal('welcome_rules') },
       { label: 'GAME PARA CASHBACK', texture: 'welcome_game', callback: () => this.startGame(), locked: true },
-      { label: 'Wi-Fi', texture: 'welcome_wifi' },
-      { label: 'LUGARES PARA VISITAR', texture: 'welcome_visit' },
-      { label: 'SUPERMERCADOS', emoji: '🛒' },
-      { label: 'FARMÁCIAS', emoji: '💊' },
-      { label: 'RESTAURANTES', emoji: '🍴' },
-      { label: 'PADARIAS E CAFÉS', texture: 'welcome_bakery' },
-      { label: 'CHECK IN/OUT', emoji: '🔑' },
-      { label: 'CONTATO', emoji: '📱' }
+      { label: 'Wi-Fi', texture: 'welcome_wifi', callback: () => this.showModal('welcome_wifi') },
+      { label: 'LUGARES PARA VISITAR', texture: 'welcome_visit', callback: () => window.open('guia.html', '_blank') },
+      { label: 'SUPERMERCADOS', emoji: '🛒', callback: () => this.showModal('supermarket') },
+      { label: 'FARMÁCIAS', emoji: '💊', callback: () => this.showModal('pharmacy') },
+      { label: 'RESTAURANTES', emoji: '🍴', callback: () => this.showModal('restaurant') },
+      { label: 'PADARIAS E CAFÉS', texture: 'welcome_bakery', callback: () => this.showModal('welcome_bakery') },
+      { label: 'CHECK IN/OUT', emoji: '🔑', callback: () => this.showModal('check_in_out') },
+      { label: 'CONTATO', emoji: '📱', callback: () => this.showModal('contact') }
     ];
 
     items.forEach((item: any, index) => {
@@ -138,6 +174,62 @@ export default class WelcomeScene extends Phaser.Scene {
 
   private startGame() {
     this.scene.start('CharacterSelect');
+  }
+
+  private showModal(key: string) {
+    if (this.modalContainer) return;
+
+    const { width, height } = this.scale;
+    const data = this.ICON_DATA[key] || { title: 'INFORMAÇÃO', content: 'Conteúdo em breve...' };
+
+    this.modalContainer = this.add.container(0, 0).setDepth(100);
+
+    // Overlay
+    const overlay = this.add.rectangle(0, 0, width, height, 0x000000, 0.7).setOrigin(0);
+    overlay.setInteractive();
+
+    // Card
+    const cardWidth = width * 0.8;
+    const cardHeight = height * 0.5;
+    const card = this.add.graphics();
+    card.fillStyle(0xffffff, 1);
+    card.fillRoundedRect(width / 2 - cardWidth / 2, height / 2 - cardHeight / 2, cardWidth, cardHeight, 20);
+
+    // Title
+    const title = this.add.text(width / 2, height / 2 - cardHeight / 2 + 50, data.title, {
+      fontFamily: 'Arial', fontSize: '32px', color: '#e64d5d', fontStyle: 'bold'
+    }).setOrigin(0.5);
+
+    // Content Text
+    const contentText = this.add.text(width / 2, height / 2 - cardHeight / 2 + 120, data.content, {
+      fontFamily: 'Arial', fontSize: '20px', color: '#333333', align: 'left', wordWrap: { width: cardWidth - 100 }
+    }).setOrigin(0.5, 0);
+
+    // Close Button
+    const btnWidth = 200;
+    const btnHeight = 60;
+    const closeBtn = this.add.container(width / 2, height / 2 + cardHeight / 2 - 60);
+    const btnBg = this.add.graphics().fillStyle(0xe64d5d, 1).fillRoundedRect(-btnWidth / 2, -btnHeight / 2, btnWidth, btnHeight, 10);
+    const btnText = this.add.text(0, 0, 'FECHAR', { fontFamily: 'Arial', fontSize: '24px', color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
+    closeBtn.add([btnBg, btnText]);
+    closeBtn.setInteractive(new Phaser.Geom.Rectangle(-btnWidth / 2, -btnHeight / 2, btnWidth, btnHeight), Phaser.Geom.Rectangle.Contains);
+
+    closeBtn.on('pointerdown', () => {
+      this.tweens.add({
+        targets: this.modalContainer,
+        alpha: 0,
+        duration: 200,
+        onComplete: () => {
+          this.modalContainer?.destroy();
+          this.modalContainer = null;
+          if (key === 'welcome_rules') this.unlockGame();
+        }
+      });
+    });
+
+    this.modalContainer.add([overlay, card, title, contentText, closeBtn]);
+    this.modalContainer.setAlpha(0);
+    this.tweens.add({ targets: this.modalContainer, alpha: 1, duration: 300 });
   }
 
   private showInfo(msg: string) {
