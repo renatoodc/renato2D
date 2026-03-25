@@ -75,7 +75,7 @@ export default class GameScene extends Phaser.Scene {
         return null;
       }
       
-      const floorKeys = ['rua_melhor', 'calcadao', 'orla', 'sand', 'water', 'agua'];
+      const floorKeys = ['rua_melhor', 'calcadao', 'orla', 'sand', 'water', 'agua', 'sand_tile', 'water_tile', 'nova_rua_reduzida', 'orla_grande'];
       newObj.setDepth(floorKeys.includes(key) ? 2 : 20);
       newObj.setOrigin(0.5, 0.5).setInteractive({ draggable: true });
       this.input.setDraggable(newObj);
@@ -97,14 +97,50 @@ export default class GameScene extends Phaser.Scene {
             rotation: parseFloat(obj.rotation.toFixed(3)), depth: obj.depth
           };
         });
-      localStorage.setItem('map_layout', JSON.stringify({ objects: objectsData, paintStrokes: this.paintStrokes }));
-      console.log("[MAP EDITOR] Saved to map_layout!");
+      const dataString = JSON.stringify({ objects: objectsData, paintStrokes: this.paintStrokes });
+      localStorage.setItem('map_layout', dataString);
+      
+      // Save to shared file via local API
+      fetch('/api/save-map', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: dataString
+      })
+      .then(() => console.log("[MAP EDITOR] Saved to shared map_layout.json!"))
+      .catch(err => console.error("[MAP EDITOR] Error saving to shared file:", err));
     };
 
-    (window as any).loadMap = () => {
-      const saved = localStorage.getItem('map_layout');
-      if (!saved) { console.log("[MAP EDITOR] No map_layout found."); return; }
-      const layout = JSON.parse(saved);
+    (window as any).loadMap = async () => {
+      let layout: any = null;
+      
+      // Try to load from shared file first
+      try {
+        const response = await fetch('/map_layout.json');
+        if (response.ok) {
+          const sharedLayout = await response.json();
+          // Only use shared layout if it contains data
+          if (sharedLayout.objects?.length > 0 || sharedLayout.paintStrokes?.length > 0) {
+            layout = sharedLayout;
+            console.log("[MAP EDITOR] Loaded from shared map_layout.json");
+          }
+        }
+      } catch (err) {
+        console.warn("[MAP EDITOR] Could not load shared map_layout.json, checking localStorage...");
+      }
+
+      // Fallback to localStorage if shared file was empty or failed
+      if (!layout) {
+        const saved = localStorage.getItem('map_layout');
+        if (saved) {
+          layout = JSON.parse(saved);
+          if (layout.objects?.length > 0 || layout.paintStrokes?.length > 0) {
+             console.log("[MAP EDITOR] Loaded from localStorage fallback");
+          }
+        }
+      }
+
+      if (!layout) { console.log("[MAP EDITOR] No map layout found."); return; }
+      
       this.paintStrokes = layout.paintStrokes || [];
       this.redrawPaint();
       const matched = new Set<Phaser.GameObjects.GameObject>();
@@ -115,7 +151,7 @@ export default class GameScene extends Phaser.Scene {
         }
         let existing = this.children.list.find(child => (child as any).texture?.key === data.key && !matched.has(child)) as any;
         if (existing) {
-          const depth = data.depth || (['rua_melhor','calcadao','orla','sand','water','agua'].includes(data.key) ? 2 : 20);
+          const depth = data.depth || (['rua_melhor','calcadao','orla','sand','water','agua','sand_tile','water_tile','nova_rua_reduzida','orla_grande'].includes(data.key) ? 2 : 20);
           existing.setPosition(data.x, data.y).setScale(data.scaleX, data.scaleY).setRotation(data.rotation).setDepth(depth);
           matched.add(existing);
         } else {
@@ -126,13 +162,13 @@ export default class GameScene extends Phaser.Scene {
           }
           else spawned = (window as any).spawn(data.key, data.x, data.y);
           if (spawned) { 
-            const depth = data.depth || (['rua_melhor','calcadao','orla','sand','water','agua'].includes(data.key) ? 2 : 20);
+            const depth = data.depth || (['rua_melhor','calcadao','orla','sand','water','agua','sand_tile','water_tile','nova_rua_reduzida','orla_grande'].includes(data.key) ? 2 : 20);
             spawned.setScale(data.scaleX, data.scaleY).setRotation(data.rotation).setDepth(depth); 
             matched.add(spawned); 
           }
         }
       });
-      console.log("[MAP EDITOR] Loaded from map_layout.");
+      console.log("[MAP EDITOR] Map reconstruction complete.");
     };
 
     (window as any).clearMap = () => {
@@ -154,7 +190,7 @@ export default class GameScene extends Phaser.Scene {
       this.children.list.forEach(c => { 
         if((c as any).input?.draggable && c !== this.floorLayer) {
            const k = (c as any).texture?.key;
-           (c as any).setDepth(['rua_melhor','calcadao','orla','sand','water','agua'].includes(k) ? 2 : 20);
+           (c as any).setDepth(['rua_melhor','calcadao','orla','sand','water','agua','sand_tile','water_tile','nova_rua_reduzida','orla_grande'].includes(k) ? 2 : 20);
         }
       });
     };

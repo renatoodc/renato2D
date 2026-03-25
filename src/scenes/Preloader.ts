@@ -19,7 +19,7 @@ export default class Preloader extends Phaser.Scene {
     // Other assets
     this.load.image('orla', '/assets/orla_grande.png');
     this.load.image('rua_melhor', '/assets/nova_rua_reduzida.png');
-    this.load.image('predio', '/assets/ilhas gregas murado.png');
+    this.load.image('predio', '/assets/ilha_muro.png'); // Fallback to ilha_muro
     this.load.image('estacionamento', '/assets/exxtac.png');
     this.load.image('ferrari', '/assets/ferrari_parada.png');
     this.load.image('concha', '/assets/concha.png');
@@ -27,6 +27,7 @@ export default class Preloader extends Phaser.Scene {
     this.load.image('arvore_canteiro', '/assets/arvore_canteiro.png');
     this.load.image('ilhas_gregas_att', '/assets/ilha_muro.png');
     this.load.image('agua', '/assets/agua.png');
+    this.load.image('mar_gif', '/assets/mar.gif');
     
     // Welcome Scene Icons
     this.load.image('welcome_rules', '/assets/welcome_rules.png');
@@ -34,6 +35,19 @@ export default class Preloader extends Phaser.Scene {
     this.load.image('welcome_visit', '/assets/welcome_visit.png');
     this.load.image('welcome_bakery', '/assets/welcome_bakery.png');
     this.load.image('welcome_wifi', '/assets/welcome_wifi.png');
+    
+    // Ensure all individual files are loaded as keys based on their names (for spawn command)
+    this.load.image('Homem', '/assets/Homem.png');
+    this.load.image('Mulher', '/assets/Mulher.png');
+    this.load.image('arvore_canteiro_file', '/assets/arvore_canteiro.png');
+    this.load.image('exxtac', '/assets/exxtac.png');
+    this.load.image('ferrari_parada', '/assets/ferrari_parada.png');
+    this.load.image('ilha_muro_file', '/assets/ilha_muro.png');
+    this.load.image('nova_rua_reduzida', '/assets/nova_rua_reduzida.png');
+    this.load.image('orla_grande', '/assets/orla_grande.png');
+    this.load.image('renatao', '/assets/renatao.png');
+    this.load.image('sand_tile', '/assets/sand_tile.png');
+    this.load.image('water_tile', '/assets/water_tile.png');
     
     this.load.on('loaderror', (file: any) => {
       console.error(`[PRELOADER] Error loading: ${file.key} from ${file.src}`);
