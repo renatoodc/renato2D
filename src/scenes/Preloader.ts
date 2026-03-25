@@ -17,15 +17,15 @@ export default class Preloader extends Phaser.Scene {
     this.load.image('water', '/assets/water_tile.png');
     
     // Other assets
-    this.load.image('orla', '/assets/orla grande com melhoramento.png');
-    this.load.image('rua_melhor', '/assets/nova rua reduzida.png');
+    this.load.image('orla', '/assets/orla_grande.png');
+    this.load.image('rua_melhor', '/assets/nova_rua_reduzida.png');
     this.load.image('predio', '/assets/ilhas gregas murado.png');
-    this.load.image('estacionamento', '/assets/extacio.png');
-    this.load.image('ferrari', '/assets/ferrari parada.png');
+    this.load.image('estacionamento', '/assets/exxtac.png');
+    this.load.image('ferrari', '/assets/ferrari_parada.png');
     this.load.image('concha', '/assets/concha.png');
     this.load.image('totem', '/assets/totem.png');
-    this.load.image('arvore_canteiro', '/assets/arvore canteiro.png');
-    this.load.image('ilhas_gregas_att', '/assets/ilha muro.png');
+    this.load.image('arvore_canteiro', '/assets/arvore_canteiro.png');
+    this.load.image('ilhas_gregas_att', '/assets/ilha_muro.png');
     this.load.image('agua', '/assets/agua.png');
     
     // Welcome Scene Icons
