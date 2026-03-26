@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supermercados - Refúgio em Itapuã</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e64d5d;
+            --secondary: #ff8a95;
+            --dark: #333333;
+            --light: #ffffff;
+            --bg: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), #ffb3ba);
+            color: var(--light);
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: -30px auto 40px;
+            padding: 0 20px;
+        }
+
+        .category-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 40px 0 20px;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border-left: 5px solid var(--primary);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: #666;
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+
+        .card .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .card .btn {
+            flex: 1;
+            min-width: 120px;
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--light);
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .card .btn:hover {
+            filter: brightness(0.9);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: var(--light);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: transform 0.2s, background 0.2s;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            background-color: var(--bg);
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+            .grid { grid-template-columns: 1fr; }
+            .back-btn { top: 10px; left: 10px; padding: 8px 15px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="back-btn" onclick="window.close()">← VOLTAR AO JOGO</button>
+
+<header>
+    <h1>Supermercados e Compras</h1>
+    <p>As melhores opções em Itapuã para suas compras do dia a dia e itens diferenciados.</p>
+</header>
+
+<div class="container">
+    
+    <section class="category-section">
+        <h2 class="section-title">🛒 Supermercados e Conveniência</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>📍 Perim - Itapuã</h3>
+                <p>O melhor e mais completo da região! Estrutura premium com padaria de alta qualidade e carnes especiais.</p>
+                <div class="btn-group">
+                    <a href="https://www.google.com/search?q=Supermercado+Perim+Itapua+Vila+Velha" target="_blank" class="btn">Maps</a>
+                </div>
+            </div>
+            <div class="card">
+                <h3>📍 Carone - Itapoã</h3>
+                <p>A 3 minutos de caminhada. Muito completo, ideal para carnes, vinhos, queijos e lanches rápidos.</p>
+                <div class="btn-group">
+                    <a href="https://www.google.com/search?q=Supermercado+Carone+Itapua+Vila+Velha" target="_blank" class="btn">Maps</a>
+                </div>
+            </div>
+            <div class="card">
+                <h3>📍 Extrabom Itapoã</h3>
+                <p>A menos de 300 metros. Ótimos preços e excelente seção de frutas e verduras frescas.</p>
+                <div class="btn-group">
+                    <a href="https://www.google.com/search?q=Extrabom+Supermercados+Itapua+Vila+Velha" target="_blank" class="btn">Maps</a>
+                </div>
+            </div>
+            <div class="card">
+                <h3>📍 Supermercado BH</h3>
+                <p>Preços super competitivos. Ótimo custo-benefício para repor bebidas e itens básicos.</p>
+                <div class="btn-group">
+                    <a href="https://www.google.com/search?q=Supermercado%20BH" target="_blank" class="btn">Maps</a>
+                </div>
+            </div>
+            <div class="card">
+                <h3>📍 Faé Express</h3>
+                <p>Mercado compacto na Av. Resplendor. Perfeito para compras rápidas e itens essenciais.</p>
+                <div class="btn-group">
+                    <a href="https://www.google.com/search?q=Fae+Express+Vila+Velha" target="_blank" class="btn">Maps</a>
+                </div>
+            </div>
+            <div class="card">
+                <h3>📍 Multishow Express</h3>
+                <p>Ideal para churrasco! Variedade de carnes selecionadas, carvão e bebidas geladas.</p>
+                <div class="btn-group">
+                    <a href="https://www.google.com/search?q=Multishow+Express+Itapua+Vila+Velha" target="_blank" class="btn">Maps</a>
+                </div>
+            </div>
+            <div class="card">
+                <h3>📍 Hipermercado Carrefour</h3>
+                <p>No Shopping Vila Velha. Gigantesco, ideal para grandes volumes e passeio no shopping.</p>
+                <div class="btn-group">
+                    <a href="https://www.google.com/search?q=Carrefour+Shopping+Vila+Velha" target="_blank" class="btn">Maps</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    &copy; 2026 Refúgio em Itapuã - Vila Velha, ES
+</footer>
+
+</body>
+</html>

@@ -28,15 +28,39 @@ Horário: O check-out deve ser respeitado para limpeza. O acesso é via check-in
     },
     'welcome_game': {
       title: '🎮 GAME PARA CASHBACK',
-      content: 'Aproveite nosso jogo exclusivo para ganhar cashback na sua próxima estadia!'
+      content: 'Aproveite nosso jogo exclusivo para ganhar cashback na sua próxima estadia! Você poderá explorar a cidade, encontrar itens raros e desbloquear prêmios reais para sua próxima reserva.\n\nRegras do Game:\n- Colete 5 moedas para ganhar 5% de desconto.\n- Encontre a concha dourada para um bônus surpresa!\n- Divirta-se respeitando os limites do mapa.'
     },
     'welcome_visit': {
       title: '📍 GUIA LOCAL',
-      content: 'Clique para abrir nosso Guia Local exclusivo com as melhores praias, pontos turísticos e dicas de Vila Velha!'
+      content: 'Clique para abrir nosso Guia Local exclusivo com as melhores praias, pontos turísticos e dicas de Vila Velha!\n\nRecomendações:\n1. Convento da Penha: Vista panorâmica incrível.\n2. Praia da Costa: Ótima para banho e caminhadas.\n3. Morro do Moreno: Trilhas e pôr do sol espetacular.\n4. Museu da Vale: Cultura e história ferroviária.'
     },
     'welcome_bakery': {
       title: '🥐 PADARIAS E CAFÉS',
-      content: 'Confira as melhores opções de café da manhã próximas a você.'
+      content: 'Confira as melhores opções de café da manhã próximas a você.\n\n- Padaria Monte Líbano: A mais tradicional, com buffet completo.\n- Café do Centro: Ideal para um café rápido e artesanal.\n- Doceria Gourmet: Bolos e doces incríveis para o seu final de tarde.'
+    },
+    'welcome_wifi': {
+      title: '📶 WI-FI',
+      content: 'Conecte-se e aproveite sua estadia!\n\nRede: [NOME_DA_REDE]\nSenha: [SENHA_DO_WIFI]\n\nA rede suporta alta velocidade para streaming e trabalho remoto.'
+    },
+    'supermarket': {
+      title: '🛒 SUPERMERCADOS',
+      content: 'Opções próximas para suas compras:\n\n- Supermercado Carone: Completo e com adega.\n- Hortifruti: Frutas e verduras sempre frescas.\n- Farmácia e Conveniência: Aberto 24h para emergências.'
+    },
+    'pharmacy': {
+      title: '💊 FARMÁCIAS',
+      content: 'Em caso de necessidade:\n\n- Farmácia Pague Menos (24h)\- Drogaria São Paulo\n- Farmácia local na esquina do prédio.'
+    },
+    'restaurant': {
+      title: '🍴 RESTAURANTES',
+      content: 'Sabores da região:\n\n- Cantina Italiana: Massas frescas.\n- Peixaria do Porto: Especialidade em frutos do mar e moqueca capixaba.\n- Hamburgueria Artesanal: Opção rápida e deliciosa.'
+    },
+    'check_in_out': {
+      title: '🔑 CHECK IN/OUT',
+      content: 'Informações importantes:\n\nCheck-in: A partir das 14:00. O acesso é via código digital enviado previamente.\n\nCheck-out: Até às 11:00. Por favor, deixe as chaves na caixa de segurança se houver, ou apenas feche a porta digital.'
+    },
+    'contact': {
+      title: '📱 CONTATO',
+      content: 'Estamos aqui para ajudar!\n\nAnfitrião: [NOME]\nWhatsApp: [NUMERO]\n\nEmergências do Prédio: [NUMERO_PORTARIA]'
     }
   };
 
@@ -75,7 +99,7 @@ Horário: O check-out deve ser respeitado para limpeza. O acesso é via check-in
       { label: 'GAME PARA CASHBACK', texture: 'welcome_game', callback: () => this.startGame(), locked: true },
       { label: 'Wi-Fi', texture: 'welcome_wifi', callback: () => this.showModal('welcome_wifi') },
       { label: 'LUGARES PARA VISITAR', texture: 'welcome_visit', callback: () => window.open('guia.html', '_blank') },
-      { label: 'SUPERMERCADOS', emoji: '🛒', callback: () => this.showModal('supermarket') },
+      { label: 'SUPERMERCADOS', emoji: '🛒', callback: () => window.open('supermercados.html', '_blank') },
       { label: 'FARMÁCIAS', emoji: '💊', callback: () => this.showModal('pharmacy') },
       { label: 'RESTAURANTES', emoji: '🍴', callback: () => this.showModal('restaurant') },
       { label: 'PADARIAS E CAFÉS', texture: 'welcome_bakery', callback: () => this.showModal('welcome_bakery') },
@@ -184,52 +208,174 @@ Horário: O check-out deve ser respeitado para limpeza. O acesso é via check-in
 
     this.modalContainer = this.add.container(0, 0).setDepth(100);
 
-    // Overlay
-    const overlay = this.add.rectangle(0, 0, width, height, 0x000000, 0.7).setOrigin(0);
-    overlay.setInteractive();
+    // Overlay with fade
+    const overlay = this.add.rectangle(0, 0, width, height, 0x000000, 0)
+      .setOrigin(0)
+      .setInteractive();
+    
+    this.tweens.add({ targets: overlay, fillAlpha: 0.6, duration: 300 });
 
-    // Card
-    const cardWidth = width * 0.8;
-    const cardHeight = height * 0.5;
-    const card = this.add.graphics();
-    card.fillStyle(0xffffff, 1);
-    card.fillRoundedRect(width / 2 - cardWidth / 2, height / 2 - cardHeight / 2, cardWidth, cardHeight, 20);
+    // Modal sizing
+    const isMobile = width < 600;
+    const cardWidth = isMobile ? width * 0.9 : Math.min(width * 0.6, 600);
+    const cardHeight = isMobile ? height * 0.7 : Math.min(height * 0.8, 700);
+    const cardX = width / 2 - cardWidth / 2;
+    const cardY = height / 2 - cardHeight / 2;
 
-    // Title
-    const title = this.add.text(width / 2, height / 2 - cardHeight / 2 + 50, data.title, {
-      fontFamily: 'Arial', fontSize: '32px', color: '#e64d5d', fontStyle: 'bold'
+    // Card background with Glassmorphism
+    const cardBg = this.add.graphics();
+    // Shadow
+    cardBg.fillStyle(0x000000, 0.2);
+    cardBg.fillRoundedRect(cardX + 5, cardY + 5, cardWidth, cardHeight, 24);
+    // Main background (semi-transparent)
+    cardBg.fillStyle(0xffffff, 0.9);
+    cardBg.fillRoundedRect(cardX, cardY, cardWidth, cardHeight, 24);
+    // Border
+    cardBg.lineStyle(2, 0xe64d5d, 0.4);
+    cardBg.strokeRoundedRect(cardX, cardY, cardWidth, cardHeight, 24);
+
+    // Close Icon (X) in top right
+    const closeX = cardX + cardWidth - 40;
+    const closeY = cardY + 40;
+    const closeIcon = this.add.container(closeX, closeY);
+    const closeCircle = this.add.graphics().fillStyle(0xf5f5f5, 1).fillCircle(0, 0, 20);
+    const closeText = this.add.text(0, 0, '✕', { fontSize: '24px', color: '#333', fontStyle: 'bold' }).setOrigin(0.5);
+    closeIcon.add([closeCircle, closeText]);
+    closeIcon.setInteractive(new Phaser.Geom.Circle(0, 0, 20), Phaser.Geom.Circle.Contains);
+    closeIcon.on('pointerover', () => closeCircle.clear().fillStyle(0xffcccc, 1).fillCircle(0, 0, 20));
+    closeIcon.on('pointerout', () => closeCircle.clear().fillStyle(0xf5f5f5, 1).fillCircle(0, 0, 20));
+    closeIcon.on('pointerdown', () => closeModal());
+
+    // Title (Static)
+    const title = this.add.text(width / 2, cardY + 60, data.title, {
+      fontFamily: 'Montserrat, Arial', 
+      fontSize: isMobile ? '26px' : '34px', 
+      color: '#e64d5d', 
+      fontStyle: 'bold',
+      align: 'center'
     }).setOrigin(0.5);
 
+    // Separator Line
+    const separator = this.add.graphics();
+    separator.lineStyle(1, 0x000000, 0.1);
+    separator.lineBetween(cardX + 40, cardY + 105, cardX + cardWidth - 40, cardY + 105);
+
+    // Scrollable Content Area
+    const margin = 40;
+    const contentWidth = cardWidth - (margin * 2);
+    const viewY = cardY + 125;
+    const viewHeight = cardHeight - (viewY - cardY) - 40; 
+
+    const contentContainer = this.add.container(width / 2, viewY);
+    
     // Content Text
-    const contentText = this.add.text(width / 2, height / 2 - cardHeight / 2 + 120, data.content, {
-      fontFamily: 'Arial', fontSize: '20px', color: '#333333', align: 'left', wordWrap: { width: cardWidth - 100 }
+    const contentText = this.add.text(0, 0, data.content, {
+      fontFamily: 'Inter, Arial', 
+      fontSize: isMobile ? '18px' : '20px', 
+      color: '#2d3436', 
+      align: 'left', 
+      wordWrap: { width: contentWidth },
+      lineSpacing: 12
     }).setOrigin(0.5, 0);
 
-    // Close Button
-    const btnWidth = 200;
-    const btnHeight = 60;
-    const closeBtn = this.add.container(width / 2, height / 2 + cardHeight / 2 - 60);
-    const btnBg = this.add.graphics().fillStyle(0xe64d5d, 1).fillRoundedRect(-btnWidth / 2, -btnHeight / 2, btnWidth, btnHeight, 10);
-    const btnText = this.add.text(0, 0, 'FECHAR', { fontFamily: 'Arial', fontSize: '24px', color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
-    closeBtn.add([btnBg, btnText]);
-    closeBtn.setInteractive(new Phaser.Geom.Rectangle(-btnWidth / 2, -btnHeight / 2, btnWidth, btnHeight), Phaser.Geom.Rectangle.Contains);
+    contentContainer.add(contentText);
 
-    closeBtn.on('pointerdown', () => {
+    // Mask for scrolling (with rounded bottom to match card)
+    const maskShape = this.make.graphics({ x: 0, y: 0 });
+    maskShape.fillStyle(0xffffff);
+    maskShape.fillRoundedRect(cardX + margin, viewY, contentWidth, viewHeight, { tl: 0, tr: 0, bl: 20, br: 20 });
+    const mask = maskShape.createGeometryMask();
+    contentContainer.setMask(mask);
+
+    // Scrolling Logic
+    let currentY = 0;
+    const minHeight = viewHeight;
+    const totalHeight = contentText.height;
+    const maxScroll = Math.max(0, totalHeight - minHeight);
+
+    const updateScroll = (delta: number) => {
+      currentY = Phaser.Math.Clamp(currentY + delta, -maxScroll, 0);
+      contentText.y = currentY;
+      
+      // Update scrollbar
+      if (maxScroll > 0) {
+        const scrollRatio = Math.abs(currentY) / maxScroll;
+        const barHeight = (viewHeight / totalHeight) * viewHeight;
+        const barRange = viewHeight - barHeight;
+        scrollbarThumb.y = viewY + (scrollRatio * barRange);
+      }
+    };
+
+    // Scrollbar Visual
+    const scrollbarBg = this.add.graphics();
+    const scrollbarThumb = this.add.graphics();
+    if (maxScroll > 0) {
+      scrollbarBg.fillStyle(0x000000, 0.05);
+      scrollbarBg.fillRoundedRect(cardX + cardWidth - 15, viewY, 6, viewHeight, 3);
+      
+      const barHeight = (viewHeight / totalHeight) * viewHeight;
+      scrollbarThumb.fillStyle(0xe64d5d, 0.7);
+      scrollbarThumb.fillRoundedRect(cardX + cardWidth - 15, 0, 6, barHeight, 3);
+      scrollbarThumb.y = viewY;
+    }
+
+    // Input Events for Scrolling
+    overlay.on('wheel', (_pointer: any, _over: any, _deltaX: number, deltaY: number) => {
+      updateScroll(-deltaY * 0.5);
+    });
+
+    let isDragging = false;
+    let lastP: number = 0;
+
+    overlay.on('pointerdown', (p: any) => {
+        isDragging = true;
+        lastP = p.y;
+    });
+
+    this.input.on('pointermove', (p: any) => {
+        if (!isDragging) return;
+        const delta = p.y - lastP;
+        lastP = p.y;
+        updateScroll(delta);
+    });
+
+    this.input.on('pointerup', () => {
+        isDragging = false;
+    });
+
+    // Close Action
+    const closeModal = () => {
       this.tweens.add({
         targets: this.modalContainer,
         alpha: 0,
-        duration: 200,
+        y: 20,
+        duration: 300,
+        ease: 'Back.easeIn',
         onComplete: () => {
           this.modalContainer?.destroy();
           this.modalContainer = null;
           if (key === 'welcome_rules') this.unlockGame();
+          // Remove global move/up listeners
+          this.input.off('pointermove');
+          this.input.off('pointerup');
         }
       });
-    });
+    };
 
-    this.modalContainer.add([overlay, card, title, contentText, closeBtn]);
+    // Add everything to main container
+    this.modalContainer.add([overlay, cardBg, title, separator, contentContainer, closeIcon]);
+    if (maxScroll > 0) this.modalContainer.add([scrollbarBg, scrollbarThumb]);
+
+    // Initial Animation
     this.modalContainer.setAlpha(0);
-    this.tweens.add({ targets: this.modalContainer, alpha: 1, duration: 300 });
+    this.modalContainer.y = -20;
+    this.tweens.add({
+      targets: this.modalContainer,
+      alpha: 1,
+      y: 0,
+      duration: 400,
+      ease: 'Back.easeOut'
+    });
   }
 
   private showInfo(msg: string) {

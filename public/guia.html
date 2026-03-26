@@ -111,21 +111,38 @@
             margin-bottom: 15px;
         }
 
+        .card .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
         .card .btn {
+            flex: 1;
+            min-width: 120px;
             display: inline-block;
             background-color: var(--primary);
             color: var(--light);
             text-decoration: none;
-            padding: 10px 20px;
+            padding: 10px 15px;
             border-radius: 10px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-align: center;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
 
         .card .btn:hover {
-            background-color: var(--dark);
+            filter: brightness(0.9);
+            transform: translateY(-2px);
+        }
+
+        .card .btn-trip {
+            background-color: #00af87; /* TripAdvisor Green */
         }
 
         footer {
@@ -185,22 +202,34 @@
             <div class="card">
                 <h3>📍 Convento da Penha</h3>
                 <p>O maior símbolo do estado, no topo de um penhasco com vista deslumbrante. Passeio obrigatório!</p>
-                <a href="https://www.google.com/maps/search/Convento+da+Penha" target="_blank" class="btn">Ver no Maps</a>
+                <div class="btn-group">
+                    <a href="https://www.google.com/maps/search/Convento+da+Penha" target="_blank" class="btn">Maps</a>
+                    <a href="https://www.tripadvisor.com.br/Attraction_Review-g303319-d2408107-Reviews-Nossa_Senhora_da_Penha_Convent-Vila_Velha_State_of_Espirito_Santo.html" target="_blank" class="btn btn-trip">TripAdvisor</a>
+                </div>
             </div>
             <div class="card">
                 <h3>📍 Farol Santa Luzia</h3>
                 <p>Marco de 1870 com peças da Escócia. Cenário espetacular para fotos na entrada da Baía de Vitória.</p>
-                <a href="https://www.google.com/maps/search/Farol+Santa+Luzia+Vila+Velha" target="_blank" class="btn">Ver no Maps</a>
+                <div class="btn-group">
+                    <a href="https://www.google.com/maps/search/Farol+Santa+Luzia+Vila+Velha" target="_blank" class="btn">Maps</a>
+                    <a href="https://www.tripadvisor.com.br/Attraction_Review-g303319-d8533291-Reviews-Farol_de_Santa_Luzia-Vila_Velha_State_of_Espirito_Santo.html" target="_blank" class="btn btn-trip">TripAdvisor</a>
+                </div>
             </div>
             <div class="card">
                 <h3>📍 Fábrica Garoto</h3>
                 <p>Viagem ao mundo dos doces. Possui museu interativo e loja icônica. Requer agendamento para o tour.</p>
-                <a href="https://www.garoto.com.br/chocotour" target="_blank" class="btn">Agendar Tour</a>
+                <div class="btn-group">
+                    <a href="https://www.garoto.com.br/chocotour" target="_blank" class="btn">Agendar</a>
+                    <a href="https://www.tripadvisor.com.br/Attraction_Review-g303319-d2424450-Reviews-Fabrica_de_Chocolates_Garoto-Vila_Velha_State_of_Espirito_Santo.html" target="_blank" class="btn btn-trip">TripAdvisor</a>
+                </div>
             </div>
             <div class="card">
                 <h3>📍 Igreja do Rosário</h3>
                 <p>Marco religioso mais antigo em funcionamento no Brasil. Tesouro da época da colonização.</p>
-                <a href="https://www.google.com/maps/search/Igreja+Matriz+Nossa+Senhora+do+Rosário+Prainha" target="_blank" class="btn">Ver no Maps</a>
+                <div class="btn-group">
+                    <a href="https://www.google.com/maps/search/Igreja+Matriz+Nossa+Senhora+do+Rosário+Prainha" target="_blank" class="btn">Maps</a>
+                    <a href="https://www.tripadvisor.com.br/Attraction_Review-g303319-d6589501-Reviews-Igreja_De_Nossa_Senhora_Do_Rosario-Vila_Velha_State_of_Espirito_Santo.html" target="_blank" class="btn btn-trip">TripAdvisor</a>
+                </div>
             </div>
         </div>
     </section>
@@ -211,22 +240,34 @@
             <div class="card" style="border-left-color: #4da6ff;">
                 <h3>📍 Praia de Itapuã</h3>
                 <p>A poucos passos de casa! Ambiente familiar e partida para as Ilhas Pituã e Itatiaia.</p>
-                <a href="https://www.google.com/maps/search/Praia+de+Itapuã+Vila+Velha" target="_blank" class="btn" style="background-color: #4da6ff;">Ver no Maps</a>
+                <div class="btn-group">
+                    <a href="https://www.google.com/maps/search/Praia+de+Itapuã+Vila+Velha" target="_blank" class="btn" style="background-color: #4da6ff;">Maps</a>
+                    <a href="https://www.tripadvisor.com.br/Attraction_Review-g303319-d10291461-Reviews-Praia_de_Itapua-Vila_Velha_State_of_Espirito_Santo.html" target="_blank" class="btn btn-trip">TripAdvisor</a>
+                </div>
             </div>
             <div class="card" style="border-left-color: #4da6ff;">
                 <h3>📍 Praia da Sereia</h3>
                 <p>Verdadeira piscina natural. Protegida por recifes, é perfeita para crianças e Stand-up Paddle.</p>
-                <a href="https://www.google.com/maps/search/Praia+da+Sereia+Vila+Velha" target="_blank" class="btn" style="background-color: #4da6ff;">Ver no Maps</a>
+                <div class="btn-group">
+                    <a href="https://www.google.com/maps/search/Praia+da+Sereia+Vila+Velha" target="_blank" class="btn" style="background-color: #4da6ff;">Maps</a>
+                    <a href="https://www.tripadvisor.com.br/Attraction_Review-g303319-d4056565-Reviews-Praia_da_Sereia-Vila_Velha_State_of_Espirito_Santo.html" target="_blank" class="btn btn-trip">TripAdvisor</a>
+                </div>
             </div>
             <div class="card" style="border-left-color: #4da6ff;">
                 <h3>📍 Praia da Costa</h3>
                 <p>A mais famosa da cidade. Extenso calçadão, quiosques e águas claras ideais para banho.</p>
-                <a href="https://www.google.com/maps/search/Praia+da+Costa+Vila+Velha" target="_blank" class="btn" style="background-color: #4da6ff;">Ver no Maps</a>
+                <div class="btn-group">
+                    <a href="https://www.google.com/maps/search/Praia+da+Costa+Vila+Velha" target="_blank" class="btn" style="background-color: #4da6ff;">Maps</a>
+                    <a href="https://www.tripadvisor.com.br/Attraction_Review-g303319-d2408104-Reviews-Praia_da_Costa-Vila_Velha_State_of_Espirito_Santo.html" target="_blank" class="btn btn-trip">TripAdvisor</a>
+                </div>
             </div>
             <div class="card" style="border-left-color: #4da6ff;">
                 <h3>📍 Praia Secreta</h3>
                 <p>Refúgio fotogênico escondido. Águas cristalinas e rústicas próximo ao Farol Santa Luzia.</p>
-                <a href="https://www.google.com/maps/search/Praia+Secreta+Vila+Velha" target="_blank" class="btn" style="background-color: #4da6ff;">Ver no Maps</a>
+                <div class="btn-group">
+                    <a href="https://www.google.com/maps/search/Praia+Secreta+Vila+Velha" target="_blank" class="btn" style="background-color: #4da6ff;">Maps</a>
+                    <a href="https://www.tripadvisor.com.br/Attraction_Review-g303319-d12847956-Reviews-Praia_Secreta-Vila_Velha_State_of_Espirito_Santo.html" target="_blank" class="btn btn-trip">TripAdvisor</a>
+                </div>
             </div>
         </div>
     </section>
@@ -237,7 +278,10 @@
             <div class="card" style="border-left-color: #2eb85c;">
                 <h3>📍 Morro do Moreno</h3>
                 <p>Mirante natural espetacular. Ideal para assistir ao pôr do sol com vista 360º da baía.</p>
-                <a href="https://www.google.com/maps/search/Morro+do+Moreno+Vila+Velha" target="_blank" class="btn" style="background-color: #2eb85c;">Ver no Maps</a>
+                <div class="btn-group">
+                    <a href="https://www.google.com/maps/search/Morro+do+Moreno+Vila+Velha" target="_blank" class="btn" style="background-color: #2eb85c;">Maps</a>
+                    <a href="https://www.tripadvisor.com.br/Attraction_Review-g303319-d3536151-Reviews-Morro_do_Moreno-Vila_Velha_State_of_Espirito_Santo.html" target="_blank" class="btn btn-trip">TripAdvisor</a>
+                </div>
             </div>
         </div>
     </section>
