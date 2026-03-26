@@ -10,9 +10,7 @@ export default class CharacterSelect extends Phaser.Scene {
   }
 
   create() {
-    // Clear any previous UI layer contents
-    const uiLayer = document.getElementById('ui-layer');
-    if (uiLayer) uiLayer.innerHTML = '';
+    // Initializing character selection
 
     const { width, height } = this.cameras.main;
     const isPortrait = height > width;

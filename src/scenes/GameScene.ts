@@ -27,6 +27,8 @@ export default class GameScene extends Phaser.Scene {
   private floorCanvas!: Phaser.Textures.CanvasTexture;
   private paintStrokes: Array<{ type: string, points: number[], color: number, size: number }> = [];
   private currentStroke: { type: string, points: number[], color: number, size: number } | null = null;
+  private shellCount: number = 0;
+  private concha4Count: number = 0;
   
   private initialScaleX = 1;
   private initialScaleY = 1;
@@ -39,6 +41,7 @@ export default class GameScene extends Phaser.Scene {
 
   create() {
     console.log("%c[MAP EDITOR] v4.0 - Ultimate Restoration", "color: #00ffff; font-weight: bold;");
+    console.log("[MAP EDITOR] Digite spawn('arvore canteiro.png') ou spawn('totem.png') para testar.");
     const worldW = 4000;
     const worldH = 12490;
     const worldStartY = 5704;
@@ -50,12 +53,17 @@ export default class GameScene extends Phaser.Scene {
     // SPRAWN API - Improved to handle filenames and keys
     (window as any).spawn = (assetKey: string, x?: number, y?: number) => {
       let key = assetKey;
+      // Extract filename if it's a path (handles both / and \)
+      const parts = key.split(/[/\\]/);
+      key = parts[parts.length - 1];
+
       // If user passed a filename like 'agua.png', try to extract the key
       if (key.includes('.')) key = key.split('.')[0].replace(/\s/g, '_');
       
       // Fallback: search textures by source name if key doesn't work
       if (!this.textures.exists(key)) {
-         const found = this.textures.getTextureKeys().find(tk => tk.includes(assetKey.split('.')[0]));
+         const search = key.split('.')[0];
+         const found = this.textures.getTextureKeys().find(tk => tk.includes(search));
          if (found) key = found;
       }
 
@@ -63,11 +71,35 @@ export default class GameScene extends Phaser.Scene {
       let sY = y ?? (this.player ? this.player.y : this.cameras.main.scrollY + this.cameras.main.height/2);
       
       let newObj: any;
-      if (key === 'concha') {
-        newObj = new Interactable(this, sX, sY, 'concha', { speaker: 'Concha', text: 'Você encontrou uma concha!' });
+      if (key.startsWith('concha')) {
+        let prize = "Concha vazia... continue procurando";
+        let isLarge = false;
+
+        if (key === 'concha') {
+            this.shellCount++;
+            if (this.shellCount === 1) {
+                prize = "Parece que você tem sorte! Você encontrou 20% Cashback na próxima reserva (envie um print ao Anfitrião no chat do Airbnb)";
+                isLarge = true;
+            } else if (this.shellCount === 2) {
+                prize = "Parabéns! Você encontrou R$ 5,00 no Pix (envie um print ao Anfitrião no chat do Airbnb)";
+                isLarge = true;
+            } else if (this.shellCount === 3) {
+                prize = "Boa! Você encontrou R$ 1,00 no Pix (envie um print ao Anfitrião no chat do Airbnb)";
+                isLarge = true;
+            }
+        } else if (key === 'concha4') {
+            this.concha4Count++;
+            if (this.concha4Count <= 2) {
+                prize = "você encontrou uma pérola, mas infelizmente é uma pérola virtual que não vale nada";
+                isLarge = false;
+            }
+        }
+
+        newObj = new Interactable(this, sX, sY, key, { speaker: 'Concha', text: prize });
+        (newObj as any).isLargeDialogue = isLarge;
         this.interactables.add(newObj);
         newObj.body.updateFromGameObject();
-        newObj.setDepth(20);
+        newObj.setDepth(30);
       } else if (this.textures.exists(key)) {
         newObj = this.add.image(sX, sY, key);
       } else {
@@ -76,17 +108,20 @@ export default class GameScene extends Phaser.Scene {
       }
       
       const floorKeys = ['rua_melhor', 'calcadao', 'orla', 'sand', 'water', 'agua', 'sand_tile', 'water_tile', 'nova_rua_reduzida', 'orla_grande'];
-      newObj.setDepth(floorKeys.includes(key) ? 2 : 20);
+      newObj.setDepth(floorKeys.includes(key) ? 2 : (key.startsWith('concha') ? 30 : 20));
       newObj.setOrigin(0.5, 0.5).setInteractive({ draggable: true });
       this.input.setDraggable(newObj);
       console.log(`[MAP EDITOR] Spawned: ${key} at ${Math.round(sX)}, ${Math.round(sY)}`);
       return newObj;
     };
 
+    (window as any).spawnArvore = (x?: number, y?: number) => (window as any).spawn('arvore_canteiro', x, y);
+    (window as any).spawnTotem = (x?: number, y?: number) => (window as any).spawn('totem', x, y);
+
     // SYSTEM API - Revert to original key
     (window as any).saveMap = () => {
       const objectsData = this.children.list
-        .filter(child => (child instanceof Phaser.GameObjects.Image || child instanceof Phaser.GameObjects.Rectangle || child instanceof Phaser.GameObjects.TileSprite) && child.input?.draggable && child !== this.floorLayer)
+        .filter(child => (child instanceof Phaser.GameObjects.Image || child instanceof Phaser.GameObjects.Sprite || child instanceof Phaser.GameObjects.Rectangle || child instanceof Phaser.GameObjects.TileSprite) && (child as any).input?.draggable && child !== this.floorLayer)
         .map(child => {
           const obj = child as any;
           return {
@@ -151,7 +186,7 @@ export default class GameScene extends Phaser.Scene {
         }
         let existing = this.children.list.find(child => (child as any).texture?.key === data.key && !matched.has(child)) as any;
         if (existing) {
-          const depth = data.depth || (['rua_melhor','calcadao','orla','sand','water','agua','sand_tile','water_tile','nova_rua_reduzida','orla_grande'].includes(data.key) ? 2 : 20);
+          const depth = data.depth || (['rua_melhor','calcadao','orla','sand','water','agua','sand_tile','water_tile','nova_rua_reduzida','orla_grande'].includes(data.key) ? 2 : (data.key.startsWith('concha') ? 30 : 20));
           existing.setPosition(data.x, data.y).setScale(data.scaleX, data.scaleY).setRotation(data.rotation).setDepth(depth);
           matched.add(existing);
         } else {
@@ -162,7 +197,7 @@ export default class GameScene extends Phaser.Scene {
           }
           else spawned = (window as any).spawn(data.key, data.x, data.y);
           if (spawned) { 
-            const depth = data.depth || (['rua_melhor','calcadao','orla','sand','water','agua','sand_tile','water_tile','nova_rua_reduzida','orla_grande'].includes(data.key) ? 2 : 20);
+            const depth = data.depth || (['rua_melhor','calcadao','orla','sand','water','agua','sand_tile','water_tile','nova_rua_reduzida','orla_grande'].includes(data.key) ? 2 : (data.key.startsWith('concha') ? 30 : 20));
             spawned.setScale(data.scaleX, data.scaleY).setRotation(data.rotation).setDepth(depth); 
             matched.add(spawned); 
           }
@@ -189,14 +224,15 @@ export default class GameScene extends Phaser.Scene {
     (window as any).rescue = () => {
       this.children.list.forEach(c => { 
         if((c as any).input?.draggable && c !== this.floorLayer) {
-           const k = (c as any).texture?.key;
-           (c as any).setDepth(['rua_melhor','calcadao','orla','sand','water','agua','sand_tile','water_tile','nova_rua_reduzida','orla_grande'].includes(k) ? 2 : 20);
+            const k = (c as any).texture?.key;
+            const depth = ['rua_melhor','calcadao','orla','sand','water','agua','sand_tile','water_tile','nova_rua_reduzida','orla_grande'].includes(k) ? 2 : (k.startsWith('concha') ? 30 : 20);
+            (c as any).setDepth(depth);
         }
       });
     };
 
     this.selectionBox = this.add.graphics().setDepth(10000);
-    this.interactionRangeGraphics = this.add.graphics().setDepth(5);
+    this.interactionRangeGraphics = this.add.graphics().setDepth(30);
     this.createEditorUI();
     // MAP CORE - Replaced mar.gif with stable deep blue
     this.cameras.main.setBackgroundColor('#87CEEB');
@@ -220,14 +256,39 @@ export default class GameScene extends Phaser.Scene {
     this.editorStatusText = this.add.text(20,20,'Editor: OFF',{fontSize:'32px',color:'#f00',backgroundColor:'#000'}).setScrollFactor(0).setDepth(20000).setAlpha(0);
     this.input.keyboard!.on('keydown-E', () => {
       this.isEditorEnabled = !this.isEditorEnabled;
-      if (!this.isEditorEnabled) { this.isPaintMode = false; this.isEyedropperMode = false; }
+      if (!this.isEditorEnabled) { 
+        this.isPaintMode = false; 
+        this.isEyedropperMode = false; 
+        this.selectedEditorObject = null;
+        this.selectionBox.clear();
+      }
       this.updatePaintUI();
       this.editorStatusText.setText(`Editor: ${this.isEditorEnabled?'ON':'OFF'}`).setColor(this.isEditorEnabled?'#0ff':'#f00').setAlpha(this.isEditorEnabled?1:0);
+    });
+
+    // DELETE KEY for Editor
+    this.input.keyboard!.on('keydown-DELETE', () => {
+      if (this.isEditorEnabled && this.selectedEditorObject) {
+         console.log(`[MAP EDITOR] Deleting: ${this.selectedEditorObject.texture.key}`);
+         this.selectedEditorObject.destroy();
+         this.selectedEditorObject = null;
+         this.selectionBox.clear();
+         (window as any).saveMap();
+      }
+    });
+    this.input.keyboard!.on('keydown-BACKSPACE', () => {
+      if (this.isEditorEnabled && this.selectedEditorObject) {
+         this.selectedEditorObject.destroy();
+         this.selectedEditorObject = null;
+         this.selectionBox.clear();
+         (window as any).saveMap();
+      }
     });
 
     // Editor Interaction - Disabled physics during drag to avoid freezes
     this.input.on('dragstart', (p:any, g:any) => { 
       if (!this.isEditorEnabled) return; 
+      this.selectedEditorObject = g;
       g._origD = g.depth; g.setDepth(22000); 
       if (g.body) (g.body as any).enable = false;
       this.dragStartX = p.worldX; this.dragStartY = p.worldY; 
@@ -311,19 +372,57 @@ export default class GameScene extends Phaser.Scene {
     
     // Initial spawn
     this.spawnNPCFerrari();
+
+    this.game.events.on('dialogueClosed', () => {
+        if (this.player) this.player.freeze(false);
+        this.cameras.main.zoomTo(1.0, 800, 'Power2');
+    });
+
+    this.game.events.on('actionButtonDown', () => {
+        this.handleInteract();
+    });
   }
 
   update() {
     this.activeInteractable = null; this.interactionRangeGraphics.clear();
-    if (this.player && this.player.active) {
+        let nearest: any = null;
+        let minDist = Infinity;
+
         this.interactables.getChildren().forEach((o:any) => {
             const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, o.x, o.y);
-            if (o.texture.key === 'concha') this.interactionRangeGraphics.lineStyle(2, 0x0f0, 0.8).strokeCircle(o.x, o.y, 200);
-            if (d < 200) { this.activeInteractable = o; if (o.texture.key === 'concha') this.interactionRangeGraphics.lineStyle(4, 0x0f0, 0.5+Math.sin(this.time.now/100)*0.2).strokeCircle(o.x, o.y, 200); }
+            const isConcha = o.texture.key.startsWith('concha');
+            const range = isConcha ? 150 : 200;
+            if (isConcha) this.interactionRangeGraphics.lineStyle(2, 0x0f0, 0.8).strokeCircle(o.x, o.y, range);
+            if (d < range && d < minDist) { 
+                nearest = o; 
+                minDist = d;
+            }
         });
-    }
 
-    const dialogueBox = document.getElementById('dialogue-box-v2');
+        this.activeInteractable = nearest;
+        if (this.activeInteractable) {
+            const isConcha = this.activeInteractable.texture.key.startsWith('concha');
+            const range = isConcha ? 150 : 200;
+            if (isConcha) {
+                this.interactionRangeGraphics.lineStyle(4, 0x0f0, 0.5+Math.sin(this.time.now/100)*0.2).strokeCircle(this.activeInteractable.x, this.activeInteractable.y, range);
+            }
+            
+            // Show Hint
+            const cam = this.cameras.main;
+            const x = (this.activeInteractable.x - cam.worldView.x) * cam.zoom;
+            const y = (this.activeInteractable.y - 120 - cam.worldView.y) * cam.zoom;
+            
+            this.game.events.emit('updateHint', { 
+                visible: true, 
+                text: isConcha ? 'PRESSIONE PARA INSPECIONAR' : 'PRESSIONE PARA INTERAGIR',
+                x: x,
+                y: y
+            });
+        } else {
+            this.game.events.emit('updateHint', { visible: false });
+        }
+
+        const dialogueBox = document.getElementById('dialogue-box-v2');
     const isDialogOpen = dialogueBox && dialogueBox.style.display !== 'none';
     
     if (!isDialogOpen) {
@@ -361,11 +460,12 @@ export default class GameScene extends Phaser.Scene {
     }
 
     if (this.activeInteractable) {
-      if (this.activeInteractable.texture.key === 'concha') {
+      if (this.activeInteractable.texture.key.startsWith('concha')) {
         this.player.freeze(true);
         this.cameras.main.zoomTo(1.5, 800, 'Power2');
       }
-      this.game.events.emit('showDialogue', (this.activeInteractable as any).dialogueData);
+      const data = { ...(this.activeInteractable as any).dialogueData, large: (this.activeInteractable as any).isLargeDialogue };
+      this.game.events.emit('showDialogue', data);
     } else if (Phaser.Math.Distance.Between(this.player.x, this.player.y, this.ferrariObj.x, this.ferrariObj.y) < 150) {
       this.isDriving = true;
       this.ferrariObj.setImmovable(false);
