@@ -14,51 +14,57 @@ export default class UIScene extends Phaser.Scene {
 
   create() {
     // We listen to GameScene events
-    const gameScene = this.scene.get('GameScene');
-
     // Dialogue System DOM
     const uiLayer = document.getElementById('ui-layer');
-    if (uiLayer) {
-      // Create interaction hint
-      const hint = document.createElement('div');
-      hint.className = 'interaction-hint';
-      uiLayer.appendChild(hint);
-
-      // Create dialogue box
-      const dialogueBox = document.createElement('div');
-      dialogueBox.className = 'dialogue-box';
-      dialogueBox.innerHTML = `
-        <div class="dialogue-speaker" id="dialogue-speaker"></div>
-        <div class="dialogue-text" id="dialogue-text"></div>
-        <button class="dialogue-button" id="dialogue-close">Got it</button>
-      `;
-      uiLayer.appendChild(dialogueBox);
+    const hint = document.getElementById('interaction-hint');
+    const dialogueBox = document.getElementById('dialogue-box-v2');
+    
+    if (uiLayer && hint && dialogueBox) {
 
       // Interaction event mapping
-      gameScene.events.on('showDialogue', (data: {speaker: string, text: string}) => {
+      this.game.events.on('showDialogue', (data: {speaker: string, text: string, large?: boolean}) => {
         const speaker = document.getElementById('dialogue-speaker');
         const textArea = document.getElementById('dialogue-text');
+        const db = document.getElementById('dialogue-box-v2');
         
-        if (speaker && textArea) {
+        if (data.speaker && textArea && speaker && db) {
           speaker.innerText = data.speaker;
           textArea.innerText = data.text;
-          dialogueBox.classList.add('visible');
+          if (data.large) db.classList.add('large');
+          else db.classList.remove('large');
+          db.classList.add('visible');
+          db.style.display = 'block';
+        }
+      });
+
+      this.game.events.on('updateHint', (data: {visible: boolean, text?: string, x?: number, y?: number}) => {
+        if (data.visible) {
+            hint.innerText = data.text || 'PRESSIONE PARA INSPECIONAR';
+            hint.style.left = `${data.x}px`;
+            hint.style.top = `${data.y}px`;
+            hint.classList.add('visible');
+        } else {
+            hint.classList.remove('visible');
         }
       });
 
       const closeBtn = document.getElementById('dialogue-close');
       if (closeBtn) {
         closeBtn.addEventListener('click', () => {
-          dialogueBox.classList.remove('visible');
-          gameScene.events.emit('dialogueClosed');
+          const db = document.getElementById('dialogue-box-v2');
+          if (db) {
+            db.classList.remove('visible');
+            db.style.display = 'none';
+          }
+          this.game.events.emit('dialogueClosed');
         });
       }
     }
 
     // Virtual DPad/Joystick for Touch devices
     if (this.sys.game.device.input.touch) {
-      this.createVirtualJoystick(gameScene);
-      this.createActionButton(gameScene);
+      this.createVirtualJoystick();
+      this.createActionButton();
 
       this.scale.on('resize', (gameSize: Phaser.Structs.Size) => {
         this.cameras.main.width = gameSize.width;
@@ -81,7 +87,7 @@ export default class UIScene extends Phaser.Scene {
     }
   }
 
-  private createVirtualJoystick(gameScene: Phaser.Scene) {
+  private createVirtualJoystick() {
     const margin = 100;
     const { height } = this.cameras.main;
     
@@ -100,31 +106,31 @@ export default class UIScene extends Phaser.Scene {
 
     interactiveZone.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       this.pointerDown = true;
-      this.updateJoystick(pointer, margin, height - margin, gameScene);
+      this.updateJoystick(pointer, margin, height - margin);
     });
 
     interactiveZone.on('pointermove', (pointer: Phaser.Input.Pointer) => {
       if (this.pointerDown) {
-        this.updateJoystick(pointer, margin, height - margin, gameScene);
+        this.updateJoystick(pointer, margin, height - margin);
       }
     });
 
     interactiveZone.on('pointerup', () => {
       this.pointerDown = false;
       this.dpadCircle.setPosition(margin, height - margin);
-      gameScene.events.emit('joystickMove', { x: 0, y: 0 });
+      this.game.events.emit('joystickMove', { x: 0, y: 0 });
     });
     
     interactiveZone.on('pointerout', () => {
       if(this.pointerDown) {
         this.pointerDown = false;
         this.dpadCircle.setPosition(margin, height - margin);
-        gameScene.events.emit('joystickMove', { x: 0, y: 0 });
+        this.game.events.emit('joystickMove', { x: 0, y: 0 });
       }
     });
   }
 
-  private updateJoystick(pointer: Phaser.Input.Pointer, baseX: number, baseY: number, gameScene: Phaser.Scene) {
+  private updateJoystick(pointer: Phaser.Input.Pointer, baseX: number, baseY: number) {
     const dx = pointer.x - baseX;
     const dy = pointer.y - baseY;
     const distance = Math.sqrt(dx * dx + dy * dy);
@@ -144,10 +150,10 @@ export default class UIScene extends Phaser.Scene {
     const vx = nx / maxRadius;
     const vy = ny / maxRadius;
     
-    gameScene.events.emit('joystickMove', { x: vx, y: vy });
+    this.game.events.emit('joystickMove', { x: vx, y: vy });
   }
 
-  private createActionButton(gameScene: Phaser.Scene) {
+  private createActionButton() {
     const { width, height } = this.cameras.main;
     const margin = 100;
 
@@ -161,7 +167,7 @@ export default class UIScene extends Phaser.Scene {
 
     btn.on('pointerdown', () => {
       btn.setAlpha(0.5);
-      gameScene.events.emit('actionButtonDown');
+      this.game.events.emit('actionButtonDown');
     });
 
     btn.on('pointerup', () => {

@@ -23,6 +23,9 @@ export default class Preloader extends Phaser.Scene {
     this.load.image('estacionamento', '/assets/exxtac.png');
     this.load.image('ferrari', '/assets/ferrari_parada.png');
     this.load.image('concha', '/assets/concha.png');
+    this.load.image('concha2', '/assets/concha2.png');
+    this.load.image('concha3', '/assets/concha3.png');
+    this.load.image('concha4', '/assets/concha4.png');
     this.load.image('totem', '/assets/totem.png');
     this.load.image('arvore_canteiro', '/assets/arvore_canteiro.png');
     this.load.image('ilhas_gregas_att', '/assets/ilha_muro.png');

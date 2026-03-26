@@ -10,7 +10,14 @@
   <body>
     <div id="game-container"></div>
     <!-- UI Overlay for Dialogue and DOM Elements -->
-    <div id="ui-layer" class="ui-layer"></div>
+    <div id="ui-layer" class="ui-layer">
+      <div id="interaction-hint" class="interaction-hint">PRESSIONE PARA INSPECIONAR</div>
+      <div id="dialogue-box-v2" class="dialogue-box" style="display: none;">
+        <div class="dialogue-speaker" id="dialogue-speaker"></div>
+        <div class="dialogue-text" id="dialogue-text"></div>
+        <button class="dialogue-button" id="dialogue-close">Entendi</button>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
