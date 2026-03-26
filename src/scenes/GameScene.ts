@@ -39,6 +39,7 @@ export default class GameScene extends Phaser.Scene {
 
   create() {
     console.log("%c[MAP EDITOR] v4.0 - Ultimate Restoration", "color: #00ffff; font-weight: bold;");
+    console.log("[MAP EDITOR] Digite spawn('arvore canteiro.png') ou spawn('totem.png') para testar.");
     const worldW = 4000;
     const worldH = 12490;
     const worldStartY = 5704;
@@ -50,12 +51,17 @@ export default class GameScene extends Phaser.Scene {
     // SPRAWN API - Improved to handle filenames and keys
     (window as any).spawn = (assetKey: string, x?: number, y?: number) => {
       let key = assetKey;
+      // Extract filename if it's a path (handles both / and \)
+      const parts = key.split(/[/\\]/);
+      key = parts[parts.length - 1];
+
       // If user passed a filename like 'agua.png', try to extract the key
       if (key.includes('.')) key = key.split('.')[0].replace(/\s/g, '_');
       
       // Fallback: search textures by source name if key doesn't work
       if (!this.textures.exists(key)) {
-         const found = this.textures.getTextureKeys().find(tk => tk.includes(assetKey.split('.')[0]));
+         const search = key.split('.')[0];
+         const found = this.textures.getTextureKeys().find(tk => tk.includes(search));
          if (found) key = found;
       }
 
@@ -82,6 +88,9 @@ export default class GameScene extends Phaser.Scene {
       console.log(`[MAP EDITOR] Spawned: ${key} at ${Math.round(sX)}, ${Math.round(sY)}`);
       return newObj;
     };
+
+    (window as any).spawnArvore = (x?: number, y?: number) => (window as any).spawn('arvore_canteiro', x, y);
+    (window as any).spawnTotem = (x?: number, y?: number) => (window as any).spawn('totem', x, y);
 
     // SYSTEM API - Revert to original key
     (window as any).saveMap = () => {
@@ -220,14 +229,39 @@ export default class GameScene extends Phaser.Scene {
     this.editorStatusText = this.add.text(20,20,'Editor: OFF',{fontSize:'32px',color:'#f00',backgroundColor:'#000'}).setScrollFactor(0).setDepth(20000).setAlpha(0);
     this.input.keyboard!.on('keydown-E', () => {
       this.isEditorEnabled = !this.isEditorEnabled;
-      if (!this.isEditorEnabled) { this.isPaintMode = false; this.isEyedropperMode = false; }
+      if (!this.isEditorEnabled) { 
+        this.isPaintMode = false; 
+        this.isEyedropperMode = false; 
+        this.selectedEditorObject = null;
+        this.selectionBox.clear();
+      }
       this.updatePaintUI();
       this.editorStatusText.setText(`Editor: ${this.isEditorEnabled?'ON':'OFF'}`).setColor(this.isEditorEnabled?'#0ff':'#f00').setAlpha(this.isEditorEnabled?1:0);
+    });
+
+    // DELETE KEY for Editor
+    this.input.keyboard!.on('keydown-DELETE', () => {
+      if (this.isEditorEnabled && this.selectedEditorObject) {
+         console.log(`[MAP EDITOR] Deleting: ${this.selectedEditorObject.texture.key}`);
+         this.selectedEditorObject.destroy();
+         this.selectedEditorObject = null;
+         this.selectionBox.clear();
+         (window as any).saveMap();
+      }
+    });
+    this.input.keyboard!.on('keydown-BACKSPACE', () => {
+      if (this.isEditorEnabled && this.selectedEditorObject) {
+         this.selectedEditorObject.destroy();
+         this.selectedEditorObject = null;
+         this.selectionBox.clear();
+         (window as any).saveMap();
+      }
     });
 
     // Editor Interaction - Disabled physics during drag to avoid freezes
     this.input.on('dragstart', (p:any, g:any) => { 
       if (!this.isEditorEnabled) return; 
+      this.selectedEditorObject = g;
       g._origD = g.depth; g.setDepth(22000); 
       if (g.body) (g.body as any).enable = false;
       this.dragStartX = p.worldX; this.dragStartY = p.worldY; 
