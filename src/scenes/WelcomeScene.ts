@@ -40,7 +40,7 @@ Horário: O check-out deve ser respeitado para limpeza. O acesso é via check-in
     },
     'welcome_wifi': {
       title: '📶 WI-FI',
-      content: 'Conecte-se e aproveite sua estadia!\n\nRede: [NOME_DA_REDE]\nSenha: [SENHA_DO_WIFI]\n\nA rede suporta alta velocidade para streaming e trabalho remoto.'
+      content: 'Conecte-se e aproveite sua estadia!\n\nRede: Loga 201\nSenha: miguel10\n\nA rede suporta alta velocidade para streaming e trabalho remoto.'
     },
     'supermarket': {
       title: '🛒 SUPERMERCADOS',
