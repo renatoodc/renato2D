@@ -381,6 +381,16 @@ export default class GameScene extends Phaser.Scene {
     this.game.events.on('actionButtonDown', () => {
         this.handleInteract();
     });
+
+    this.game.events.on('joystickMove', (data: { x: number, y: number }) => {
+        this.virtualJoystick = data;
+    });
+
+    this.events.on('shutdown', () => {
+        this.game.events.off('joystickMove');
+        this.game.events.off('actionButtonDown');
+        this.game.events.off('dialogueClosed');
+    });
   }
 
   update() {
