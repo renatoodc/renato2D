@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airbnb Manager - Dashboard Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">🏠</span>
+                <span class="logo-text">Airbnb Manager</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active"><span class="icon">📊</span> Dashboard</a>
+                <a href="#" class="nav-item"><span class="icon">📅</span> Calendário</a>
+                <a href="#" class="nav-item"><span class="icon">👥</span> Hóspedes</a>
+                <a href="#" class="nav-item"><span class="icon">💰</span> Finanças</a>
+                <a href="#" class="nav-item"><span class="icon">⚙️</span> Configurações</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Bem-vindo, Renato</h1>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Renato&background=e64d5d&color=fff" alt="User">
+                </div>
+            </header>
+
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <h3>Receita Mensal</h3>
+                    <p class="value">R$ 12.450</p>
+                    <span class="trend positive">+15% vs mês anterior</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Taxa de Ocupação</h3>
+                    <p class="value">88%</p>
+                    <span class="trend positive">+5% vs mês anterior</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Check-ins Hoje</h3>
+                    <p class="value">3</p>
+                    <span class="trend">Próximo: 14h00</span>
+                </div>
+            </section>
+
+            <section class="recent-bookings">
+                <h2>Reservas Recentes</h2>
+                <table class="bookings-table">
+                    <thead>
+                        <tr>
+                            <th>Hóspede</th>
+                            <th>Check-in</th>
+                            <th>Check-out</th>
+                            <th>Status</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookings-body">
+                        <!-- Content will be injected by main.js -->
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
