@@ -1,16 +1,32 @@
+:root {
+  --primary: #ff5a5f;
+  --primary-glow: rgba(255, 90, 95, 0.4);
+  --accent: #14b8a6;
+  --bg-overlay: rgba(15, 15, 15, 0.85);
+  --glass: rgba(255, 255, 255, 0.12);
+  --glass-high: rgba(255, 255, 255, 0.2);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --blur: blur(14px);
+  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.4);
+  --font-main: 'Inter', sans-serif;
+  --font-title: 'Montserrat', sans-serif;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   touch-action: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body, html {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #1a1a1a;
-  font-family: 'Inter', sans-serif;
+  background-color: #0f0f0f;
+  font-family: var(--font-main);
+  color: #ffffff;
 }
 
 #game-container {
@@ -27,6 +43,7 @@ body, html {
   z-index: 10;
 }
 
+/* UI Overlay Layer */
 .ui-layer {
   position: absolute;
   top: 0;
@@ -39,127 +56,226 @@ body, html {
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  padding: 20px;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
+/* Modern Glass Dialogue Box */
 .dialogue-box {
   pointer-events: auto;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
+  background: var(--glass);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
   padding: 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  margin-bottom: 20px;
+  box-shadow: var(--shadow-card);
+  margin: 0 20px 30px 20px;
   max-width: 600px;
-  width: 100%;
-  transform: translateY(20px);
+  width: calc(100% - 40px);
+  transform: translateY(20px) scale(0.95);
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dialogue-box.visible {
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
 
 .dialogue-box.large {
   max-width: 90%;
   width: 800px;
-  padding: 40px;
+  padding: 32px 40px;
 }
 
 .dialogue-box.large .dialogue-text {
-  font-size: 24px;
-}
-
-.dialogue-box.large .dialogue-speaker {
-  font-size: 18px;
-}
-
-.dialogue-box.visible {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.dialogue-text {
-  font-size: 16px;
-  color: #333;
-  line-height: 1.5;
-  margin-bottom: 16px;
+  font-size: 22px;
+  line-height: 1.4;
 }
 
 .dialogue-speaker {
-  font-weight: 600;
-  font-size: 14px;
-  color: #ff5a5f;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--primary);
   text-transform: uppercase;
   margin-bottom: 8px;
-  letter-spacing: 0.5px;
+  letter-spacing: 1.5px;
+  display: inline-block;
+  padding: 4px 10px;
+  background: rgba(255, 90, 95, 0.1);
+  border-radius: 6px;
+}
+
+.dialogue-text {
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-weight: 400;
 }
 
 .dialogue-button {
-  background: #ff5a5f;
+  background: var(--primary);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: background 0.2s;
-}
-
-.dialogue-button:hover {
-  background: #e0484d;
+  box-shadow: 0 4px 15px var(--primary-glow);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .dialogue-button:active {
-  transform: scale(0.98);
+  transform: scale(0.94);
+  background: var(--primary-dark);
 }
 
+/* Interaction Hint - Floating pill */
 .interaction-hint {
   position: absolute;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--glass-high);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
   color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 13px;
   font-weight: 600;
+  letter-spacing: 0.5px;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.2s;
-  transform: translate(-50%, -100%);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: opacity 0.3s, transform 0.3s;
+  transform: translate(-50%, -100%) translateY(-10px);
 }
 
 .interaction-hint.visible {
   opacity: 1;
+  transform: translate(-50%, -100%) translateY(0);
 }
 
-.character-selection {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 16px;
-  padding: 30px;
+/* Responsive adjustments for Mobile */
+@media (max-width: 600px) {
+  .dialogue-box {
+    margin: 0 12px 20px 12px;
+    padding: 20px;
+    border-radius: 16px;
+  }
+  
+  .dialogue-text {
+    font-size: 15px;
+  }
+  
+  .dialogue-button {
+    width: 100%;
+    padding: 14px;
+  }
+  
+  .dialogue-speaker {
+    font-size: 11px;
+  }
+}
+
+/* Ensure Phaser DOM container is above the canvas */
+#game-container div {
+  z-index: 100 !important;
+}
+
+/* Scrollable Welcome Modal (DOM) */
+.welcome-modal-wrapper {
+  z-index: 101;
+  position: relative;
   pointer-events: auto;
+  color: #2d3748;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  height: 100%;
+  padding: 10px 0;
+  overflow: hidden;
 }
 
-.characters {
-  display: flex;
-  gap: 20px;
-}
-
-.character-card {
-  border: 2px solid #ddd;
-  border-radius: 12px;
-  padding: 20px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.character-card:hover {
-  border-color: #ff5a5f;
-  background: #fffafa;
-}
-
-.character-card h3 {
+.welcome-modal-title {
+  font-family: var(--font-title);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--primary);
   text-align: center;
-  margin-bottom: 10px;
-  color: #333;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.welcome-modal-scroll {
+  flex-grow: 1;
+  overflow-y: auto;
+  touch-action: pan-y !important; /* Enable native swipe */
+  cursor: grab; /* Desktop drag hint */
+  user-select: none; /* Prevent accidental text highlighting while dragging */
+  padding: 0 10px 20px 0;
+  margin-right: -10px; /* Hide scrollbar padding hack */
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+}
+
+.welcome-modal-scroll:active {
+  cursor: grabbing;
+}
+
+/* Custom Scrollbar for the modal */
+.welcome-modal-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.welcome-modal-scroll::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+  border-radius: 10px;
+}
+.welcome-modal-scroll::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+.welcome-modal-text {
+  font-family: var(--font-main);
+  font-size: 16px;
+  line-height: 1.6;
+  color: #334155;
+  white-space: pre-wrap;
+  padding-top: 30px; /* Offset to clear the top gradient mask */
+  padding-bottom: 20px;
+}
+
+.welcome-modal-text b, .welcome-modal-text strong {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.welcome-modal-footer {
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.welcome-modal-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 25px;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px var(--primary-glow);
+  transition: transform 0.2s;
+}
+
+.welcome-modal-btn:active {
+  transform: scale(0.95);
 }

@@ -4,63 +4,75 @@ export default class WelcomeScene extends Phaser.Scene {
   private hasReadRules: boolean = false;
   private gameButton!: Phaser.GameObjects.Container;
   private modalContainer: Phaser.GameObjects.Container | null = null;
+  private domModal: Phaser.GameObjects.DOMElement | null = null;
 
-  // Centralized content for the user to edit
+  // Centralized content - updated for clarity
   private ICON_DATA: any = {
     'welcome_rules': {
-      title: '📝 REGRAS DA CASA',
+      title: 'Regras da Casa',
       content: `1. Silêncio e Convivência:
+
 Lei do Silêncio: Respeitar o silêncio entre 22h e 08h. O edifício é estritamente residencial e familiar. Multas aplicadas pelo condomínio por excesso de barulho serão de responsabilidade do hóspede.
 
-Proibido Festas/Eventos: Não é permitida a realização de eventos ou reuniões com pessoas que não constem na reserva.
+Proibido Festas/Eventos: Não é permitida a realização de grandes eventos ou reuniões com pessoas que não constem na reserva.
+
 
 2. Ocupação e Visitas:
-Limite de Hóspedes: A capacidade máxima é de 8 pessoas. Apenas hóspedes registrados podem pernoitar. Visitas: Consultar o anfitrião no chat do Airbnb sobre visitas diurnas.
+
+Limite de Hóspedes: A capacidade máxima é de 8 pessoas. Apenas hóspedes registrados podem pernoitar.
+
+Visitas: Consultar o anfitrião no chat do Airbnb sobre visitas diurnas.
+
 
 3. Energia e Ventilação:
+
 Consumo Consciente: Ao sair, certifique-se de desligar todas as luzes e ventiladores. Como o apartamento é bem ventilado, manter as janelas abertas durante o dia ajuda a manter o frescor.
 
+
 4. Cuidados com o Imóvel:
-Fumo: É estritamente proibido fumar dentro do imóvel. Areia de Praia: Retirar o excesso ainda na rua/praia. Isso ajuda a manter a limpeza e o bom funcionamento dos ralos. Lixo: O descarte deve ser feito diariamente nos coletores do condomínio.
+
+Fumo: É estritamente proibido fumar dentro do imóvel. O fumo é permitido na área externa do condomínio.
+
+Areia de Praia: Como não possuímos chuveiro no prédio, pedimos a gentileza de retirar o excesso de areia ainda na rua/praia. Isso ajuda a manter a limpeza e o bom funcionamento dos ralos.
+
+Lixo: Por gentileza, o descarte deve ser feito preferencialmete diariamente ou ao final de sua reserva, nos coletores do condomínio, localizados à direita do portão da garagem.
+
 
 5. Check-out e Chaves:
-Horário: O check-out deve ser respeitado para limpeza. O acesso é via check-in remoto, garantindo sua autonomia.`
+
+Horário: O horário de check-out deve ser respeitado para que nossa equipe de limpeza possa preparar o imóvel para o próximo hóspede.`
     },
     'welcome_game': {
       title: '🎮 GAME PARA CASHBACK',
-      content: 'Aproveite nosso jogo exclusivo para ganhar cashback na sua próxima estadia! Você poderá explorar a cidade, encontrar itens raros e desbloquear prêmios reais para sua próxima reserva.\n\nRegras do Game:\n- Colete 5 moedas para ganhar 5% de desconto.\n- Encontre a concha dourada para um bônus surpresa!\n- Divirta-se respeitando os limites do mapa.'
-    },
-    'welcome_visit': {
-      title: '📍 GUIA LOCAL',
-      content: 'Clique para abrir nosso Guia Local exclusivo com as melhores praias, pontos turísticos e dicas de Vila Velha!\n\nRecomendações:\n1. Convento da Penha: Vista panorâmica incrível.\n2. Praia da Costa: Ótima para banho e caminhadas.\n3. Morro do Moreno: Trilhas e pôr do sol espetacular.\n4. Museu da Vale: Cultura e história ferroviária.'
-    },
-    'welcome_bakery': {
-      title: '🥐 PADARIAS E CAFÉS',
-      content: 'Confira as melhores opções de café da manhã próximas a você.\n\n- Padaria Monte Líbano: A mais tradicional, com buffet completo.\n- Café do Centro: Ideal para um café rápido e artesanal.\n- Doceria Gourmet: Bolos e doces incríveis para o seu final de tarde.'
+      content: 'Aproveite nosso jogo exclusivo para ganhar cashback na sua próxima estadia!...'
     },
     'welcome_wifi': {
       title: '📶 WI-FI',
-      content: 'Conecte-se e aproveite sua estadia!\n\nRede: Loga 201\nSenha: miguel10\n\nA rede suporta alta velocidade para streaming e trabalho remoto.'
+      content: 'Conecte-se e aproveite sua estadia!\n\nRede: Loga 201\nSenha: miguel10'
     },
-    'supermarket': {
-      title: '🛒 SUPERMERCADOS',
-      content: 'Opções próximas para suas compras:\n\n- Supermercado Carone: Completo e com adega.\n- Hortifruti: Frutas e verduras sempre frescas.\n- Farmácia e Conveniência: Aberto 24h para emergências.'
+    'welcome_visit': {
+      title: '📍 GUIA LOCAL',
+      content: 'Clique para abrir nosso Guia Local exclusivo com as melhores praias...'
+    },
+    'welcome_bakery': {
+      title: '🥐 PADARIAS E CAFÉS',
+      content: 'Confira as melhores opções de café da manhã próximas a você.'
     },
     'pharmacy': {
       title: '💊 FARMÁCIAS',
-      content: 'Em caso de necessidade:\n\n- Farmácia Pague Menos (24h)\- Drogaria São Paulo\n- Farmácia local na esquina do prédio.'
+      content: 'Em caso de necessidade:\n- Farmácia Pague Menos (24h)\n- Drogaria São Paulo'
     },
     'restaurant': {
-      title: '🍴 RESTAURANTES',
-      content: 'Sabores da região:\n\n- Cantina Italiana: Massas frescas.\n- Peixaria do Porto: Especialidade em frutos do mar e moqueca capixaba.\n- Hamburgueria Artesanal: Opção rápida e deliciosa.'
+      title: '🍽️ RESTAURANTES', // Robust emoji
+      content: 'Sabores da região:\n- Cantina Italiana\n- Peixaria do Porto'
     },
     'check_in_out': {
-      title: '🔑 CHECK IN/OUT',
-      content: 'Informações importantes:\n\nCheck-in: A partir das 14:00. O acesso é via código digital enviado previamente.\n\nCheck-out: Até às 11:00. Por favor, deixe as chaves na caixa de segurança se houver, ou apenas feche a porta digital.'
+      title: '🔑 CHECK-OUT',
+      content: 'Check-in: A partir das 14:00.\nCheck-out: Até às 11:00.'
     },
     'contact': {
       title: '📱 CONTATO',
-      content: 'Estamos aqui para ajudar!\n\nAnfitrião: [NOME]\nWhatsApp: [NUMERO]\n\nEmergências do Prédio: [NUMERO_PORTARIA]'
+      content: 'Anfitrião: Renato\nWhatsApp: (27) 99999-9999'
     }
   };
 
@@ -70,351 +82,217 @@ Horário: O check-out deve ser respeitado para limpeza. O acesso é via check-in
 
   create() {
     const { width, height } = this.scale;
+    const isPortrait = height > width;
+
+    // 1. Unified Backdrop
+    const bg = this.add.graphics();
+    bg.fillGradientStyle(0xff5a5f, 0xff5a5f, 0xe64d5d, 0xe64d5d, 1);
+    bg.fillRect(0, 0, width, height);
     
-    // Background - Red/Pink tone from image
-    this.add.rectangle(0, 0, width, height, 0xe64d5d).setOrigin(0);
+    const gradientOverlay = this.add.graphics();
+    gradientOverlay.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.0, 0.0, 0.4, 0.4);
+    gradientOverlay.fillRect(0, 0, width, height);
 
-    // Header text
-    this.add.text(width / 2, height * 0.08, 'CARO HÓSPEDE', {
-      fontFamily: 'Arial', fontSize: '36px', color: '#ffffff', fontStyle: 'bold'
+    // 2. Header Section
+    const titlePadding = isPortrait ? 0.08 : 0.05;
+    this.add.text(width / 2, height * titlePadding, 'CENTRAL DO HÓSPEDE', {
+      fontFamily: 'Montserrat', fontSize: isPortrait ? '12px' : '16px', color: '#ffffff', fontStyle: 'bold', letterSpacing: 5
+    }).setOrigin(0.5).setAlpha(0.9); // High visibility, matching "Check in" feel
+
+    this.add.text(width / 2, height * (titlePadding + 0.07), 'Bem-vindo!', {
+      fontFamily: 'Montserrat', fontSize: isPortrait ? '42px' : '64px', color: '#ffffff', fontStyle: 'bold'
     }).setOrigin(0.5);
 
-    this.add.text(width / 2, height * 0.16, 'Bem-vindo!', {
-      fontFamily: 'Arial', fontSize: '72px', color: '#ffffff', fontStyle: 'bold'
-    }).setOrigin(0.5);
-
-    this.add.text(width / 2, height * 0.24, 'CLIQUE NOS ÍCONES', {
-      fontFamily: 'Arial', fontSize: '28px', color: '#ffffff', fontStyle: 'bold'
-    }).setOrigin(0.5);
-
-    // Icons Grid configuration - 10 icons in 2 rows of 5
-    const cols = 5;
-    const spacingX = width * 0.18;
-    const spacingY = height * 0.22;
-    const startX = width / 2 - (spacingX * 2);
-    const startY = height * 0.48;
-
+    // 3. Grid Positioning
     const items = [
-      { label: 'REGRAS DA CASA', texture: 'welcome_rules', callback: () => this.showModal('welcome_rules') },
-      { label: 'GAME PARA CASHBACK', texture: 'welcome_game', callback: () => this.startGame(), locked: true },
-      { label: 'Wi-Fi', texture: 'welcome_wifi', callback: () => this.showModal('welcome_wifi') },
-      { label: 'LUGARES PARA VISITAR', texture: 'welcome_visit', callback: () => window.open('guia.html', '_blank') },
-      { label: 'SUPERMERCADOS', emoji: '🛒', callback: () => window.open('supermercados.html', '_blank') },
-      { label: 'FARMÁCIAS', emoji: '💊', callback: () => this.showModal('pharmacy') },
-      { label: 'RESTAURANTES', emoji: '🍴', callback: () => this.showModal('restaurant') },
-      { label: 'PADARIAS E CAFÉS', texture: 'welcome_bakery', callback: () => this.showModal('welcome_bakery') },
-      { label: 'CHECK IN/OUT', emoji: '🔑', callback: () => this.showModal('check_in_out') },
-      { label: 'CONTATO', emoji: '📱', callback: () => this.showModal('contact') }
+      { label: 'REGRAS DA CASA', emoji: '📜', id: 'welcome_rules', callback: () => this.showModal('welcome_rules') },
+      { label: 'WI-FI', emoji: '📶', id: 'welcome_wifi', callback: () => this.showModal('welcome_wifi') },
+      { label: 'ONDE VISITAR', emoji: '📍', id: 'welcome_visit', callback: () => window.open('https://guiadevilavelha.com.br', '_blank') },
+      { label: 'PADARIAS E CAFÉS', emoji: '🥐', id: 'welcome_bakery', callback: () => this.showModal('welcome_bakery') },
+      { label: 'GAME PARA PRÊMIOS', emoji: '🎮', id: 'welcome_game', callback: () => this.startGame(), locked: true },
+      { label: 'FARMÁCIAS', emoji: '💊', id: 'pharmacy', callback: () => this.showModal('pharmacy') },
+      { label: 'ONDE COMER', emoji: '🍽️', id: 'restaurant', callback: () => this.showModal('restaurant') },
+      { label: 'CHECK-OUT', emoji: '🔑', id: 'check_in_out', callback: () => this.showModal('check_in_out') },
+      { label: 'CONTATO', emoji: '📱', id: 'contact', callback: () => this.showModal('contact') },
     ];
 
-    items.forEach((item: any, index) => {
+    const cols = isPortrait ? 3 : 5;
+    const spacingX = width / (cols + 1);
+    const spacingY = isPortrait ? height * 0.17 : height * 0.22;
+    const startY = height * 0.35;
+
+    items.forEach((item, index) => {
       const col = index % cols;
       const row = Math.floor(index / cols);
-      const x = startX + col * spacingX;
+      const x = spacingX * (col + 1);
       const y = startY + row * spacingY;
 
-      const container = this.createIcon(x, y, item.label, item.locked, item.texture, item.emoji);
+      const container = this.createProfessionalIcon(x, y, item.label, !!item.locked, item.emoji);
       
-      if (item.texture === 'welcome_game') this.gameButton = container;
+      if (item.id === 'welcome_game') this.gameButton = container;
 
-      // Always set interactive, check state in callback
-      container.setInteractive(new Phaser.Geom.Rectangle(-60, -60, 120, 160), Phaser.Geom.Rectangle.Contains);
+      container.setInteractive(new Phaser.Geom.Rectangle(-45, -45, 90, 115), Phaser.Geom.Rectangle.Contains);
       container.on('pointerdown', () => {
         if (item.locked && !this.hasReadRules) {
-            this.showInfo('Bloqueado! Leia as Regras da Casa primeiro para liberar o game.');
-            // Jiggle effect
-            this.tweens.add({ targets: container, x: x + 5, yoyo: true, duration: 50, repeat: 3 });
+            this.showToast('Leia as Regras da Casa primeiro!');
+            this.tweens.add({ targets: container, x: x + 6, yoyo: true, duration: 60, repeat: 3 });
             return;
         }
-        if (item.callback) item.callback();
-        else this.showInfo(item.label);
+        item.callback();
       });
     });
   }
 
-  private createIcon(x: number, y: number, label: string, isLocked: boolean = false, texture?: string, emoji?: string) {
+  private createProfessionalIcon(x: number, y: number, label: string, isLocked: boolean, emoji: string) {
     const container = this.add.container(x, y);
     
-    // Always draw the white circle background
-    const circle = this.add.graphics();
-    circle.lineStyle(3, 0xffffff);
-    circle.strokeCircle(0, 0, 50);
-    circle.fillStyle(0xffffff, 0.4); // Lighter background as requested
-    circle.fillCircle(0, 0, 48);
-    container.add(circle);
+    // 1. Shadow Layer
+    const shadow = this.add.graphics();
+    shadow.fillStyle(0x000000, 0.1).fillCircle(1, 2, 45);
+    container.add(shadow);
 
-    if (texture && this.textures.exists(texture)) {
-        const icon = this.add.image(0, 0, texture).setDisplaySize(96, 96);
-        
-        // Apply a circular mask to hide the pink square background of the generated assets
-        const maskGraphics = this.make.graphics({ x, y });
-        maskGraphics.fillStyle(0xffffff);
-        maskGraphics.fillCircle(0, 0, 48);
-        const mask = maskGraphics.createGeometryMask();
-        icon.setMask(mask);
-        
-        container.add(icon);
-    } else {
-        const iconText = this.add.text(0, 0, emoji || '🏠', { fontSize: '40px' }).setOrigin(0.5);
-        container.add(iconText);
-    }
+    // 2. Crip Glass Circle
+    const base = this.add.graphics();
+    base.fillStyle(0xffffff, 0.15).fillCircle(0, 0, 44);
+    base.lineStyle(2.5, 0xffffff, 0.4).strokeCircle(0, 0, 44); // Sharper border
+    container.add(base);
 
-    const labelText = this.add.text(0, 70, label, {
-      fontFamily: 'Arial', fontSize: '18px', color: '#ffffff', align: 'center', wordWrap: { width: 140 }
+    // 3. High-Fidelity Emoji with padding to prevent clipping
+    const iconText = this.add.text(0, 0, emoji, { 
+      fontSize: '40px',
+      padding: { x: 8, y: 8 } // Ensure no clipping on garfo/faca/etc.
     }).setOrigin(0.5);
+    container.add(iconText);
 
+    // 4. Clarity Focus Label
+    const labelText = this.add.text(0, 60, label.toUpperCase(), {
+      fontFamily: 'Inter', fontSize: '11px', color: '#ffffff', fontStyle: 'bold', letterSpacing: 1.2
+    }).setOrigin(0.5);
     container.add(labelText);
 
+    // 5. Nítive Lock Indicator (Full opacity fonts, matching "Check in" pattern)
     if (isLocked) {
-        // Keep visible as per user request, but logic handles the block
+        const lock = this.add.text(28, 28, '🔒', { fontSize: '16px' }).setOrigin(0.5);
+        container.add(lock);
     }
 
-    // Hover effect
-    container.on('pointerover', () => {
-        if (!isLocked || this.hasReadRules) this.tweens.add({ targets: container, scale: 1.1, duration: 100 });
-    });
-    container.on('pointerout', () => {
-        this.tweens.add({ targets: container, scale: 1.0, duration: 100 });
-    });
+    // Hover Animation
+    container.on('pointerover', () => this.tweens.add({ targets: container, scale: 1.12, duration: 250, ease: 'Cubic.easeOut' }));
+    container.on('pointerout', () => this.tweens.add({ targets: container, scale: 1.0, duration: 200, ease: 'Cubic.easeIn' }));
 
     return container;
   }
 
-  private unlockGame() {
-    if (this.hasReadRules) return;
-    this.hasReadRules = true;
-    this.gameButton.setAlpha(1);
-    
-    this.showInfo('Regras da Casa: Lidas!');
-    
-    // Visual feedback for unlock
+  private showToast(msg: string) {
+    const { width, height } = this.scale;
+    const toast = this.add.container(width / 2, height + 60);
+    const bg = this.add.graphics().fillStyle(0x000000, 0.9).fillRoundedRect(-140, -22, 280, 44, 22);
+    const txt = this.add.text(0, 0, msg, { fontFamily: 'Inter', fontSize: '12px', color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
+    toast.add([bg, txt]);
     this.tweens.add({
-      targets: this.gameButton,
-      scale: 1.2,
-      yoyo: true,
-      duration: 300
+      targets: toast, y: height - 100, duration: 500, ease: 'Back.easeOut',
+      onComplete: () => this.time.delayedCall(2200, () => {
+        this.tweens.add({ targets: toast, alpha: 0, duration: 400, onComplete: () => toast.destroy() });
+      })
     });
   }
 
   private startGame() {
-    this.scene.start('CharacterSelect');
+    this.cameras.main.fadeOut(600, 0, 0, 0);
+    this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('CharacterSelect'));
   }
 
   private showModal(key: string) {
     if (this.modalContainer) return;
-
     const { width, height } = this.scale;
-    const data = this.ICON_DATA[key] || { title: 'INFORMAÇÃO', content: 'Conteúdo em breve...' };
+    const data = this.ICON_DATA[key] || { title: 'INFO', content: '...' };
 
-    this.modalContainer = this.add.container(0, 0).setDepth(100);
-
-    // Overlay with fade
-    const overlay = this.add.rectangle(0, 0, width, height, 0x000000, 0)
-      .setOrigin(0)
-      .setInteractive();
+    this.modalContainer = this.add.container(0, 0).setDepth(200);
+    const overlay = this.add.rectangle(0, 0, width, height, 0x000000, 0.8).setOrigin(0).setInteractive();
     
-    this.tweens.add({ targets: overlay, fillAlpha: 0.6, duration: 300 });
-
-    // Modal sizing
-    const isMobile = width < 600;
-    const cardWidth = isMobile ? width * 0.9 : Math.min(width * 0.6, 600);
-    const cardHeight = isMobile ? height * 0.7 : Math.min(height * 0.8, 700);
-    const cardX = width / 2 - cardWidth / 2;
-    const cardY = height / 2 - cardHeight / 2;
-
-    // Card background with Glassmorphism
+    // Responsive Card Size
+    const cardW = Math.min(width * 0.9, 440);
+    const cardH = Math.min(height * 0.75, 540);
+    
+    const modalFrame = this.add.container(width / 2, height / 2);
     const cardBg = this.add.graphics();
-    // Shadow
-    cardBg.fillStyle(0x000000, 0.2);
-    cardBg.fillRoundedRect(cardX + 5, cardY + 5, cardWidth, cardHeight, 24);
-    // Main background (semi-transparent)
-    cardBg.fillStyle(0xffffff, 0.9);
-    cardBg.fillRoundedRect(cardX, cardY, cardWidth, cardHeight, 24);
-    // Border
-    cardBg.lineStyle(2, 0xe64d5d, 0.4);
-    cardBg.strokeRoundedRect(cardX, cardY, cardWidth, cardHeight, 24);
+    cardBg.fillStyle(0x000000, 0.3).fillRoundedRect(-cardW / 2 + 5, -cardH / 2 + 5, cardW, cardH, 32);
+    cardBg.fillStyle(0xffffff, 1).fillRoundedRect(-cardW / 2, -cardH / 2, cardW, cardH, 32);
+    modalFrame.add(cardBg);
 
-    // Close Icon (X) in top right
-    const closeX = cardX + cardWidth - 40;
-    const closeY = cardY + 40;
-    const closeIcon = this.add.container(closeX, closeY);
-    const closeCircle = this.add.graphics().fillStyle(0xf5f5f5, 1).fillCircle(0, 0, 20);
-    const closeText = this.add.text(0, 0, '✕', { fontSize: '24px', color: '#333', fontStyle: 'bold' }).setOrigin(0.5);
-    closeIcon.add([closeCircle, closeText]);
-    closeIcon.setInteractive(new Phaser.Geom.Circle(0, 0, 20), Phaser.Geom.Circle.Contains);
-    closeIcon.on('pointerover', () => closeCircle.clear().fillStyle(0xffcccc, 1).fillCircle(0, 0, 20));
-    closeIcon.on('pointerout', () => closeCircle.clear().fillStyle(0xf5f5f5, 1).fillCircle(0, 0, 20));
-    closeIcon.on('pointerdown', () => closeModal());
+    // Native HTML/CSS Scrollable Content
+    const domHtml = `
+      <div class="welcome-modal-wrapper" style="width: ${cardW - 60}px; height: ${cardH - 60}px;">
+        <h1 class="welcome-modal-title">${data.title}</h1>
+        <div class="welcome-modal-scroll">
+          <p class="welcome-modal-text">${data.content}</p>
+        </div>
+        <div class="welcome-modal-footer">
+          <button class="welcome-modal-btn">ENTENDIDO</button>
+        </div>
+      </div>
+    `;
 
-    // Title (Static)
-    const title = this.add.text(width / 2, cardY + 60, data.title, {
-      fontFamily: 'Montserrat, Arial', 
-      fontSize: isMobile ? '26px' : '34px', 
-      color: '#e64d5d', 
-      fontStyle: 'bold',
-      align: 'center'
-    }).setOrigin(0.5);
-
-    // Separator Line
-    const separator = this.add.graphics();
-    separator.lineStyle(1, 0x000000, 0.1);
-    separator.lineBetween(cardX + 40, cardY + 105, cardX + cardWidth - 40, cardY + 105);
-
-    // Scrollable Content Area
-    const margin = 40;
-    const contentWidth = cardWidth - (margin * 2);
-    const viewY = cardY + 125;
-    const viewHeight = cardHeight - (viewY - cardY) - 40; 
-
-    const contentContainer = this.add.container(width / 2, viewY);
+    this.domModal = this.add.dom(width / 2, height / 2).createFromHTML(domHtml);
     
-    // Content Text
-    const contentText = this.add.text(0, 0, data.content, {
-      fontFamily: 'Inter, Arial', 
-      fontSize: isMobile ? '18px' : '20px', 
-      color: '#2d3436', 
-      align: 'left', 
-      wordWrap: { width: contentWidth },
-      lineSpacing: 12
-    }).setOrigin(0.5, 0);
-
-    contentContainer.add(contentText);
-
-    // Mask for scrolling (with rounded bottom to match card)
-    const maskShape = this.make.graphics({ x: 0, y: 0 });
-    maskShape.fillStyle(0xffffff);
-    maskShape.fillRoundedRect(cardX + margin, viewY, contentWidth, viewHeight, { tl: 0, tr: 0, bl: 20, br: 20 });
-    const mask = maskShape.createGeometryMask();
-    contentContainer.setMask(mask);
-
-    // Scrolling Logic
-    let currentY = 0;
-    const minHeight = viewHeight;
-    const totalHeight = contentText.height;
-    const maxScroll = Math.max(0, totalHeight - minHeight);
-
-    const updateScroll = (delta: number) => {
-      currentY = Phaser.Math.Clamp(currentY + delta, -maxScroll, 0);
-      contentText.y = currentY;
-      
-      // Update scrollbar
-      if (maxScroll > 0) {
-        const scrollRatio = Math.abs(currentY) / maxScroll;
-        const barHeight = (viewHeight / totalHeight) * viewHeight;
-        const barRange = viewHeight - barHeight;
-        scrollbarThumb.y = viewY + (scrollRatio * barRange);
-      }
-    };
-
-    // Scrollbar Visual
-    const scrollbarBg = this.add.graphics();
-    const scrollbarThumb = this.add.graphics();
-    if (maxScroll > 0) {
-      scrollbarBg.fillStyle(0x000000, 0.05);
-      scrollbarBg.fillRoundedRect(cardX + cardWidth - 15, viewY, 6, viewHeight, 3);
-      
-      const barHeight = (viewHeight / totalHeight) * viewHeight;
-      scrollbarThumb.fillStyle(0xe64d5d, 0.7);
-      scrollbarThumb.fillRoundedRect(cardX + cardWidth - 15, 0, 6, barHeight, 3);
-      scrollbarThumb.y = viewY;
-    }
-
-    // Input Events for Scrolling
-    overlay.on('wheel', (_pointer: any, _over: any, _deltaX: number, deltaY: number) => {
-      updateScroll(-deltaY * 0.5);
-    });
-
-    let isDragging = false;
-    let lastP: number = 0;
-
-    overlay.on('pointerdown', (p: any) => {
-        isDragging = true;
-        lastP = p.y;
-    });
-
-    this.input.on('pointermove', (p: any) => {
-        if (!isDragging) return;
-        const delta = p.y - lastP;
-        lastP = p.y;
-        updateScroll(delta);
-    });
-
-    this.input.on('pointerup', () => {
-        isDragging = false;
-    });
-
-    // Close Action
-    const closeModal = () => {
-      this.tweens.add({
-        targets: this.modalContainer,
-        alpha: 0,
-        y: 20,
-        duration: 300,
-        ease: 'Back.easeIn',
-        onComplete: () => {
-          this.modalContainer?.destroy();
-          this.modalContainer = null;
-          if (key === 'welcome_rules') this.unlockGame();
-          // Remove global move/up listeners
-          this.input.off('pointermove');
-          this.input.off('pointerup');
+    // Add event listener to the native button
+    const btn = this.domModal.node.querySelector('.welcome-modal-btn') as HTMLElement;
+    if (btn) {
+      btn.addEventListener('click', () => {
+        this.domModal?.destroy();
+        this.domModal = null;
+        this.modalContainer?.destroy();
+        this.modalContainer = null;
+        if (key === 'welcome_rules') {
+          this.hasReadRules = true;
+          this.gameButton.setAlpha(1);
         }
       });
-    };
+    }
 
-    // Add everything to main container
-    this.modalContainer.add([overlay, cardBg, title, separator, contentContainer, closeIcon]);
-    if (maxScroll > 0) this.modalContainer.add([scrollbarBg, scrollbarThumb]);
+    // High-Performance Drag-Scroll Implementation
+    const scrollContainer = this.domModal.node.querySelector('.welcome-modal-scroll') as HTMLElement;
+    if (scrollContainer) {
+        let isDown = false;
+        let startY: number;
+        let scrollTop: number;
 
-    // Initial Animation
-    this.modalContainer.setAlpha(0);
-    this.modalContainer.y = -20;
-    this.tweens.add({
-      targets: this.modalContainer,
-      alpha: 1,
-      y: 0,
-      duration: 400,
-      ease: 'Back.easeOut'
-    });
-  }
+        const start = (e: MouseEvent | TouchEvent) => {
+            isDown = true;
+            const pageY = e instanceof MouseEvent ? e.pageY : e.touches[0].pageY;
+            startY = pageY - scrollContainer.offsetTop;
+            scrollTop = scrollContainer.scrollTop;
+        };
 
-  private showInfo(msg: string) {
-    const { width, height } = this.scale;
+        const end = () => isDown = false;
+
+        const move = (e: MouseEvent | TouchEvent) => {
+            if (!isDown) return;
+            // Only prevent default on mouse to avoid breaking native mobile swipe features
+            if (e instanceof MouseEvent) e.preventDefault();
+            const pageY = e instanceof MouseEvent ? e.pageY : e.touches[0].pageY;
+            const y = pageY - scrollContainer.offsetTop;
+            const walk = (y - startY) * 1.5; // Multiplier for better feel
+            scrollContainer.scrollTop = scrollTop - walk;
+        };
+
+        // Desktop
+        scrollContainer.addEventListener('mousedown', start as any);
+        scrollContainer.addEventListener('mouseleave', end);
+        scrollContainer.addEventListener('mouseup', end);
+        scrollContainer.addEventListener('mousemove', move as any);
+
+        // Mobile (just in case native swipe is blocked)
+        scrollContainer.addEventListener('touchstart', start as any);
+        scrollContainer.addEventListener('touchend', end);
+        scrollContainer.addEventListener('touchmove', move as any);
+    }
+
+    this.modalContainer.add([overlay, modalFrame]);
     
-    // Create a toast message container
-    const toast = this.add.container(width / 2, height * 0.9);
-    
-    const bg = this.add.graphics();
-    bg.fillStyle(0x000000, 0.7);
-    const padding = 20;
-    
-    const text = this.add.text(0, 0, msg, {
-        fontFamily: 'Arial', fontSize: '24px', color: '#ffffff', align: 'center', backgroundColor: 'transparent'
-    }).setOrigin(0.5);
-    
-    bg.fillRoundedRect(-text.width / 2 - padding, -text.height / 2 - 10, text.width + padding * 2, text.height + 20, 10);
-    
-    toast.add([bg, text]);
-    toast.setAlpha(0);
-    
-    // Fade in and out
-    this.tweens.add({
-        targets: toast,
-        alpha: 1,
-        y: height * 0.85,
-        duration: 300,
-        ease: 'Power2',
-        onComplete: () => {
-            this.time.delayedCall(2000, () => {
-                this.tweens.add({
-                    targets: toast,
-                    alpha: 0,
-                    y: height * 0.8,
-                    duration: 300,
-                    onComplete: () => toast.destroy()
-                });
-            });
-        }
-    });
+    // Animations
+    modalFrame.setScale(0.7).setAlpha(0);
+    this.domModal.setScale(0.7).setAlpha(0);
+    this.tweens.add({ targets: [modalFrame, this.domModal], scale: 1, alpha: 1, duration: 450, ease: 'Back.easeOut' });
   }
 }
