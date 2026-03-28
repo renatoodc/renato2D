@@ -1,35 +1,96 @@
-const getCurrentUser = () => localStorage.getItem('airbnb_current_user') || 'guest';
+import { signIn, signOut, resetPassword, getSession, onAuthStateChange, updatePassword, getCurrentUser } from './auth.js';
+import { loadReservations, saveReservation, deleteReservation, loadExpenses, saveExpense, deleteExpense, loadDemoData } from './db.js';
 
-function getInitialState(user = 'guest') {
-    const defaultState = {
-        selectedYear: 2026,
-        selectedMonth: new Date().getMonth() + 1,
-        selectedReservationMonth: new Date().getMonth() + 1,
-        selectedChartYears: [2026],
-        guestSort: { field: 'freq', direction: 'desc' },
-        expenseSort: { field: 'date', direction: 'desc' },
-        reservationSort: { field: 'checkIn', direction: 'desc' },
-        dashboardSort: { field: 'monthNum', direction: 'asc' },
-        reservations: [],
-        expenses: [],
-        isLoggedIn: false
+// ============================
+// STATE
+// ============================
+let state = {
+    selectedYear: 2026,
+    selectedMonth: new Date().getMonth() + 1,
+    selectedReservationMonth: new Date().getMonth() + 1,
+    selectedChartYears: [2026],
+    guestSort: { field: 'freq', direction: 'desc' },
+    expenseSort: { field: 'date', direction: 'desc' },
+    reservationSort: { field: 'checkIn', direction: 'desc' },
+    dashboardSort: { field: 'monthNum', direction: 'asc' },
+    reservations: [],
+    expenses: [],
+    isLoggedIn: false,
+    currentUser: null
+};
+
+// Save only UI preferences to localStorage (not data)
+function savePreferences() {
+    const prefs = {
+        selectedYear: state.selectedYear,
+        selectedMonth: state.selectedMonth,
+        selectedReservationMonth: state.selectedReservationMonth,
+        selectedChartYears: state.selectedChartYears,
+        guestSort: state.guestSort,
+        expenseSort: state.expenseSort,
+        reservationSort: state.reservationSort,
+        dashboardSort: state.dashboardSort
     };
-    
-    let loaded = JSON.parse(localStorage.getItem(`airbnb_state_${user}`)) || {};
-    // Deep merge/guards
-    const s = { ...defaultState, ...loaded };
-    // Ensure nested objects exist
-    if (!s.guestSort) s.guestSort = defaultState.guestSort;
-    if (!s.expenseSort) s.expenseSort = defaultState.expenseSort;
-    if (!s.reservationSort) s.reservationSort = defaultState.reservationSort;
-    if (!s.dashboardSort) s.dashboardSort = defaultState.dashboardSort;
-    if (!s.selectedChartYears) s.selectedChartYears = defaultState.selectedChartYears;
-    
-    return s;
+    localStorage.setItem('airbnb_ui_prefs', JSON.stringify(prefs));
 }
 
-let state = getInitialState(getCurrentUser());
+function loadPreferences() {
+    try {
+        const prefs = JSON.parse(localStorage.getItem('airbnb_ui_prefs'));
+        if (prefs) {
+            state.selectedYear = prefs.selectedYear || state.selectedYear;
+            state.selectedMonth = prefs.selectedMonth || state.selectedMonth;
+            state.selectedReservationMonth = prefs.selectedReservationMonth || state.selectedReservationMonth;
+            state.selectedChartYears = prefs.selectedChartYears || state.selectedChartYears;
+            state.guestSort = prefs.guestSort || state.guestSort;
+            state.expenseSort = prefs.expenseSort || state.expenseSort;
+            state.reservationSort = prefs.reservationSort || state.reservationSort;
+            state.dashboardSort = prefs.dashboardSort || state.dashboardSort;
+        }
+    } catch (e) {
+        // ignore
+    }
+}
 
+// ============================
+// TOAST NOTIFICATIONS
+// ============================
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    
+    const icons = {
+        success: 'check-circle',
+        error: 'alert-circle',
+        info: 'info'
+    };
+    
+    toast.innerHTML = `
+        <i data-lucide="${icons[type] || 'info'}" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+        <span>${message}</span>
+    `;
+    container.appendChild(toast);
+    if (window.lucide) window.lucide.createIcons();
+
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
+}
+
+function showLoading(show = true) {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) overlay.style.display = show ? 'flex' : 'none';
+}
+
+// ============================
+// FORMATTING
+// ============================
 function formatDateBR(dateStr) {
     if (!dateStr) return '-';
     const [year, month, day] = dateStr.split('-');
@@ -37,25 +98,9 @@ function formatDateBR(dateStr) {
     return `${day}/${month}/${year}`;
 }
 
-// Migration for old state structure
-if (state.guests && !state.reservations) {
-    state.reservations = state.guests.map(g => ({
-        id: g.id,
-        mainGuest: g.name,
-        guests: [{ name: g.name, cpf: g.cpf || '' }],
-        checkIn: g.checkIn,
-        checkOut: g.checkOut,
-        value: g.value
-    }));
-    delete state.guests;
-}
-
-function saveState() {
-    localStorage.setItem('airbnb_manager_state', JSON.stringify(state));
-    renderAll();
-}
-
-// Navigation
+// ============================
+// NAVIGATION
+// ============================
 window.switchView = (viewName, extra = null) => {
     document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
     const target = document.getElementById(`view-${viewName}`);
@@ -83,6 +128,9 @@ window.switchView = (viewName, extra = null) => {
     });
 };
 
+// ============================
+// RENDER ALL
+// ============================
 function renderAll() {
     renderYearSelector();
     renderDashboard();
@@ -97,9 +145,13 @@ function renderAll() {
 
 window.changeYear = (year) => {
     state.selectedYear = parseInt(year);
-    saveState();
+    savePreferences();
+    renderAll();
 };
 
+// ============================
+// YEAR SELECTOR
+// ============================
 function renderYearSelector() {
     ['dash-year-select', 'res-year-select', 'exp-year-select'].forEach(id => {
         const select = document.getElementById(id);
@@ -115,6 +167,9 @@ function renderYearSelector() {
     });
 }
 
+// ============================
+// DASHBOARD
+// ============================
 function renderDashboard() {
     const year = state.selectedYear;
     const filteredRes = state.reservations.filter(r => new Date(r.checkIn).getFullYear() === year);
@@ -123,7 +178,6 @@ function renderDashboard() {
     const revenue = filteredRes.reduce((sum, r) => sum + r.value, 0);
     const expenses = filteredExp.reduce((sum, e) => sum + e.value, 0);
     
-    // Calculate unique guests for the year
     const guestSet = new Set();
     filteredRes.forEach(r => r.guests.forEach(g => {
         if (g.name && g.name.trim()) {
@@ -140,7 +194,6 @@ function renderDashboard() {
     const tableBody = document.getElementById('dash-bookings-body');
     if (!tableBody) return;
     
-    // Get today in YYYY-MM-DD
     const today = new Date().toISOString().split('T')[0];
     const activeRes = state.reservations.filter(r => r.checkIn <= today && r.checkOut >= today);
 
@@ -154,6 +207,9 @@ function renderDashboard() {
     `).join('') || '<tr><td colspan="4" style="text-align:center; opacity:0.5; padding: 20px;">Nenhuma reserva ativa para hoje</td></tr>';
 }
 
+// ============================
+// MONTHLY FINANCIALS
+// ============================
 function renderMonthlyFinancials() {
     const tableBody = document.getElementById('dash-monthly-finance-body');
     const title = document.getElementById('dash-monthly-title');
@@ -164,7 +220,6 @@ function renderMonthlyFinancials() {
     const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
     const year = state.selectedYear;
     
-    // Calculate data first
     const data = months.map((m, i) => {
         const monthNum = i + 1;
         const monthlyRevenue = state.reservations
@@ -190,7 +245,6 @@ function renderMonthlyFinancials() {
         };
     });
 
-    // Sort data
     data.sort((a, b) => {
         const field = state.dashboardSort.field;
         const dir = state.dashboardSort.direction === 'asc' ? 1 : -1;
@@ -218,9 +272,13 @@ window.setDashboardSort = (field) => {
         state.dashboardSort.field = field;
         state.dashboardSort.direction = 'desc';
     }
-    saveState();
+    savePreferences();
+    renderAll();
 };
 
+// ============================
+// EXPENSE MONTHS
+// ============================
 function renderMonths() {
     const grid = document.getElementById('month-grid');
     if (!grid) return;
@@ -246,6 +304,9 @@ function renderMonths() {
     }).join('');
 }
 
+// ============================
+// EXPENSE DETAILS
+// ============================
 function renderMonthlyDetails() {
     const listBody = document.getElementById('expenses-details-body');
     const title = document.getElementById('selected-month-title');
@@ -276,7 +337,7 @@ function renderMonthlyDetails() {
             <td>
                 <div style="display:flex; gap:5px;">
                     <button onclick="showModal('expense', ${e.id})" class="btn-secondary" style="padding: 5px 10px;">Editar</button>
-                    <button onclick="deleteItem('expenses', ${e.id})" class="btn-secondary" style="padding: 5px 10px; background: #c0392b;">Excluir</button>
+                    <button onclick="handleDelete('expenses', ${e.id})" class="btn-secondary" style="padding: 5px 10px; background: #c0392b;">Excluir</button>
                 </div>
             </td>
         </tr>
@@ -290,9 +351,13 @@ window.setExpenseSort = (field) => {
         state.expenseSort.field = field;
         state.expenseSort.direction = 'desc';
     }
-    saveState();
+    savePreferences();
+    renderAll();
 };
 
+// ============================
+// RESERVATION MONTHS
+// ============================
 function renderReservationMonths() {
     const grid = document.getElementById('res-month-grid');
     if (!grid) return;
@@ -319,6 +384,9 @@ function renderReservationMonths() {
     }).join('');
 }
 
+// ============================
+// RESERVATION DETAILS
+// ============================
 function renderMonthlyReservations() {
     const listBody = document.getElementById('reservations-details-body');
     const title = document.getElementById('selected-res-month-title');
@@ -351,7 +419,7 @@ function renderMonthlyReservations() {
             <td>
                 <div style="display:flex; gap:5px;">
                     <button onclick="showModal('guest', ${r.id})" class="btn-secondary" style="padding: 5px 10px;">Editar</button>
-                    <button onclick="deleteItem('reservations', ${r.id})" class="btn-secondary" style="padding: 5px 10px; background: #c0392b;">Excluir</button>
+                    <button onclick="handleDelete('reservations', ${r.id})" class="btn-secondary" style="padding: 5px 10px; background: #c0392b;">Excluir</button>
                 </div>
             </td>
         </tr>
@@ -365,31 +433,17 @@ window.setReservationSort = (field) => {
         state.reservationSort.field = field;
         state.reservationSort.direction = 'desc';
     }
-    saveState();
+    savePreferences();
+    renderAll();
 };
 
-function renderReservations() {
-    const listBody = document.getElementById('reservations-list-body');
-    if (!listBody) return;
-    listBody.innerHTML = state.reservations.map(r => `
-        <tr>
-            <td style="font-weight:700">${r.mainGuest}</td>
-            <td style="font-size: 0.85rem; color: var(--text-secondary)">
-                ${r.guests.map(g => `${g.name} (${g.cpf})`).join('<br>')}
-            </td>
-            <td>${r.checkIn}</td>
-            <td>${r.checkOut}</td>
-            <td style="font-weight:800; color: var(--primary)">R$ ${r.value}</td>
-            <td><button onclick="deleteItem('reservations', ${r.id})" class="btn-secondary" style="padding: 5px 10px;">Excluir</button></td>
-        </tr>
-    `).join('');
-}
-
+// ============================
+// GUESTS
+// ============================
 function renderGuests() {
     const listBody = document.getElementById('guests-freq-body');
     if (!listBody) return;
 
-    // Aggregate guests by CPF/Key
     const guestMap = new Map();
     state.reservations.forEach(r => {
         r.guests.forEach(g => {
@@ -408,7 +462,6 @@ function renderGuests() {
     const totalCounter = document.getElementById('total-guests-count');
     if (totalCounter) totalCounter.textContent = guestList.length;
 
-    // Sorting logic
     guestList.sort((a, b) => {
         let valA = a[state.guestSort.field];
         let valB = b[state.guestSort.field];
@@ -441,7 +494,6 @@ function renderGuests() {
         </tr>
     `).join('');
 
-    // @ts-ignore
     if (window.lucide) window.lucide.createIcons();
 }
 
@@ -452,11 +504,13 @@ window.setGuestSort = (field) => {
         state.guestSort.field = field;
         state.guestSort.direction = field === 'name' ? 'asc' : 'desc';
     }
-    saveState();
+    savePreferences();
     renderAll();
 };
 
-// Charts & Analytics
+// ============================
+// CHARTS
+// ============================
 let mainChart = null;
 
 function renderCharts() {
@@ -507,7 +561,6 @@ function renderCharts() {
             profitData.push(revenue - expenses);
         }
 
-        // Colors for premium look
         const colors = [
             { rev: '#4cd137', exp: '#e64d5d', prof: '#00a8ff' },
             { rev: '#fbc531', exp: '#9c88ff', prof: '#487eb0' }
@@ -522,7 +575,7 @@ function renderCharts() {
             borderWidth: 2,
             tension: 0.4,
             type: 'bar',
-            hidden: state.selectedChartYears.length > 2 // Hide breakdown if too many years
+            hidden: state.selectedChartYears.length > 2
         });
         datasets.push({
             label: `Despesas ${year}`,
@@ -548,7 +601,6 @@ function renderCharts() {
 
     if (mainChart) mainChart.destroy();
     
-    // @ts-ignore
     mainChart = new Chart(ctx, {
         type: 'bar',
         data: { labels: months, datasets: datasets },
@@ -591,10 +643,13 @@ window.toggleChartYear = (year) => {
     } else {
         state.selectedChartYears.push(year);
     }
-    saveState();
+    savePreferences();
+    renderAll();
 };
 
-// Modals & Dynamic Guest Fields
+// ============================
+// MODALS & GUEST FIELDS
+// ============================
 window.addGuestField = (name = '', cpf = '') => {
     const container = document.getElementById('guests-container');
     const div = document.createElement('div');
@@ -719,49 +774,60 @@ window.showModal = (type, editId = null) => {
     if (window.lucide) window.lucide.createIcons();
 
     const form = document.getElementById('modal-form');
-    form.onsubmit = (e) => {
+    form.onsubmit = async (e) => {
         e.preventDefault();
-        if (type === 'guest') {
-            const guestNames = document.querySelectorAll('.guest-name');
-            const guestCpfs = document.querySelectorAll('.guest-cpf');
-            const guestsList = [];
-            guestNames.forEach((input, index) => {
-                guestsList.push({ name: input.value, cpf: guestCpfs[index].value });
-            });
+        showLoading(true);
 
-            const reservationData = {
-                id: editId || Date.now(),
-                mainGuest: guestsList[0].name,
-                guests: guestsList,
-                checkIn: document.getElementById('r-in').value,
-                checkOut: document.getElementById('r-out').value,
-                value: parseFloat(document.getElementById('r-val').value)
-            };
+        try {
+            if (type === 'guest') {
+                const guestNames = document.querySelectorAll('.guest-name');
+                const guestCpfs = document.querySelectorAll('.guest-cpf');
+                const guestsList = [];
+                guestNames.forEach((input, index) => {
+                    guestsList.push({ name: input.value, cpf: guestCpfs[index].value });
+                });
 
-            if (editId) {
-                const idx = state.reservations.findIndex(r => r.id === editId);
-                state.reservations[idx] = reservationData;
+                const reservationData = {
+                    id: editId || null,
+                    mainGuest: guestsList[0].name,
+                    guests: guestsList,
+                    checkIn: document.getElementById('r-in').value,
+                    checkOut: document.getElementById('r-out').value,
+                    value: parseFloat(document.getElementById('r-val').value)
+                };
+
+                const saved = await saveReservation(reservationData);
+                if (saved) {
+                    showToast('Reserva salva com sucesso!', 'success');
+                } else {
+                    showToast('Erro ao salvar reserva.', 'error');
+                }
             } else {
-                state.reservations.push(reservationData);
-            }
-        } else {
-            const expenseData = {
-                id: editId || Date.now(),
-                category: document.getElementById('e-cat').value,
-                description: document.getElementById('e-desc').value,
-                date: document.getElementById('e-date').value,
-                value: parseFloat(document.getElementById('e-val').value)
-            };
+                const expenseData = {
+                    id: editId || null,
+                    category: document.getElementById('e-cat').value,
+                    description: document.getElementById('e-desc').value,
+                    date: document.getElementById('e-date').value,
+                    value: parseFloat(document.getElementById('e-val').value)
+                };
 
-            if (editId) {
-                const idx = state.expenses.findIndex(e => e.id === editId);
-                state.expenses[idx] = expenseData;
-            } else {
-                state.expenses.push(expenseData);
+                const saved = await saveExpense(expenseData);
+                if (saved) {
+                    showToast('Despesa salva com sucesso!', 'success');
+                } else {
+                    showToast('Erro ao salvar despesa.', 'error');
+                }
             }
+
+            // Reload data from Supabase
+            await refreshData();
+            closeModal();
+        } catch (err) {
+            console.error('Save error:', err);
+            showToast('Erro inesperado ao salvar.', 'error');
+        } finally {
+            showLoading(false);
         }
-        closeModal();
-        saveState();
     };
 };
 
@@ -769,137 +835,300 @@ window.closeModal = () => {
     document.getElementById('modal-overlay').style.display = 'none';
 };
 
-window.deleteItem = (list, id) => {
-    state[list] = state[list].filter(item => item.id !== id);
-    saveState();
-};
+// ============================
+// DELETE (async with Supabase)
+// ============================
+window.handleDelete = async (list, id) => {
+    if (!confirm('Tem certeza que deseja excluir?')) return;
 
-window.handleLogin = () => {
-    const user = document.getElementById('login-user').value;
-    const pass = document.getElementById('login-pass').value;
-    const errorMsg = document.getElementById('login-error');
-
-    if (user === 'tacolimey' && pass === 'pinto1234') {
-        localStorage.setItem('airbnb_current_user', user);
-        state = getInitialState(user);
-        state.isLoggedIn = true;
-        saveState();
-        updateAuthView();
-        renderAll();
-    } else {
-        if (errorMsg) {
-            errorMsg.style.display = 'block';
-            setTimeout(() => { errorMsg.style.display = 'none'; }, 3000);
+    showLoading(true);
+    try {
+        let success;
+        if (list === 'reservations') {
+            success = await deleteReservation(id);
+        } else {
+            success = await deleteExpense(id);
         }
+
+        if (success) {
+            showToast('Item excluído com sucesso!', 'success');
+            await refreshData();
+        } else {
+            showToast('Erro ao excluir item.', 'error');
+        }
+    } catch (err) {
+        console.error('Delete error:', err);
+        showToast('Erro inesperado ao excluir.', 'error');
+    } finally {
+        showLoading(false);
     }
 };
 
-window.recoverData = () => {
-    localStorage.setItem('airbnb_current_user', 'tacolimey');
-    state.isLoggedIn = true;
-    
-    // Exact reconstruction of the 14 unique guests & reservations
-    state.reservations = [
-        // Janeiro (R$ 8.616)
-        { 
-            id: 1, mainGuest: 'William Douglas Estacio dos Santos', 
-            guests: [
-                { name: 'William Douglas Estacio dos Santos', cpf: '12287623680' },
-                { name: 'Lorena Natyelle de Souza Estacio', cpf: '14556083605' }
-            ], 
-            checkIn: '2026-01-02', checkOut: '2026-01-10', value: 3600 
-        },
-        { 
-            id: 2, mainGuest: 'Michelle Carine Carmo de Freitas', 
-            guests: [
-                { name: 'Michelle Carine Carmo de Freitas', cpf: '10590029657' },
-                { name: 'Extra Guest 1', cpf: 'X01' },
-                { name: 'Extra Guest 2', cpf: 'X02' }
-            ], 
-            checkIn: '2026-01-12', checkOut: '2026-01-20', value: 2500 
-        },
-        { 
-            id: 3, mainGuest: 'Jean Leonor Pereira', 
-            guests: [
-                { name: 'Jean Leonor Pereira', cpf: '09670040639' },
-                { name: 'Extra Guest 3', cpf: 'X03' }
-            ], 
-            checkIn: '2026-01-22', checkOut: '2026-01-28', value: 2516 
-        },
-        // Fevereiro (R$ 5.223)
-        { 
-            id: 4, mainGuest: 'Gabriel Gomes', 
-            guests: [
-                { name: 'Gabriel Gomes', cpf: '0' },
-                { name: 'Extra Guest 4', cpf: 'X04' }
-            ], 
-            checkIn: '2026-02-01', checkOut: '2026-02-12', value: 3000 
-        },
-        { 
-            id: 5, mainGuest: 'Guest Sync Test', 
-            guests: [
-                { name: 'Guest Sync Test', cpf: '123.456.789-00' },
-                { name: 'Extra Guest 5', cpf: 'X05' }
-            ], 
-            checkIn: '2026-02-15', checkOut: '2026-02-25', value: 2223 
-        },
-        // Março (R$ 3.133)
-        { 
-            id: 6, mainGuest: 'Test Guest A', 
-            guests: [
-                { name: 'Test Guest A', cpf: '111' }
-            ], 
-            checkIn: '2026-03-01', checkOut: '2026-03-15', value: 1533 
-        },
-        { 
-            id: 7, mainGuest: 'Test Guest B', 
-            guests: [
-                { name: 'Test Guest B', cpf: '222' },
-                { name: 'Extra Guest 6', cpf: 'X06' }
-            ], 
-            checkIn: '2026-03-18', checkOut: '2026-03-28', value: 1600 
-        }
-    ];
-
-    state.expenses = [
-        { id: 1, category: 'CONDOMÍNIO', description: 'Janeiro', date: '2026-01-14', value: 404 },
-        { id: 2, category: 'ENERGIA', description: 'Janeiro', date: '2026-01-05', value: 194 },
-        { id: 3, category: 'LIMPEZA', description: 'Jan 03', date: '2026-01-03', value: 120 },
-        { id: 4, category: 'LIMPEZA', description: 'Jan 17', date: '2026-01-17', value: 120 },
-        { id: 5, category: 'LIMPEZA', description: 'Jan 21', date: '2026-01-21', value: 120 },
-        { id: 6, category: 'LIMPEZA', description: 'Jan 28', date: '2026-01-28', value: 120 },
-        { id: 7, category: 'INTERNET', description: 'Loga', date: '2026-01-14', value: 100 },
-        { id: 8, category: 'OUTROS', description: 'Fevereiro', date: '2026-02-15', value: 1097 },
-        { id: 9, category: 'OUTROS', description: 'Março', date: '2026-03-15', value: 902 }
-    ];
-    state.selectedYear = 2026;
-    saveState();
-    updateAuthView();
+// ============================
+// DATA REFRESH
+// ============================
+async function refreshData() {
+    state.reservations = await loadReservations();
+    state.expenses = await loadExpenses();
     renderAll();
-    alert('Dados restaurados: 14 hóspedes únicos e financeiros exatos para Q1 2026!');
+}
+
+// ============================
+// AUTH HANDLERS
+// ============================
+window.handleLogin = async () => {
+    const email = document.getElementById('login-email').value;
+    const pass = document.getElementById('login-pass').value;
+    const errorMsg = document.getElementById('login-error');
+    const btn = document.getElementById('btn-login');
+
+    if (!email || !pass) {
+        errorMsg.textContent = 'Preencha todos os campos.';
+        errorMsg.style.display = 'block';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-dots">Entrando...</span>';
+
+    const { data, error } = await signIn(email, pass);
+
+    if (error) {
+        errorMsg.textContent = 'Credenciais inválidas. Tente novamente.';
+        errorMsg.style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = 'Entrar <i data-lucide="log-in" style="margin-left: 10px;"></i>';
+        if (window.lucide) window.lucide.createIcons();
+        setTimeout(() => { errorMsg.style.display = 'none'; }, 3000);
+    }
+    // Auth state change handler will handle the rest
 };
 
-window.logout = () => {
+window.showResetForm = () => {
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('reset-form').style.display = 'block';
+    document.getElementById('login-title').textContent = 'Recuperar Senha';
+    document.getElementById('login-subtitle').textContent = 'Digite seu email para receber o link de recuperação';
+    if (window.lucide) window.lucide.createIcons();
+};
+
+window.showLoginForm = () => {
+    document.getElementById('reset-form').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('login-title').textContent = 'Bem-vindo';
+    document.getElementById('login-subtitle').textContent = 'Acesse sua conta para gerenciar suas finanças';
+    if (window.lucide) window.lucide.createIcons();
+};
+
+window.handleResetPassword = async () => {
+    const email = document.getElementById('reset-email').value;
+    const successMsg = document.getElementById('reset-message');
+    const errorMsg = document.getElementById('reset-error');
+    const btn = document.getElementById('btn-reset');
+
+    if (!email) {
+        errorMsg.textContent = 'Digite seu email.';
+        errorMsg.style.display = 'block';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = 'Enviando...';
+
+    const { error } = await resetPassword(email);
+
+    if (error) {
+        errorMsg.textContent = 'Erro ao enviar email. Verifique o endereço.';
+        errorMsg.style.display = 'block';
+        successMsg.style.display = 'none';
+    } else {
+        successMsg.style.display = 'block';
+        errorMsg.style.display = 'none';
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = 'Enviar Link de Recuperação <i data-lucide="send" style="margin-left: 10px;"></i>';
+    if (window.lucide) window.lucide.createIcons();
+};
+
+window.handleUpdatePassword = async () => {
+    const newPass = document.getElementById('new-password').value;
+    const confirmPass = document.getElementById('confirm-password').value;
+    const errorMsg = document.getElementById('update-pass-error');
+
+    if (!newPass || !confirmPass) {
+        errorMsg.textContent = 'Preencha todos os campos.';
+        errorMsg.style.display = 'block';
+        return;
+    }
+
+    if (newPass !== confirmPass) {
+        errorMsg.textContent = 'As senhas não coincidem.';
+        errorMsg.style.display = 'block';
+        return;
+    }
+
+    if (newPass.length < 6) {
+        errorMsg.textContent = 'A senha deve ter pelo menos 6 caracteres.';
+        errorMsg.style.display = 'block';
+        return;
+    }
+
+    const { error } = await updatePassword(newPass);
+
+    if (error) {
+        errorMsg.textContent = 'Erro ao atualizar senha. Tente novamente.';
+        errorMsg.style.display = 'block';
+    } else {
+        showToast('Senha atualizada com sucesso!', 'success');
+        // Redirect to app
+        await initApp();
+    }
+};
+
+window.logout = async () => {
+    showLoading(true);
+    await signOut();
     state.isLoggedIn = false;
-    saveState();
-    localStorage.removeItem('airbnb_current_user');
+    state.currentUser = null;
+    state.reservations = [];
+    state.expenses = [];
+    showLoading(false);
     location.reload();
 };
 
+// Demo data handler
+window.handleLoadDemoData = async () => {
+    if (!confirm('Isso carregará dados de demonstração na sua conta. Deseja continuar?')) return;
+
+    showLoading(true);
+    try {
+        const success = await loadDemoData();
+        if (success) {
+            showToast('Dados demo carregados com sucesso!', 'success');
+            await refreshData();
+        } else {
+            showToast('Erro ao carregar dados demo.', 'error');
+        }
+    } catch (err) {
+        console.error('Demo data error:', err);
+        showToast('Erro inesperado.', 'error');
+    } finally {
+        showLoading(false);
+    }
+};
+
+// ============================
+// AUTH VIEW
+// ============================
 function updateAuthView() {
     if (state.isLoggedIn) {
         document.body.classList.add('authenticated');
+        // Update user info in sidebar
+        const emailDisplay = document.getElementById('user-email-display');
+        if (emailDisplay && state.currentUser) {
+            emailDisplay.textContent = state.currentUser.email;
+        }
+        // Update avatar
+        const avatar = document.getElementById('user-avatar');
+        if (avatar && state.currentUser) {
+            const name = state.currentUser.email.split('@')[0];
+            avatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=e64d5d&color=fff`;
+        }
     } else {
         document.body.classList.remove('authenticated');
     }
     if (window.lucide) window.lucide.createIcons();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    updateAuthView();
-    if (state.isLoggedIn) {
-        renderAll();
+// ============================
+// APP INITIALIZATION
+// ============================
+let _isInitializing = false;
+
+async function initApp() {
+    if (_isInitializing) return;
+    _isInitializing = true;
+    showLoading(true);
+    loadPreferences();
+
+    try {
+        const { session } = await getSession();
+
+        if (session) {
+            state.isLoggedIn = true;
+            state.currentUser = session.user;
+            updateAuthView();
+
+            // Load data from Supabase
+            state.reservations = await loadReservations();
+            state.expenses = await loadExpenses();
+            renderAll();
+        } else {
+            state.isLoggedIn = false;
+            updateAuthView();
+        }
+    } catch (err) {
+        console.error('Init error:', err);
+        state.isLoggedIn = false;
+        updateAuthView();
+    } finally {
+        showLoading(false);
+        _isInitializing = false;
     }
+}
+
+// ============================
+// AUTH STATE LISTENER
+// ============================
+onAuthStateChange(async (event, session) => {
+    // Skip events that don't require action
+    if (event === 'INITIAL_SESSION') return;
+    if (event === 'TOKEN_REFRESHED') return;
+
+    if (event === 'SIGNED_IN' && session) {
+        // If already logged in (e.g. tab switch), skip the full reload
+        if (state.isLoggedIn) return;
+        // If initApp is running, let it handle the load
+        if (_isInitializing) return;
+
+        state.isLoggedIn = true;
+        state.currentUser = session.user;
+        updateAuthView();
+
+        showLoading(true);
+        try {
+            state.reservations = await loadReservations();
+            state.expenses = await loadExpenses();
+            renderAll();
+            showToast('Login realizado com sucesso!', 'success');
+        } catch (err) {
+            console.error('Auth load error:', err);
+            showToast('Erro ao carregar dados.', 'error');
+        } finally {
+            showLoading(false);
+        }
+    } else if (event === 'SIGNED_OUT') {
+        state.isLoggedIn = false;
+        state.currentUser = null;
+        state.reservations = [];
+        state.expenses = [];
+        updateAuthView();
+    } else if (event === 'PASSWORD_RECOVERY') {
+        // Show update password form
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('reset-form').style.display = 'none';
+        document.getElementById('update-password-form').style.display = 'block';
+        document.getElementById('login-title').textContent = 'Nova Senha';
+        document.getElementById('login-subtitle').textContent = 'Defina sua nova senha de acesso';
+    }
+});
+
+// ============================
+// DOM READY
+// ============================
+document.addEventListener('DOMContentLoaded', () => {
+    initApp();
     
     // Add event listeners to sidebar
     document.querySelectorAll('.nav-item').forEach((item) => {
