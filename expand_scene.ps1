@@ -57,7 +57,7 @@ $skyBrush.Dispose()
 $blueBrush.Dispose()
 
 # Helper
-function Draw-S {
+function Invoke-DrawSection {
     param($srcImg, $srcX, $srcY, $srcW, $srcH, $destX, $destY, $destW, $destH)
     $sR = New-Object System.Drawing.Rectangle([int]$srcX, [int]$srcY, [int]$srcW, [int]$srcH)
     $dR = New-Object System.Drawing.Rectangle([int]$destX, [int]$destY, [int]$destW, [int]$destH)
@@ -69,7 +69,7 @@ $currY = $topPaddingH
 
 # A. ROAD
 # First, draw the road background
-Draw-S $rua1 0 $roadSrcY 1435 $roadSrcH 0 $currY $targetWidth $roadDestH
+Invoke-DrawSection $rua1 0 $roadSrcY 1435 $roadSrcH 0 $currY $targetWidth $roadDestH
 
 $currY += $roadDestH
 
@@ -86,14 +86,14 @@ $crossDestH = [int][math]::Round(21 * $scale) # Cover down to bottom
 $ramp1SrcW = 57 - 0
 $ramp1X = [int][math]::Round(0 * $scale)
 $ramp1W = [int][math]::Round($ramp1SrcW * $scale)
-Draw-S $rua1 0 $crossSrcY $ramp1SrcW $crossSrcH $ramp1X $crossDestY $ramp1W $crossDestH
+Invoke-DrawSection $rua1 0 $crossSrcY $ramp1SrcW $crossSrcH $ramp1X $crossDestY $ramp1W $crossDestH
 
 # Right Drop (True right crosswalk at 1355)
 # Widen to the very edge of the image (1435) to remove the remaining curb piece
 $ramp2SrcW = 1435 - 1355
 $ramp2X = [int][math]::Round(1355 * $scale)
 $ramp2W = [int][math]::Round($ramp2SrcW * $scale)
-Draw-S $rua1 1355 $crossSrcY $ramp2SrcW $crossSrcH $ramp2X $crossDestY $ramp2W $crossDestH
+Invoke-DrawSection $rua1 1355 $crossSrcY $ramp2SrcW $crossSrcH $ramp2X $crossDestY $ramp2W $crossDestH
 
 # B. CICLOVIA (Gray asphalt) - Fixed 350px
 $grayStart = $currY
@@ -106,19 +106,19 @@ $asphaltDestH = [int][math]::Round(($cicloBodyDestH - $stripeDestH) / 2.0) # 131
 $asphalt2DestH = $cicloBodyDestH - $stripeDestH - $asphaltDestH # 131px
 
 # Top asphalt (y=9, h=40)
-Draw-S $calcadaoBackup 0 9 1435 40 0 $currY $targetWidth $asphaltDestH
+Invoke-DrawSection $calcadaoBackup 0 9 1435 40 0 $currY $targetWidth $asphaltDestH
 $currY += $asphaltDestH
 
 # Stripe (y=49, h=13)
-Draw-S $calcadaoBackup 0 49 1435 13 0 $currY $targetWidth $stripeDestH
+Invoke-DrawSection $calcadaoBackup 0 49 1435 13 0 $currY $targetWidth $stripeDestH
 $currY += $stripeDestH
 
 # Bottom asphalt (y=62, h=40)
-Draw-S $calcadaoBackup 0 62 1435 40 0 $currY $targetWidth $asphalt2DestH
+Invoke-DrawSection $calcadaoBackup 0 62 1435 40 0 $currY $targetWidth $asphalt2DestH
 $currY += $asphalt2DestH
 
 # Middle curb (Restored continuous curb)
-Draw-S $calcadaoBackup 0 112 1435 18 0 $currY $targetWidth $curbDestH
+Invoke-DrawSection $calcadaoBackup 0 112 1435 18 0 $currY $targetWidth $curbDestH
 $currY = $grayStart + $grayDestH # Ensure perfect alignment
 
 # C. CALÇADÃO (Red tiles) - Fixed 450px
@@ -126,11 +126,11 @@ $botCurbDestH = [int][math]::Round(52 * $scale) # approx 148px
 $redBodyDestH = $redDestH - $botCurbDestH # 302px
 
 $redSrcCropH = [int][math]::Round($redBodyDestH / $scale) # approx 106px
-Draw-S $calcadaoBackup 0 130 1435 $redSrcCropH 0 $currY $targetWidth $redBodyDestH
+Invoke-DrawSection $calcadaoBackup 0 130 1435 $redSrcCropH 0 $currY $targetWidth $redBodyDestH
 $currY += $redBodyDestH
 
 # Bottom Curb/Sand Transition
-Draw-S $calcadaoBackup 0 270 1435 52 0 $currY $targetWidth $botCurbDestH
+Invoke-DrawSection $calcadaoBackup 0 270 1435 52 0 $currY $targetWidth $botCurbDestH
 $currY = $grayStart + $grayDestH + $redDestH # Ensure perfect alignment
 # D. RESTINGA — sand background + restinga centered, overlapping sidewalk
 # Load sand tile

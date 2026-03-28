@@ -8,69 +8,354 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+    <!-- Login Portal -->
+    <div id="login-view" class="login-page">
+        <div class="login-card fade-in">
+            <div class="login-header">
+                <div class="logo">
+                    <i data-lucide="home" style="color: var(--primary); width: 32px; height: 32px;"></i>
+                    <span>Airbnb<br><small>Manager</small></span>
+                </div>
+                <h1>Bem-vindo</h1>
+                <p>Acesse sua conta para gerenciar suas finanças</p>
+            </div>
+            
+            <div class="login-form">
+                <div class="input-group">
+                    <label>Usuário</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="user"></i>
+                        <input type="text" id="login-user" placeholder="Digite seu usuário">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Senha</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="lock"></i>
+                        <input type="password" id="login-pass" placeholder="••••••••">
+                    </div>
+                </div>
+
+                <div id="login-error" class="error-msg" style="display: none; color: #ff4757; font-size: 0.85rem; text-align: center; margin-bottom: 15px;">
+                    Credenciais inválidas. Tente novamente.
+                </div>
+                
+                <button onclick="window.handleLogin()" class="btn-primary" style="width: 100%; justify-content: center; padding: 14px; font-size: 1rem;">
+                    Entrar <i data-lucide="log-in" style="margin-left: 10px;"></i>
+                </button>
+            </div>
+            
+            <div class="login-footer">
+                <p>&copy; 2026 Airbnb Manager SaaS Premium</p>
+                <a href="#" onclick="window.recoverData()" style="color: var(--primary); font-size: 0.75rem; text-decoration: none; margin-top: 10px; display: inline-block; opacity: 0.8;">Recuperar Dados (Emergência)</a>
+            </div>
+        </div>
+    </div>
+
     <div id="app">
+        <!-- Decorative Background -->
+        <div style="position: fixed; top: -10%; right: -10%; width: 40%; height: 60%; background: radial-gradient(circle, rgba(255, 71, 87, 0.05) 0%, transparent 70%); filter: blur(100px); pointer-events: none; z-index: 0;"></div>
+        
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <span class="logo-icon">🏠</span>
+                <i data-lucide="home" class="logo-icon" style="color: var(--primary); width: 32px; height: 32px;"></i>
                 <span class="logo-text">Airbnb Manager</span>
             </div>
             <nav class="nav-menu">
-                <a href="#" class="nav-item active"><span class="icon">📊</span> Dashboard</a>
-                <a href="#" class="nav-item"><span class="icon">📅</span> Calendário</a>
-                <a href="#" class="nav-item"><span class="icon">👥</span> Hóspedes</a>
-                <a href="#" class="nav-item"><span class="icon">💰</span> Finanças</a>
-                <a href="#" class="nav-item"><span class="icon">⚙️</span> Configurações</a>
+                <a href="#" class="nav-item active">
+                    <i data-lucide="layout-dashboard"></i> 
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="calendar-range"></i> 
+                    <span>Reservas</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="users"></i> 
+                    <span>Despesas</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="receipt"></i> 
+                    <span>Hóspedes</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="trending-up"></i> 
+                    <span>Gráficos</span>
+                </a>
+                <div style="margin-top: auto; padding: 10px 0;">
+                    <a href="javascript:void(0)" onclick="window.logout()" class="nav-logout" style="color: #ff4757; cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 12px 20px; text-decoration: none; transition: all 0.3s ease; border-radius: 12px; margin: 4px 0;">
+                        <i data-lucide="log-out" style="width: 20px; height: 20px;"></i>
+                        <span style="font-weight: 500;">Sair</span>
+                    </a>
+                </div>
             </nav>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <header class="top-bar">
-                <h1>Bem-vindo, Renato</h1>
-                <div class="user-profile">
-                    <img src="https://ui-avatars.com/api/?name=Renato&background=e64d5d&color=fff" alt="User">
-                </div>
-            </header>
+            <!-- Dashboard View -->
+            <div id="view-dashboard" class="view">
+                <header class="top-bar">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <h1>Dashboard</h1>
+                        <div class="year-selector">
+                            <label for="dash-year-select" style="font-size: 0.9rem; opacity: 0.7; margin-right: 10px;">Ano:</label>
+                            <select id="dash-year-select" onchange="window.changeYear(this.value)" style="padding: 5px 15px; border-radius: 20px; background: #333; color: white; border: 1px solid #555; cursor: pointer; outline: none;">
+                                <!-- Years will be populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Renato&background=e64d5d&color=fff" alt="User">
+                    </div>
+                </header>
 
-            <section class="stats-grid">
-                <div class="stat-card">
-                    <h3>Receita Mensal</h3>
-                    <p class="value">R$ 12.450</p>
-                    <span class="trend positive">+15% vs mês anterior</span>
-                </div>
-                <div class="stat-card">
-                    <h3>Taxa de Ocupação</h3>
-                    <p class="value">88%</p>
-                    <span class="trend positive">+5% vs mês anterior</span>
-                </div>
-                <div class="stat-card">
-                    <h3>Check-ins Hoje</h3>
-                    <p class="value">3</p>
-                    <span class="trend">Próximo: 14h00</span>
-                </div>
-            </section>
+                <section class="stats-grid">
+                    <div class="stat-card card">
+                        <span class="stat-label">Receita Anual</span>
+                        <span class="stat-value" id="dash-revenue" style="color: #4cd137">R$ 0</span>
+                    </div>
+                    <div class="stat-card card">
+                        <span class="stat-label">Despesas (Ano)</span>
+                        <span class="stat-value" id="dash-expenses" style="color: #e64d5d">- R$ 0</span>
+                    </div>
+                    <div class="stat-card card">
+                        <span class="stat-label">Total de Hóspedes (Ano)</span>
+                        <span class="stat-value" id="dash-guests" style="color: var(--primary)">0</span>
+                    </div>
+                    <div class="stat-card card">
+                        <span class="stat-label">Balanço do Ano</span>
+                        <span class="stat-value" id="dash-balance" style="color: #4cd137">R$ 0</span>
+                    </div>
+                </section>
 
-            <section class="recent-bookings">
-                <h2>Reservas Recentes</h2>
-                <table class="bookings-table">
+                <div class="dashboard-secondary">
+                    <section class="monthly-financials card" style="margin-bottom: 20px;">
+                        <h2 id="dash-monthly-title">Balanço Mensal</h2>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="window.setDashboardSort('monthNum')" style="cursor: pointer;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            Mês <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                        </div>
+                                    </th>
+                                    <th onclick="window.setDashboardSort('revenue')" style="cursor: pointer;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            Receita (+) <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                        </div>
+                                    </th>
+                                    <th onclick="window.setDashboardSort('expenses')" style="cursor: pointer;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            Despesas (-) <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                        </div>
+                                    </th>
+                                    <th onclick="window.setDashboardSort('balance')" style="cursor: pointer;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            Lucro (Balanço) <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="dash-monthly-finance-body"></tbody>
+                        </table>
+                    </section>
+
+                    <section class="recent-bookings card">
+                        <h2>Reserva Ativa</h2>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Hóspede Principal</th>
+                                    <th>Entrada</th>
+                                    <th>Saída</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dash-bookings-body"></tbody>
+                        </table>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Reservations View (Month Selection) -->
+            <div id="view-reservations" class="view" style="display: none;">
+                <header class="view-header">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <h1>Reservas por Mês</h1>
+                        <div class="year-selector">
+                            <label style="font-size: 0.9rem; opacity: 0.7; margin-right: 10px;">Ano:</label>
+                            <select id="res-year-select" onchange="window.changeYear(this.value)" style="padding: 5px 15px; border-radius: 20px; background: #333; color: white; border: 1px solid #555; cursor: pointer; outline: none;"></select>
+                        </div>
+                    </div>
+                </header>
+                <div class="month-grid" id="res-month-grid">
+                    <!-- Months generated by JS -->
+                </div>
+            </div>
+
+            <!-- Reservation Details View (Sub-page) -->
+            <div id="view-reservation-details" class="view" style="display: none;">
+                <header class="view-header">
+                    <button class="btn-back" onclick="switchView('reservations')">
+                        <i data-lucide="arrow-left"></i> Voltar
+                    </button>
+                    <h1 id="selected-res-month-title">Reservas</h1>
+                    <button class="btn-primary" onclick="showModal('guest')">+ Nova Reserva</button>
+                </header>
+                
+                <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Hóspede</th>
-                            <th>Check-in</th>
-                            <th>Check-out</th>
-                            <th>Status</th>
-                            <th>Valor</th>
+                            <th onclick="window.setReservationSort('name')" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    Hóspede Principal <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                </div>
+                            </th>
+                            <th>Hóspedes Cadastrados</th>
+                            <th onclick="window.setReservationSort('checkIn')" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    Check-in <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                </div>
+                            </th>
+                            <th onclick="window.setReservationSort('checkOut')" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    Check-out <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                </div>
+                            </th>
+                            <th onclick="window.setReservationSort('value')" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    Valor Total <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                </div>
+                            </th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
-                    <tbody id="bookings-body">
-                        <!-- Content will be injected by main.js -->
-                    </tbody>
+                    <tbody id="reservations-details-body"></tbody>
                 </table>
-            </section>
+            </div>
+
+            <!-- Expenses View (Month Selection) -->
+            <div id="view-expenses" class="view" style="display: none;">
+                <header class="view-header">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <h1>Despesas por Mês</h1>
+                        <div class="year-selector">
+                            <label style="font-size: 0.9rem; opacity: 0.7; margin-right: 10px;">Ano:</label>
+                            <select id="exp-year-select" onchange="window.changeYear(this.value)" style="padding: 5px 15px; border-radius: 20px; background: #333; color: white; border: 1px solid #555; cursor: pointer; outline: none;"></select>
+                        </div>
+                    </div>
+                </header>
+                <div class="month-grid" id="month-grid">
+                    <!-- Months generated by JS -->
+                </div>
+            </div>
+
+            <!-- Expense Details View (Sub-page) -->
+            <div id="view-expense-details" class="view" style="display: none;">
+                <header class="view-header">
+                    <button class="btn-back" onclick="switchView('expenses')">
+                        <i data-lucide="arrow-left"></i> Voltar
+                    </button>
+                    <h1 id="selected-month-title">Despesas</h1>
+                    <button class="btn-primary" onclick="showModal('expense')">+ Nova Despesa</button>
+                </header>
+                
+                <section class="card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th onclick="window.setExpenseSort('category')" style="cursor: pointer;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        Categoria <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                    </div>
+                                </th>
+                                <th>Descrição</th>
+                                <th onclick="window.setExpenseSort('date')" style="cursor: pointer;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        Data <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                    </div>
+                                </th>
+                                <th onclick="window.setExpenseSort('value')" style="cursor: pointer;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        Valor <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                    </div>
+                                </th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenses-details-body"></tbody>
+                    </table>
+                </section>
+            </div>
+
+            <!-- Guests View (Frequency) -->
+            <div id="view-guests" class="view" style="display: none;">
+                <header class="view-header">
+                    <h1>Histórico de Hóspedes</h1>
+                    <div class="stat-badge">Total de Hóspedes: <span id="total-guests-count">0</span></div>
+                </header>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th onclick="window.setGuestSort('name')" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    Nome do Hóspede <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                </div>
+                            </th>
+                            <th>CPF</th>
+                            <th onclick="window.setGuestSort('freq')" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    Hospedagens (Freq.) <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                </div>
+                            </th>
+                            <th onclick="window.setGuestSort('lastCheckIn')" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    Último Check-in <i data-lucide="arrow-up-down" style="width: 14px; height: 14px;"></i>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="guests-freq-body"></tbody>
+                </table>
+            </div>
+
+            <!-- Charts View -->
+            <div id="view-charts" class="view" style="display: none;">
+                <header class="view-header">
+                    <h1>Análise de Desempenho</h1>
+                </header>
+                
+                <div class="card" style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3>Comparativo Mensal</h3>
+                        <div id="chart-year-filters" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <!-- Checkboxes for years will be here -->
+                        </div>
+                    </div>
+                    <div style="position: relative; height: 50vh; width: 100%;">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </main>
+    </div>
+
+    <!-- Modals (Simple overlays) -->
+    <div id="modal-overlay" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <h2 id="modal-title">Novo Cadastro</h2>
+            <form id="modal-form">
+                <div id="form-fields"></div>
+            </form>
+        </div>
     </div>
     <script type="module" src="./main.js"></script>
 </body>
