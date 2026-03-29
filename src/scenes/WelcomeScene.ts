@@ -15,6 +15,8 @@ export default class WelcomeScene extends Phaser.Scene {
   private targetParallaxY = 0;
   private currentParallaxX = 0;
   private currentParallaxY = 0;
+  private vesselLayer!: Phaser.GameObjects.Container;
+  private vessels: (Phaser.GameObjects.Graphics & { speed: number, type: 'ship' | 'boat', phase: number, baseY: number })[] = [];
   private gameButton!: Phaser.GameObjects.Container;
   private modalContainer: Phaser.GameObjects.Container | null = null;
   private domModal: Phaser.GameObjects.DOMElement | null = null;
@@ -96,7 +98,8 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
     const { width, height } = this.scale;
     const isPortrait = height > width;
 
-    // 1. Procedural Dynamic Beach Backdrop
+    this.birdLayer = this.add.container(0, 0).setDepth(10);
+    this.vesselLayer = this.add.container(0, 0).setDepth(5);
     this.createDynamicBeachBackground(width, height);
 
     // 2. Subtle Ocean Vignette
@@ -130,7 +133,7 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
 
     // 4. Icons
     const items = [
-      { label: 'REGRAS DA CASA', emoji: '📜', id: 'welcome_rules', callback: () => {
+      { label: 'REGRAS\nDA CASA', emoji: '📜', id: 'welcome_rules', callback: () => {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('RulesScene'));
       }},
@@ -146,9 +149,9 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('LocalGuideScene'));
       }},
-      { label: 'PADARIAS E CAFÉS', emoji: '🥐', id: 'welcome_bakery', callback: () => this.showModal('welcome_bakery') },
-      { label: 'ONDE COMER', emoji: '🍽️', id: 'restaurant', callback: () => this.showModal('restaurant') },
-      { label: 'GAME PRÊMIOS', emoji: '🎮', id: 'welcome_game', callback: () => this.startGame(), locked: true },
+      { label: 'PADARIAS\nE CAFÉS', emoji: '🥐', id: 'welcome_bakery', callback: () => this.showModal('welcome_bakery') },
+      { label: 'RESTAURANTES', emoji: '🍽️', id: 'restaurant', callback: () => this.showModal('restaurant') },
+      { label: 'GAME PARA\nPRÊMIOS', emoji: '🎮', id: 'welcome_game', callback: () => this.startGame(), locked: true },
       { label: 'MERCADOS', emoji: '🛒', id: 'welcome_market', callback: () => {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('MarketScene'));
@@ -161,7 +164,7 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
 
     const cols = isPortrait ? 3 : 5;
     const spacingX = width / (cols + 1);
-    const spacingY = isPortrait ? height * 0.23 : height * 0.24; 
+    const spacingY = isPortrait ? height * 0.24 : height * 0.24; 
     const startY = isPortrait ? height * 0.35 : height * 0.38; 
     const wrapWidth = spacingX * 1.15;
 
@@ -248,16 +251,31 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
         bird.lineTo(14, 0 + (wingVal * 1.5));
         bird.strokePath();
     });
+
+    // 🚢 Vessel Migration & Bobbing
+    this.vessels.forEach(vessel => {
+        vessel.x += vessel.speed;
+        if (vessel.x > this.scale.width + 100) vessel.x = -100;
+
+        if (vessel.type === 'boat') {
+            vessel.y = vessel.baseY + Math.sin(time * 0.002 + vessel.phase) * 4;
+            vessel.rotation = Math.sin(time * 0.0015 + vessel.phase) * 0.1;
+        }
+    });
+
+    if (this.vesselLayer) {
+        this.vesselLayer.setPosition(this.currentParallaxX * factor * -0.07, this.currentParallaxY * factor * -0.07);
+    }
   }
 
   private createDynamicBeachBackground(width: number, height: number) {
-    const overscan = 100;
     const seaY = height * 0.52;
     const sandY = height * 0.82;
 
+    // 🕵️ UI Expert: Overscan Engineering (width+100 starting at -50)
     this.skyLayer = this.add.graphics();
     this.skyLayer.fillGradientStyle(0x00d2ff, 0x00d2ff, 0x3a7bd5, 0x3a7bd5, 1);
-    this.skyLayer.fillRect(-overscan/2, -overscan/2, width + overscan, height + overscan);
+    this.skyLayer.fillRect(-50, -50, width + 100, height + 100);
 
     this.createCartoonSun(width * 0.05, height * 0.05);
 
@@ -265,23 +283,23 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
     this.seaLayer = this.add.graphics();
     // Unified Solid Blue (0x3a7bd5) as requested
     this.seaLayer.fillStyle(0x3a7bd5, 0.95);
-    this.seaLayer.fillRect(-overscan/2, seaY - 100, width + overscan, (sandY - seaY) + 140); 
+    this.seaLayer.fillRect(-50, seaY - 100, width + 100, (sandY - seaY) + 140); 
 
     // 4. SEAMLESS SAND (Flipped Gradient: Darker at shore, Lighter at bottom)
     this.sandLayer = this.add.graphics();
     this.sandLayer.fillGradientStyle(0xd2b48c, 0xd2b48c, 0xfff9e6, 0xfff9e6, 1, 1, 1, 1);
-    this.sandLayer.fillRect(-overscan/2, sandY - 20, width + overscan, height - sandY + overscan);
+    this.sandLayer.fillRect(-50, sandY - 20, width + 100, (height - sandY) + 120);
 
     // 4.1 HIGH-FIDELITY WET SAND (Flipped: Darkest at the very edge)
     this.wetSandLayer = this.add.graphics();
     // Darker Moisture (0x8b7355) at the shore edge, fading to Toast (0xd2b48c)
     this.wetSandLayer.fillGradientStyle(0x8b7355, 0x8b7355, 0xd2b48c, 0xd2b48c, 0.45, 0.45, 0, 0);
-    this.wetSandLayer.fillRect(-overscan/2, sandY, width + overscan, 80); // Moisture Zone
+    this.wetSandLayer.fillRect(-50, sandY, width + 100, 80); // Moisture Zone
     
     // Spectral Gloss (Ultra-subtle wet sheen)
     this.glossLayer = this.add.graphics();
     this.glossLayer.fillGradientStyle(0xffffff, 0xffffff, 0xffffff, 0xffffff, 0.12, 0.12, 0, 0);
-    this.glossLayer.fillRect(-overscan/2, sandY, width + overscan, 15);
+    this.glossLayer.fillRect(-50, sandY, width + 100, 15);
     this.glossLayer.setAlpha(0.6);
     
     if (!this.textures.exists('sand_grain')) {
@@ -295,12 +313,15 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
         grainCtx.generateTexture('sand_grain', 32, 32);
         grainCtx.destroy();
     }
-    this.add.tileSprite(width/2, (height + sandY)/2, width + overscan, height - sandY + 20, 'sand_grain').setAlpha(0.4);
+    this.add.tileSprite(width/2, (height + sandY)/2, width + 100, height - sandY + 20, 'sand_grain').setAlpha(0.4);
 
     this.createBirds(width, height);
+    this.createVessels(width, height, seaY);
     this.createCoastalSurge(width, seaY, sandY);
     
-    this.add.graphics().fillStyle(0x000000, 0.08).fillRect(0, sandY, width, 10);
+    this.wetSandLayer = this.add.graphics();
+    this.wetSandLayer.fillGradientStyle(0x8b7355, 0x8b7355, 0xd2b48c, 0xd2b48c, 0.45, 0.45, 0, 0);
+    this.wetSandLayer.fillRect(-50, sandY, width + 100, 80);
     
     this.add.particles(0, 0, 'white_pixel', {
         x: { min: 0, max: width },
@@ -357,6 +378,56 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
 
         this.birds.push(bird);
         this.birdLayer.add(bird);
+    }
+  }
+
+  private createVessels(width: number, _height: number, seaY: number) {
+    // 🚢 UI Expert: Cargo Ships on Horizon
+    const shipConfigs = [
+        { x: width * 0.2, y: seaY - 22, speed: 0.04 },
+        { x: width * 0.8, y: seaY - 26, speed: 0.03 }
+    ];
+
+    shipConfigs.forEach(conf => {
+        const ship = this.add.graphics() as any;
+        ship.fillStyle(0x001a33, 0.4);
+        // Hull
+        ship.fillRect(-15, 0, 35, 4);
+        // Bridge
+        ship.fillRect(0, -3, 8, 4);
+        ship.setPosition(conf.x, conf.y);
+        ship.speed = conf.speed;
+        ship.type = 'ship';
+        this.vessels.push(ship);
+        this.vesselLayer.add(ship);
+    });
+
+    // 🚣 UI Expert: Fishing Boats
+    for (let i = 0; i < 4; i++) {
+        const boat = this.add.graphics() as any;
+        const bx = Math.random() * width;
+        const by = seaY + 130 + (Math.random() * 60);
+        
+        boat.fillStyle(0x001a33, 0.6);
+        // Simple Hull
+        boat.beginPath();
+        boat.moveTo(-6, 0);
+        boat.lineTo(6, 0);
+        boat.lineTo(4, 3);
+        boat.lineTo(-4, 3);
+        boat.closePath();
+        boat.fillPath();
+        // Mast
+        boat.lineStyle(1.5, 0x001a33, 0.6);
+        boat.lineBetween(0, 0, 0, -6);
+        
+        boat.setPosition(bx, by);
+        boat.speed = 0.08 + Math.random() * 0.08;
+        boat.phase = Math.random() * Math.PI * 2;
+        boat.baseY = by;
+        boat.type = 'boat';
+        this.vessels.push(boat);
+        this.vesselLayer.add(boat);
     }
   }
 
@@ -440,14 +511,15 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
 
     const labelText = this.add.text(0, 56, label.toUpperCase(), {
       fontFamily: 'Outfit', 
-      fontSize: '11.5px', 
+      fontSize: '12.5px', 
       color: '#ffffff', 
       fontStyle: '900', 
-      letterSpacing: 1.2, 
+      letterSpacing: 0.8, 
       align: 'center', 
       wordWrap: { width: wrapWidth, useAdvancedWrap: true },
-      lineSpacing: 1
+      lineSpacing: -1
     }).setOrigin(0.5, 0);
+    labelText.setStroke('#000000', 4);
     labelText.setShadow(2, 2, 'rgba(0,0,0,0.8)', 6);
     container.add(labelText);
 
