@@ -161,9 +161,9 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
 
     const cols = isPortrait ? 3 : 5;
     const spacingX = width / (cols + 1);
-    const spacingY = isPortrait ? height * 0.19 : height * 0.24; 
-    const startY = isPortrait ? height * 0.40 : height * 0.38; 
-    const wrapWidth = spacingX * 0.9;
+    const spacingY = isPortrait ? height * 0.23 : height * 0.24; 
+    const startY = isPortrait ? height * 0.35 : height * 0.38; 
+    const wrapWidth = spacingX * 1.15;
 
     items.forEach((item, index) => {
       const col = index % cols;
@@ -417,17 +417,17 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
 
   private createProfessionalIcon(x: number, y: number, label: string, isLocked: boolean, emoji: string, wrapWidth: number, isGame: boolean = false) {
     const container = this.add.container(x, y);
-    const shadow = this.add.graphics().fillStyle(0x003366, 0.15).fillCircle(1, 3, 45);
+    const shadow = this.add.graphics().fillStyle(0x003366, 0.15).fillCircle(1, 3, 40);
     container.add(shadow);
-
+    
     const base = this.add.graphics();
     const bgColor = isGame ? 0xffffff : 0xe0f7fa; 
     const bgAlpha = isGame ? 0.3 : 0.2;
     const strokeColor = isGame ? 0xffd700 : 0x80deea; 
     const strokeAlpha = isGame ? 0.9 : 0.6;
 
-    base.fillStyle(bgColor, bgAlpha).fillCircle(0, 0, 44);
-    base.lineStyle(2.5, strokeColor, strokeAlpha).strokeCircle(0, 0, 44); 
+    base.fillStyle(bgColor, bgAlpha).fillCircle(0, 0, 40);
+    base.lineStyle(2.5, strokeColor, strokeAlpha).strokeCircle(0, 0, 40); 
     base.fillStyle(0xffffff, 0.08).fillCircle(-15, -15, 18);
     container.add(base);
 
@@ -438,16 +438,21 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
     iconText.setShadow(0, 0, isGame ? '#ffd700' : '#80deea', 12, true, true);
     container.add(iconText);
 
-    const labelText = this.add.text(0, 62, label.toUpperCase(), {
-      fontFamily: 'Montserrat', fontSize: '10px', color: '#ffffff', fontStyle: 'bold', 
-      letterSpacing: 1.5, align: 'center', wordWrap: { width: wrapWidth, useAdvancedWrap: true },
-      lineSpacing: 3
+    const labelText = this.add.text(0, 56, label.toUpperCase(), {
+      fontFamily: 'Outfit', 
+      fontSize: '11.5px', 
+      color: '#ffffff', 
+      fontStyle: '900', 
+      letterSpacing: 1.2, 
+      align: 'center', 
+      wordWrap: { width: wrapWidth, useAdvancedWrap: true },
+      lineSpacing: 1
     }).setOrigin(0.5, 0);
-    labelText.setShadow(2, 2, 'rgba(0,0,0,0.6)', 4);
+    labelText.setShadow(2, 2, 'rgba(0,0,0,0.8)', 6);
     container.add(labelText);
 
     if (isLocked) {
-      const lock = this.add.text(30, 30, '🔒', { fontSize: '16px' }).setOrigin(0.5);
+      const lock = this.add.text(28, 28, '🔒', { fontSize: '16px' }).setOrigin(0.5);
       lock.setName('lock_icon');
       container.add(lock);
     }
