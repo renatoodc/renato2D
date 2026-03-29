@@ -113,7 +113,6 @@ export class CheckoutScene extends Phaser.Scene {
     let startScrollTop = 0;
     let currentY = 0;
     let isDragging = false;
-    const threshold = 180;
 
     container.addEventListener('touchstart', (e) => {
         startY = e.touches[0].pageY;
