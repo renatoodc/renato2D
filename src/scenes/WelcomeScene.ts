@@ -117,8 +117,8 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
 
     // Header 2: ITAIPAVA 201 (New)
     this.add.text(width / 2, height * (titlePadding + 0.035), 'ITAIPAVA 201', {
-      fontFamily: 'Montserrat', fontSize: isPortrait ? '14px' : '18px', color: '#ffd700', fontStyle: 'bold', letterSpacing: 2
-    }).setOrigin(0.5).setShadow(2, 2, 'rgba(0,0,0,0.3)', 2);
+      fontFamily: 'Montserrat', fontSize: isPortrait ? '14px' : '18px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
+    }).setOrigin(0.5).setShadow(2, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1);
 
     // Header 3: Bem-vindo!
     const mainTitle = this.add.text(width / 2, height * (titlePadding + 0.12), 'Bem-vindo!', {
@@ -128,8 +128,8 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
 
     // Header 4: Refúgio em Itapuã (New)
     this.add.text(width / 2, height * (titlePadding + 0.185), 'Refúgio em Itapuã', {
-      fontFamily: 'Montserrat', fontSize: isPortrait ? '18px' : '22px', color: '#ffffff', fontStyle: 'normal', letterSpacing: 1
-    }).setOrigin(0.5).setShadow(1, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(0.9);
+      fontFamily: 'Montserrat', fontSize: isPortrait ? '18px' : '22px', color: '#ffaa00', fontStyle: 'normal', letterSpacing: 1
+    }).setOrigin(0.5).setShadow(1, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1);
 
     // 4. Icons
     const items = [
@@ -163,16 +163,20 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
     ];
 
     const cols = isPortrait ? 3 : 5;
-    const spacingX = width / (cols + 1);
-    const spacingY = isPortrait ? height * 0.24 : height * 0.24; 
     const startY = isPortrait ? height * 0.35 : height * 0.38; 
-    const wrapWidth = spacingX * 1.15;
-
+    const spacingY = isPortrait ? height * 0.25 : height * 0.24; 
+    
     items.forEach((item, index) => {
       const col = index % cols;
       const row = Math.floor(index / cols);
-      const x = spacingX * (col + 1);
+      
+      // 🕵️ UI Expert: Horizontal Spread Optimization (Reduced margins to 15%)
+      const marginX = isPortrait ? width * 0.15 : width * 0.10;
+      const availableWidth = width - (marginX * 2);
+      const x = marginX + (col * (availableWidth / (cols - 1)));
       const y = startY + row * spacingY;
+      
+      const wrapWidth = (availableWidth / cols) * 1.1;
 
       const isGame = item.id === 'welcome_game';
       const container = this.createProfessionalIcon(x, y, item.label, !!item.locked, item.emoji, wrapWidth, isGame);
@@ -381,11 +385,11 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
     }
   }
 
-  private createVessels(width: number, _height: number, seaY: number) {
+  private createVessels(width: number, height: number, seaY: number) {
     // 🚢 UI Expert: Cargo Ships on Horizon
     const shipConfigs = [
-        { x: width * 0.2, y: seaY - 22, speed: 0.04 },
-        { x: width * 0.8, y: seaY - 26, speed: 0.03 }
+        { x: width * 0.2, y: seaY - 35, speed: 0.04 },
+        { x: width * 0.8, y: seaY - 40, speed: 0.03 }
     ];
 
     shipConfigs.forEach(conf => {
@@ -402,11 +406,14 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
         this.vesselLayer.add(ship);
     });
 
-    // 🚣 UI Expert: Fishing Boats
+    // 🚣 UI Expert: Fishing Boats (Proportional to Sea Area)
+    const sandY = height * 0.82;
+    const seaDepth = sandY - seaY;
+    
     for (let i = 0; i < 4; i++) {
         const boat = this.add.graphics() as any;
         const bx = Math.random() * width;
-        const by = seaY + 130 + (Math.random() * 60);
+        const by = seaY + (seaDepth * 0.40) + (Math.random() * (seaDepth * 0.25));
         
         boat.fillStyle(0x001a33, 0.6);
         // Simple Hull
