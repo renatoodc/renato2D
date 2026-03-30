@@ -302,3 +302,28 @@ html {
 .welcome-modal-btn:active {
   transform: scale(0.95);
 }
+
+/* Responsive adjustments for Small Heights (iPhone 8, etc) */
+@media (max-height: 700px) {
+  .dialogue-box {
+    margin-bottom: 15px;
+    padding: 16px;
+    border-radius: 12px;
+  }
+  .dialogue-text {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  .dialogue-button {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+  .welcome-modal-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .welcome-modal-text {
+    font-size: 14px;
+    padding-top: 20px;
+  }
+}
