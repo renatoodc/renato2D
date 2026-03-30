@@ -140,8 +140,10 @@ export class ContactScene extends Phaser.Scene {
     const style = document.createElement('style');
     style.innerHTML = `
         #contact-pro-page {
-            width: 100vw;
+            width: 100%;
+            height: 100%;
             height: 100vh;
+            height: 100dvh;
             overflow-y: auto;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             font-family: 'Outfit', 'Inter', sans-serif;

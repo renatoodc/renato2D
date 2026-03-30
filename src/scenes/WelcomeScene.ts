@@ -30,6 +30,12 @@ export default class WelcomeScene extends Phaser.Scene {
     this.birdLayer = this.add.container(0, 0).setDepth(10);
     this.vesselLayer = this.add.container(0, 0).setDepth(5);
     this.createDynamicBeachBackground(width, height);
+    
+    // 🕵️ UI Expert: Responsive Viewport Engine
+    // Listens for resize events (like mobile address bar toggles) and refreshes the layout
+    this.scale.on('resize', () => {
+        if (this.scene.isActive()) this.scene.restart();
+    });
 
     // 2. Subtle Ocean Vignette
     const vignette = this.add.graphics();

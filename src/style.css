@@ -24,16 +24,19 @@ body,
 html {
   width: 100%;
   height: 100%;
+  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   background-color: #0f0f0f;
   font-family: var(--font-main);
   color: #ffffff;
-  height: 100dvh;
 }
 
 #game-container {
   width: 100%;
   height: 100%;
+  height: 100vh;
+  height: 100dvh;
   position: absolute;
   top: 0;
   left: 0;
@@ -52,6 +55,8 @@ html {
   left: 0;
   width: 100%;
   height: 100%;
+  height: 100vh;
+  height: 100dvh;
   z-index: 20;
   pointer-events: none;
   display: flex;
