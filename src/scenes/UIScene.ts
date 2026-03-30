@@ -28,6 +28,8 @@ export default class UIScene extends Phaser.Scene {
       this.createProfessionalJoystick();
       this.createProfessionalActionButton();
 
+      this.createMenuButton();
+
       this.scale.on('resize', (gameSize: Phaser.Structs.Size) => {
         this.cameras.main.width = gameSize.width;
         this.cameras.main.height = gameSize.height;
@@ -178,6 +180,44 @@ export default class UIScene extends Phaser.Scene {
 
     this.input.on('pointerup', () => {
       this.tweens.add({ targets: this.actionButton, scale: 1, duration: 100 });
+    });
+  }
+
+  private createMenuButton() {
+    const x = 20;
+    const y = 20;
+
+    const btn = this.add.container(x, y).setDepth(9999);
+    
+    // Glass Background
+    const bg = this.add.graphics();
+    bg.fillStyle(0x000000, 0.4).fillRoundedRect(0, 0, 100, 40, 12);
+    bg.lineStyle(2, 0xffffff, 0.5).strokeRoundedRect(0, 0, 100, 40, 12);
+    
+    const txt = this.add.text(50, 20, '🔙 MENU', {
+      fontFamily: 'Montserrat',
+      fontSize: '14px',
+      color: '#ffffff',
+      fontStyle: '800'
+    }).setOrigin(0.5);
+
+    btn.add([bg, txt]);
+    
+    // Explicit hit area for total reliability
+    btn.setInteractive(new Phaser.Geom.Rectangle(0, 0, 100, 40), Phaser.Geom.Rectangle.Contains);
+
+    btn.on('pointerdown', () => {
+      console.log('MENU BUTTON CLICKED');
+      this.tweens.add({ targets: btn, scale: 0.92, duration: 80 });
+      
+      this.cameras.main.fadeOut(400, 0, 0, 0);
+      this.cameras.main.once('camerafadeoutcomplete', () => {
+        // Stop both scenes to be clean
+        this.registry.set('isReturningToMenu', true);
+        this.scene.stop('UIScene');
+        this.scene.stop('GameScene');
+        this.scene.start('WelcomeScene');
+      });
     });
   }
 

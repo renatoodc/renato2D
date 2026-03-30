@@ -97,7 +97,9 @@ export class RulesScene extends Phaser.Scene {
         this.cameras.main.fadeOut(300, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
             // Signal WelcomeScene that we read the rules (global state persistence)
-            (this.scene.get('WelcomeScene') as any).hasReadRules = true;
+            const welcome = this.scene.get('WelcomeScene') as any;
+            if (welcome) welcome.hasReadRules = true;
+            this.game.registry.set('justUnlocked', true);
             this.scene.start('WelcomeScene');
         });
     };

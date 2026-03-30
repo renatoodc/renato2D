@@ -17,6 +17,7 @@ export default class WelcomeScene extends Phaser.Scene {
   private currentParallaxY = 0;
   private vesselLayer!: Phaser.GameObjects.Container;
   private vessels: (Phaser.GameObjects.Graphics & { speed: number, type: 'ship' | 'boat', phase: number, baseY: number })[] = [];
+  private gameIcon!: Phaser.GameObjects.Container;
 
   constructor() {
     super('WelcomeScene');
@@ -113,7 +114,13 @@ export default class WelcomeScene extends Phaser.Scene {
       const wrapWidth = (availableWidth / cols) * 1.1;
 
       const isGame = item.id === 'welcome_game';
-      const container = this.createProfessionalIcon(x, y, item.label, !!item.locked, item.emoji, wrapWidth, isGame);
+      // Inicia como bloqueado visualmente SE o usuário nunca leu as regras OU se acabou de ler (para podermos mostrar a transição)
+      const isJustUnlocked = isGame && this.game.registry.get('justUnlocked');
+      const startLocked = item.locked && !this.hasReadRules;
+      const visualLocked = startLocked || isJustUnlocked;
+
+      const container = this.createProfessionalIcon(x, y, item.label, !!visualLocked, item.emoji, wrapWidth, isGame);
+      if (isGame) this.gameIcon = container;
 
       container.setInteractive(new Phaser.Geom.Circle(0, 0, 50), Phaser.Geom.Circle.Contains);
       container.on('pointerdown', () => {
@@ -129,6 +136,60 @@ export default class WelcomeScene extends Phaser.Scene {
       this.time.delayedCall(index * 60, () => {
         this.tweens.add({ targets: container, alpha: 1, y: y, duration: 400, ease: 'Back.easeOut' });
       });
+    });
+
+    // 🕵️ UI Expert: JOGO/PREMIOS Unlock Animation
+    if (this.game.registry.get('justUnlocked')) {
+        this.game.registry.set('justUnlocked', false);
+        this.time.delayedCall(1200, () => this.animateUnlockSequence());
+    }
+  }
+
+  private animateUnlockSequence() {
+    if (!this.gameIcon) return;
+    const lock = this.gameIcon.getByName('lock_icon') as Phaser.GameObjects.Text;
+    
+    // 1. Shake the whole icon (it's "resisting" or "preparing")
+    this.tweens.add({
+        targets: this.gameIcon,
+        x: this.gameIcon.x + 5,
+        duration: 80,
+        yoyo: true,
+        repeat: 5,
+        onComplete: () => {
+            // 2. Expand & Flash
+            this.tweens.add({
+                targets: this.gameIcon,
+                scale: 1.4,
+                duration: 400,
+                ease: 'Cubic.easeOut',
+                onStart: () => {
+                    if (lock) {
+                        this.tweens.add({
+                            targets: lock,
+                            alpha: 0,
+                            y: lock.y - 40,
+                            scale: 2,
+                            duration: 600,
+                            onComplete: () => lock.destroy()
+                        });
+                    }
+                },
+                onComplete: () => {
+                    // 3. Settling and Celebration
+                    this.tweens.add({
+                        targets: this.gameIcon,
+                        scale: 1,
+                        duration: 600,
+                        ease: 'Elastic.easeOut'
+                    });
+                    
+                    // Add some particles or glow? (Simple flash for now)
+                    const flash = this.add.graphics().fillStyle(0xffffff, 0.8).fillCircle(this.gameIcon.x, this.gameIcon.y, 40);
+                    this.tweens.add({ targets: flash, alpha: 0, scale: 2, duration: 800, onComplete: () => flash.destroy() });
+                }
+            });
+        }
     });
   }
 

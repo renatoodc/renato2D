@@ -12,12 +12,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     // Calculate base scale to standardize character height
     // We aim for a consistent visual height in the game
-    const targetHeight = 3.5 * 48; // Standardized height based on 3.5 scale to match the massive 4096px background map
-    this.baseScale = targetHeight / this.height;
+    // 🕵️ UI Expert: 85% Increase in character size for ultra-massive mobile presence
+    const targetHeight = 3.5 * 48;
+    this.baseScale = (targetHeight / this.height) * 1.85;
     
-    // Fine-tune adjustment for female character if it still feels off
+    // Fine-tune adjustment for female character
     if (texture === 'female') {
-      this.baseScale *= 0.85; // Reducing female scale by 15% as she is reported as larger
+      this.baseScale *= 0.85; 
     }
 
     this.setScale(this.baseScale);
@@ -66,6 +67,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     this.setVelocity(speedX, speedY);
+    
+    // 🕵️ UI Expert: Nuclear Clamp for Mobile Stability (Absolute right limit 4080, left 0)
+    if (this.x > 4080) this.x = 4080;
+    if (this.x < 0) this.x = 0;
+    if (this.y < 0) this.y = 0;
+    if (this.y > 12490) this.y = 12490;
 
     if (speedX !== 0 || speedY !== 0) {
       const animKey = this.texture.key + '_walk';

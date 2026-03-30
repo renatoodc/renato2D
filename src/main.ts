@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 
 import Preloader from './scenes/Preloader';
+import StoryScene from './scenes/StoryScene';
 import CharacterSelect from './scenes/CharacterSelect';
 import GameScene from './scenes/GameScene';
 import UIScene from './scenes/UIScene';
@@ -34,7 +35,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false
     }
   },
-  scene: [Preloader, WelcomeScene, CharacterSelect, GameScene, UIScene, LocalGuideScene, CheckoutScene, RulesScene, WifiScene, ContactScene, MarketScene, RestaurantScene, BakeryScene]
+  scene: [Preloader, WelcomeScene, CharacterSelect, StoryScene, GameScene, UIScene, LocalGuideScene, CheckoutScene, RulesScene, WifiScene, ContactScene, MarketScene, RestaurantScene, BakeryScene]
 };
 
 export default new Phaser.Game(config);
