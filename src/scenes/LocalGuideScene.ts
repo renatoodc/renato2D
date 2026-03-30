@@ -247,7 +247,7 @@ export class LocalGuideScene extends Phaser.Scene {
     };
 
     const title = document.createElement('h1');
-    title.innerText = 'GUIA TURÍSTICO VILA VELHA';
+    title.innerText = 'PONTOS TURÍSTICOS';
 
     header.appendChild(backBtn);
     header.appendChild(title);
@@ -411,10 +411,14 @@ export class LocalGuideScene extends Phaser.Scene {
 
         .guide-header h1 {
             margin: 0;
-            font-size: 1.2rem;
-            color: #3a7bd5;
+            font-size: 1.15rem;
+            color: #1e3c72;
             letter-spacing: 2px;
-            font-weight: 800;
+            font-weight: 950;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 0 70px; /* Evita sobreposição com o botão Voltar */
+            flex: 1;
         }
 
         .anchor-menu {

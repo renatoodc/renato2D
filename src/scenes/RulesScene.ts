@@ -69,10 +69,17 @@ export class RulesScene extends Phaser.Scene {
 
   private addRuleCard(parent: HTMLElement, title: string, text: string) {
     const card = document.createElement('div');
-    card.className = 'info-card';
+    card.className = 'rule-card-pro';
+    
+    // Extract emoji if present
+    const emojiMatch = title.match(/^([\uD800-\uDBFF][\uDC00-\uDFFF]|\S)\s*/);
+    const emoji = emojiMatch ? emojiMatch[1] : '📜';
+    const cleanTitle = title.replace(/^([\uD800-\uDBFF][\uDC00-\uDFFF]|\S)\s*/, '');
+
     card.innerHTML = `
-        <div class="card-body">
-            <h3>${title}</h3>
+        <div class="rule-icon-pro">${emoji}</div>
+        <div class="rule-body">
+            <h3>${cleanTitle}</h3>
             <p>${text}</p>
         </div>
     `;
@@ -133,69 +140,91 @@ export class RulesScene extends Phaser.Scene {
             width: 100vw;
             height: 100vh;
             overflow-y: auto;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            font-family: 'Outfit', 'Inter', sans-serif;
-            color: #333;
-            -webkit-overflow-scrolling: touch;
+            background: radial-gradient(circle at top right, #2a5298, #1e3c72);
+            font-family: 'Outfit', sans-serif;
+            color: white;
+            padding-bottom: 50px;
         }
 
         .rules-header {
             position: sticky;
             top: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
+            z-index: 2000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 18px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
         }
 
         .back-button {
             position: absolute;
-            left: 15px;
+            left: 20px;
             background: #f0f2f5;
             border: none;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-weight: 600;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: #1e3c72;
             cursor: pointer;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .rules-header h1 {
             margin: 0;
             font-size: 1.1rem;
             color: #1e3c72;
-            letter-spacing: 2px;
-            font-weight: 800;
+            letter-spacing: 1px;
+            font-weight: 950;
+            text-align: center;
+            padding: 0 75px; 
+            flex: 1;
+            text-transform: uppercase;
         }
 
         .rules-content {
-            padding: 20px;
-            max-width: 500px;
+            padding: 30px 20px;
+            max-width: 480px;
             margin: 0 auto;
         }
 
         .rules-intro p {
-            color: white;
+            color: rgba(255,255,255,0.9);
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             line-height: 1.6;
-            margin-bottom: 25px;
-            opacity: 0.9;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .info-card {
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            color: white;
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: transform 0.2s;
+        .rule-card-pro {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 25px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
+
+        .rule-icon-pro {
+            background: rgba(255, 255, 255, 0.1);
+            width: 50px; height: 50px;
+            border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .rule-body h3 { margin: 0 0 8px 0; font-size: 1.15rem; color: #ffcc00; font-weight: 800; }
+        .rule-body p { margin: 0; font-size: 1rem; line-height: 1.5; color: rgba(255,255,255,0.95); }
         
         .info-card h3 { margin: 0 0 10px 0; font-size: 1.1rem; color: #ffd700; letter-spacing: 0.5px; }
         .info-card p { margin: 0; font-size: 0.95rem; line-height: 1.5; opacity: 0.95; }

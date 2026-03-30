@@ -52,11 +52,12 @@ export class WifiScene extends Phaser.Scene {
     `;
     content.appendChild(heroCard);
 
-    // ℹ️ Instruction Card
+    // ℹ️ Instruction Card (PRO STYLE)
     const infoCard = document.createElement('div');
-    infoCard.className = 'info-card';
+    infoCard.className = 'wifi-info-pro';
     infoCard.innerHTML = `
-        <div class="card-body">
+        <div class="info-icon-glow">💡</div>
+        <div class="info-body">
             <h3>Dica de Conexão</h3>
             <p>Se tiver problemas com o sinal, tente desligar e ligar o roteador localizado na sala. A rede suporta múltiplos dispositivos simultaneamente.</p>
         </div>
@@ -146,34 +147,40 @@ export class WifiScene extends Phaser.Scene {
             width: 100vw;
             height: 100vh;
             overflow-y: auto;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            font-family: 'Outfit', 'Inter', sans-serif;
-            color: #333;
-            -webkit-overflow-scrolling: touch;
+            background: radial-gradient(circle at top right, #2a5298, #1e3c72);
+            font-family: 'Outfit', sans-serif;
+            color: white;
+            padding-bottom: 50px;
         }
 
         .wifi-header {
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 18px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
         }
 
         .back-button {
             position: absolute;
-            left: 15px;
+            left: 20px;
             background: #f0f2f5;
             border: none;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-weight: 600;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: #1e3c72;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             cursor: pointer;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .wifi-header h1 {
@@ -181,64 +188,127 @@ export class WifiScene extends Phaser.Scene {
             font-size: 1.1rem;
             color: #1e3c72;
             letter-spacing: 2px;
-            font-weight: 800;
+            font-weight: 950;
+            text-align: center;
+            padding: 0 75px; 
+            flex: 1;
+            text-transform: uppercase;
         }
 
         .wifi-content {
-            padding: 20px;
-            max-width: 500px;
+            padding: 30px 20px;
+            max-width: 480px;
             margin: 0 auto;
         }
 
         .wifi-intro p {
-            color: white;
+            color: rgba(255,255,255,0.9);
             text-align: center;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            opacity: 0.9;
+            font-size: 1.15rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .wifi-hero-card {
             background: white;
-            border-radius: 24px;
-            padding: 30px 20px;
+            border-radius: 32px;
+            padding: 40px 20px;
             text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
             margin-bottom: 30px;
-            border-bottom: 8px solid #ffd700;
+            position: relative;
+            overflow: hidden;
         }
 
-        .wifi-hero-card .card-icon { font-size: 3rem; margin-bottom: 20px; }
+        .wifi-hero-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 10px;
+            background: linear-gradient(90deg, #ffcc00, #ffaa00);
+        }
+
+        .card-icon { 
+            background: #eef2f7;
+            width: 80px; height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            font-size: 2.5rem;
+            display: flex; align-items: center; justify-content: center;
+        }
         
-        .wifi-details { margin-bottom: 25px; }
-        .wifi-row { margin-bottom: 15px; }
-        .wifi-row span { display: block; font-size: 0.85rem; color: #777; letter-spacing: 2px; font-weight: 800; margin-bottom: 4px; }
-        .wifi-row strong { font-size: 1.8rem; color: #1e3c72; font-weight: 900; }
+        .wifi-details { margin-bottom: 30px; }
+        .wifi-row { margin-bottom: 20px; }
+        .wifi-row span { 
+            display: block; 
+            font-size: 0.8rem; 
+            color: #888; 
+            letter-spacing: 2.5px; 
+            font-weight: 800; 
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .wifi-row strong { 
+            font-size: 2.2rem; 
+            color: #1e3c72; 
+            font-weight: 900;
+            display: block;
+        }
 
         .copy-btn {
-            background: white;
-            color: #1e3c72;
-            border: 2px solid #1e3c72;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .copy-btn:active { transform: scale(0.95); }
-
-        .info-card {
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: white;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: none;
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 90%;
+            box-shadow: 0 8px 20px rgba(30,60,114,0.3);
+        }
+        .copy-btn:active { transform: scale(0.92); }
+
+        .wifi-info-pro {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 25px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .info-icon-glow {
+            background: rgba(255, 204, 0, 0.2);
+            width: 50px; height: 50px;
+            border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 204, 0, 0.3);
         }
         
-        .info-card h3 { margin: 0 0 10px 0; font-size: 1.1rem; color: #ffd700; }
-        .info-card p { margin: 0; font-size: 0.95rem; line-height: 1.5; opacity: 0.95; }
+        .info-body h3 { 
+            margin: 0 0 8px 0; 
+            font-size: 1.15rem; 
+            color: #ffcc00; 
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .info-body p { 
+            margin: 0; 
+            font-size: 1rem; 
+            line-height: 1.6; 
+            color: rgba(255,255,255,0.95);
+            font-weight: 400;
+        }
     `;
     container.appendChild(style);
   }

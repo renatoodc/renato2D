@@ -17,78 +17,10 @@ export default class WelcomeScene extends Phaser.Scene {
   private currentParallaxY = 0;
   private vesselLayer!: Phaser.GameObjects.Container;
   private vessels: (Phaser.GameObjects.Graphics & { speed: number, type: 'ship' | 'boat', phase: number, baseY: number })[] = [];
+  private headerText!: Phaser.GameObjects.Text;
   private gameButton!: Phaser.GameObjects.Container;
   private modalContainer: Phaser.GameObjects.Container | null = null;
   private domModal: Phaser.GameObjects.DOMElement | null = null;
-
-  private ICON_DATA: any = {
-    'welcome_rules': {
-      title: 'Regras da Casa',
-      content: `1. Silêncio e Convivência:
-
-Lei do Silêncio: Respeitar o silêncio entre 22h e 08h. O edifício é estritamente residencial e familiar. Multas aplicadas pelo condomínio por excesso de barulho serão de responsabilidade do hóspede.
-
-Proibido Festas/Eventos: Não é permitida a realização de grandes eventos ou reuniões com pessoas que não constem na reserva.
-
-
-2. Ocupação e Visitas:
-
-Limite de Hóspedes: A capacidade máxima é de 8 pessoas. Apenas hóspedes registrados podem pernoitar.
-
-Visitas: Consultar o anfitrião no chat do Airbnb sobre visitas diurnas.
-
-
-3. Energia e Ventilação:
-
-Consumo Consciente: Ao sair, certifique-se de desligar todas as luzes e ventiladores. Como o apartamento é bem ventilado, manter as janelas abertas durante o dia ajuda a manter o frescor.
-
-
-4. Cuidados com o Imóvel:
-
-Fumo: É estritamente proibido fumar dentro do imóvel. O fumo é permitido na área externa do condomínio.
-
-Areia de Praia: Como não possuímos chuveiro no prédio, pedimos a gentileza de retirar o excesso de areia ainda na rua/praia. Isso ajuda a manter a limpeza e o bom funcionamento dos ralos.
-
-Lixo: Por gentileza, o descarte deve ser feito preferencialmete diariamente ou ao final de sua reserva, nos coletores do condomínio, localizados à direita do portão da garagem.
-
-
-5. Check-out e Chaves:
-
-Horário: O horário de check-out deve ser respeitado para que nossa equipe de limpeza possa preparar o imóvel para o próximo hóspede.`
-    },
-    'welcome_game': {
-      title: '🎮 GAME PARA CASHBACK',
-      content: 'Aproveite nosso jogo exclusivo para ganhar cashback na sua próxima estadia!...'
-    },
-    'welcome_wifi': {
-      title: '📶 WI-FI',
-      content: 'Conecte-se e aproveite sua estadia!\n\nRede: Loga 201\nSenha: miguel10'
-    },
-    'welcome_visit': {
-      title: '📍 GUIA LOCAL',
-      content: 'Clique para abrir nosso Guia Local exclusivo com as melhores praias...'
-    },
-    'welcome_bakery': {
-      title: '🥐 PADARIAS E CAFÉS',
-      content: 'Confira as melhores opções de café da manhã próximas a você.'
-    },
-    'pharmacy': {
-      title: '💊 FARMÁCIAS',
-      content: 'Em caso de necessidade:\n- Farmácia Pague Menos (24h)\n- Drogaria São Paulo'
-    },
-    'restaurant': {
-      title: '🍽️ RESTAURANTES',
-      content: 'Sabores da região:\n- Cantina Italiana\n- Peixaria do Porto'
-    },
-    'check_in_out': {
-      title: '🔑 CHECK-OUT',
-      content: 'Check-in: A partir das 14:00.\nCheck-out: Até às 11:00.'
-    },
-    'contact': {
-      title: '📱 CONTATO',
-      content: 'Anfitrião: Renato\nWhatsApp: (27) 99999-9999'
-    }
-  };
 
   constructor() {
     super('WelcomeScene');
@@ -121,14 +53,14 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
     }).setOrigin(0.5).setShadow(2, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1);
 
     // Header 3: Bem-vindo!
-    const mainTitle = this.add.text(width / 2, height * (titlePadding + 0.12), 'Bem-vindo!', {
-      fontFamily: 'Montserrat', fontSize: isPortrait ? '48px' : '64px', color: '#ffffff', fontStyle: 'bold'
+    const mainTitle = this.add.text(width / 2, height * (titlePadding + 0.12), 'BEM-VINDO!', {
+      fontFamily: 'Montserrat', fontSize: isPortrait ? '42px' : '58px', color: '#ffffff', fontStyle: '900', letterSpacing: 2
     }).setOrigin(0.5);
     mainTitle.setShadow(2, 4, 'rgba(0,0,0,0.35)', 10);
 
     // Header 4: Refúgio em Itapuã (New)
-    this.add.text(width / 2, height * (titlePadding + 0.185), 'Refúgio em Itapuã', {
-      fontFamily: 'Montserrat', fontSize: isPortrait ? '18px' : '22px', color: '#ffaa00', fontStyle: 'normal', letterSpacing: 1
+    this.add.text(width / 2, height * (titlePadding + 0.17), 'REFÚGIO EM ITAPUÃ', {
+      fontFamily: 'Montserrat', fontSize: isPortrait ? '16px' : '20px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
     }).setOrigin(0.5).setShadow(1, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1);
 
     // 4. Icons
@@ -149,8 +81,14 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('LocalGuideScene'));
       }},
-      { label: 'PADARIAS\nE CAFÉS', emoji: '🥐', id: 'welcome_bakery', callback: () => this.showModal('welcome_bakery') },
-      { label: 'RESTAURANTES', emoji: '🍽️', id: 'restaurant', callback: () => this.showModal('restaurant') },
+      { label: 'PADARIAS\nE CAFÉS', emoji: '🥐', id: 'welcome_bakery', callback: () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('BakeryScene'));
+      }},
+      { label: 'RESTAURANTES\nE BARES', emoji: '🍽️', id: 'restaurant', callback: () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('RestaurantScene'));
+      }},
       { label: 'GAME PARA\nPRÊMIOS', emoji: '🎮', id: 'welcome_game', callback: () => this.startGame(), locked: true },
       { label: 'MERCADOS', emoji: '🛒', id: 'welcome_market', callback: () => {
         this.cameras.main.fadeOut(500, 0, 0, 0);
@@ -311,7 +249,6 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
         for(let i=0; i<400; i++) {
             const gx = Math.random() * 32;
             const gy = Math.random() * 32;
-            grainCtx.fillStyle(0x000000, 0.05 + Math.random() * 0.08);
             grainCtx.fillRect(gx, gy, 1, 1);
         }
         grainCtx.generateTexture('sand_grain', 32, 32);
@@ -559,106 +496,5 @@ Horário: O horário de check-out deve ser respeitado para que nossa equipe de l
   private startGame() {
     this.cameras.main.fadeOut(600, 0, 0, 0);
     this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('CharacterSelect'));
-  }
-
-  private showModal(key: string) {
-    if (this.modalContainer) return;
-    const { width, height } = this.scale;
-    const data = this.ICON_DATA[key] || { title: 'INFO', content: '...' };
-
-    this.modalContainer = this.add.container(0, 0).setDepth(200);
-    const overlay = this.add.rectangle(0, 0, width, height, 0x000000, 0.8).setOrigin(0).setInteractive();
-    
-    const cardW = Math.min(width * 0.9, 440);
-    const cardH = Math.min(height * 0.75, 540);
-    
-    const modalFrame = this.add.container(width / 2, height / 2);
-    const cardBg = this.add.graphics();
-    cardBg.fillStyle(0x000000, 0.3).fillRoundedRect(-cardW / 2 + 5, -cardH / 2 + 5, cardW, cardH, 32);
-    cardBg.fillStyle(0xffffff, 1).fillRoundedRect(-cardW / 2, -cardH / 2, cardW, cardH, 32);
-    modalFrame.add(cardBg);
-
-    const domHtml = `
-      <div class="welcome-modal-wrapper" style="width: ${cardW - 60}px; height: ${cardH - 60}px;">
-        <h1 class="welcome-modal-title">${data.title}</h1>
-        <div class="welcome-modal-scroll">
-          <p class="welcome-modal-text">${data.content}</p>
-        </div>
-        <div class="welcome-modal-footer">
-          <button class="welcome-modal-btn">ENTENDIDO</button>
-        </div>
-      </div>
-    `;
-
-    this.domModal = this.add.dom(width / 2, height / 2).createFromHTML(domHtml);
-    
-    const btn = this.domModal.node.querySelector('.welcome-modal-btn') as HTMLElement;
-    if (btn) {
-      btn.addEventListener('click', () => {
-        this.domModal?.destroy();
-        this.domModal = null;
-        this.modalContainer?.destroy();
-        this.modalContainer = null;
-        if (key === 'welcome_rules') {
-          this.hasReadRules = true;
-          this.gameButton.setAlpha(1);
-          const lock = this.gameButton.getByName('lock_icon') as Phaser.GameObjects.Text;
-          if (lock) {
-            this.tweens.add({
-              targets: lock,
-              scale: 2,
-              alpha: 0,
-              duration: 400,
-              onComplete: () => lock.destroy()
-            });
-            this.showToast('🎮 Game desbloqueado!');
-          }
-        }
-      });
-    }
-
-    const scrollContainer = this.domModal.node.querySelector('.welcome-modal-scroll') as HTMLElement;
-    const modalWrapper = this.domModal.node.querySelector('.welcome-modal-wrapper') as HTMLElement;
-    if (scrollContainer && modalWrapper) {
-        let isDown = false;
-        let startPageY: number;
-        let sTop: number;
-
-        const start = (e: MouseEvent | TouchEvent) => {
-            isDown = true;
-            const pageY = e instanceof MouseEvent ? e.pageY : e.touches[0].pageY;
-            startPageY = pageY;
-            sTop = scrollContainer.scrollTop;
-            modalWrapper.style.transition = 'none';
-        };
-
-        const end = () => {
-            isDown = false;
-        };
-
-        const move = (e: MouseEvent | TouchEvent) => {
-            if (!isDown) return;
-            const pageY = e instanceof MouseEvent ? e.pageY : e.touches[0].pageY;
-            const deltaY = pageY - startPageY;
-
-            // 📖 Manual Scroll
-            scrollContainer.scrollTop = sTop - deltaY;
-            
-            // Ensure no accidental dismissal movement
-            modalWrapper.style.transform = 'translateY(0)';
-        };
-
-        scrollContainer.addEventListener('mousedown', start as any);
-        window.addEventListener('mouseup', end);
-        scrollContainer.addEventListener('mousemove', move as any);
-        scrollContainer.addEventListener('touchstart', start as any, { passive: true });
-        scrollContainer.addEventListener('touchend', end);
-        scrollContainer.addEventListener('touchmove', move as any, { passive: false });
-    }
-
-    this.modalContainer.add([overlay, modalFrame]);
-    modalFrame.setScale(0.7).setAlpha(0);
-    this.domModal.setScale(0.7).setAlpha(0);
-    this.tweens.add({ targets: [modalFrame, this.domModal], scale: 1, alpha: 1, duration: 450, ease: 'Back.easeOut' });
   }
 }

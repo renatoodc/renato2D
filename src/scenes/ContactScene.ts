@@ -175,8 +175,12 @@ export class ContactScene extends Phaser.Scene {
             margin: 0;
             font-size: 1.1rem;
             color: #1e3c72;
-            letter-spacing: 2px;
-            font-weight: 800;
+            letter-spacing: 1px;
+            font-weight: 950;
+            text-align: center;
+            padding: 0 75px; 
+            flex: 1;
+            text-transform: uppercase;
         }
 
         .contact-content {

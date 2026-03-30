@@ -11,6 +11,8 @@ import { RulesScene } from './scenes/RulesScene';
 import { WifiScene } from './scenes/WifiScene';
 import { ContactScene } from './scenes/ContactScene';
 import { MarketScene } from './scenes/MarketScene';
+import { RestaurantScene } from './scenes/RestaurantScene';
+import { BakeryScene } from './scenes/BakeryScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -32,7 +34,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false
     }
   },
-  scene: [Preloader, WelcomeScene, CharacterSelect, GameScene, UIScene, LocalGuideScene, CheckoutScene, RulesScene, WifiScene, ContactScene, MarketScene]
+  scene: [Preloader, WelcomeScene, CharacterSelect, GameScene, UIScene, LocalGuideScene, CheckoutScene, RulesScene, WifiScene, ContactScene, MarketScene, RestaurantScene, BakeryScene]
 };
 
 export default new Phaser.Game(config);

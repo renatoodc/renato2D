@@ -57,10 +57,10 @@ export class CheckoutScene extends Phaser.Scene {
 
     // 🔑 Instruction: Keys
     const keysCard = document.createElement('div');
-    keysCard.className = 'info-card';
+    keysCard.className = 'pro-card-wifi';
     keysCard.innerHTML = `
-        <div class="card-icon">🔑</div>
-        <div class="card-body">
+        <div class="pro-card-icon">🔑</div>
+        <div class="pro-card-body">
             <h3>Chaves e Controle</h3>
             <p>Deixe na <strong>caixa de correio 201</strong>, localizada no térreo do prédio.</p>
         </div>
@@ -69,10 +69,10 @@ export class CheckoutScene extends Phaser.Scene {
 
     // 🗑️ Instruction: Trash
     const trashCard = document.createElement('div');
-    trashCard.className = 'info-card';
+    trashCard.className = 'pro-card-wifi';
     trashCard.innerHTML = `
-        <div class="card-icon">🗑️</div>
-        <div class="card-body">
+        <div class="pro-card-icon">🗑️</div>
+        <div class="pro-card-body">
             <h3>Descarte de Lixo</h3>
             <p>Favor descartar nos coletores ao <strong>lado direito do portão da garagem</strong>.</p>
         </div>
@@ -171,87 +171,102 @@ export class CheckoutScene extends Phaser.Scene {
             width: 100vw;
             height: 100vh;
             overflow-y: auto;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            font-family: 'Outfit', 'Inter', sans-serif;
-            color: #333;
-            -webkit-overflow-scrolling: touch;
+            background: radial-gradient(circle at top right, #2a5298, #1e3c72);
+            font-family: 'Outfit', sans-serif;
+            color: white;
+            padding-bottom: 50px;
         }
 
         .checkout-header {
             position: sticky;
             top: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
+            z-index: 2000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 18px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
         }
 
         .back-button {
             position: absolute;
-            left: 15px;
+            left: 20px;
             background: #f0f2f5;
             border: none;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-weight: 600;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: #1e3c72;
             cursor: pointer;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .checkout-header h1 {
             margin: 0;
             font-size: 1.1rem;
             color: #1e3c72;
-            letter-spacing: 2px;
-            font-weight: 800;
+            letter-spacing: 1px;
+            font-weight: 950;
+            text-align: center;
+            padding: 0 75px; 
+            flex: 1;
+            text-transform: uppercase;
         }
 
         .checkout-content {
-            padding: 20px;
-            max-width: 500px;
+            padding: 30px 20px;
+            max-width: 480px;
             margin: 0 auto;
         }
 
         .checkout-intro p {
-            color: white;
+            color: rgba(255,255,255,0.9);
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             line-height: 1.6;
-            margin-bottom: 25px;
-            opacity: 0.9;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .highlight-card {
             background: white;
-            border-radius: 24px;
-            padding: 25px;
+            border-radius: 32px;
+            padding: 30px 20px;
             display: flex;
             align-items: center;
             gap: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            margin-bottom: 25px;
-            border-left: 6px solid #ffd700;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            margin-bottom: 35px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .time-card .card-icon { font-size: 2.5rem; }
-        .time-card .card-text span { display: block; font-size: 0.9rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
-        .time-card .card-text strong { display: block; font-size: 2rem; color: #1e3c72; font-weight: 900; }
+        .highlight-card::after {
+            content: '';
+            position: absolute;
+            left: 0; top:0; bottom: 0; width: 8px;
+            background: linear-gradient(to bottom, #ffcc00, #ffaa00);
+        }
+
+        .time-card .card-icon { font-size: 2.5rem; background: #f8f9fa; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .time-card .card-text span { display: block; font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 4px; }
+        .time-card .card-text strong { display: block; font-size: 2.22rem; color: #1e3c72; font-weight: 900; line-height: 1; }
 
         .checkout-note p {
-            color: rgba(255,255,255,0.75);
-            font-size: 0.9rem;
+            color: rgba(255,255,255,0.85);
+            font-size: 1rem;
             text-align: center;
-            line-height: 1.5;
-            margin-bottom: 30px;
+            line-height: 1.6;
+            margin-bottom: 35px;
             font-style: italic;
+            padding: 0 10px;
         }
 
-        .info-card {
+        .pro-card-wifi {
             background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(8px);
             border-radius: 20px;
             padding: 20px;
             display: flex;
@@ -266,30 +281,30 @@ export class CheckoutScene extends Phaser.Scene {
         .info-card p { margin: 0; font-size: 0.95rem; line-height: 1.4; opacity: 0.95; }
 
         .cta-section {
-            background: rgba(0,0,0,0.2);
-            border-radius: 24px;
-            padding: 30px 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 32px;
+            padding: 40px 25px;
             text-align: center;
-            margin: 30px 0;
-            border: 2px dashed rgba(255,255,255,0.2);
+            margin: 40px 0;
+            border: 2px dashed rgba(255,255,255,0.15);
         }
 
-        .cta-section h3 { color: white; margin-bottom: 10px; font-size: 1.2rem; }
-        .cta-section p { color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 25px; }
+        .cta-section h3 { color: #ffcc00; margin-bottom: 12px; font-size: 1.4rem; font-weight: 800; }
+        .cta-section p { color: rgba(255,255,255,0.8); font-size: 1rem; margin-bottom: 30px; line-height: 1.5; }
 
         .cta-button {
             display: inline-block;
-            background: white;
+            background: linear-gradient(135deg, #ffcc00, #ffaa00);
             color: #1e3c72;
             text-decoration: none;
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 1rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+            padding: 18px 36px;
+            border-radius: 100px;
+            font-weight: 900;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(255, 204, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .cta-button:active { transform: scale(0.95); }
+        .cta-button:active { transform: scale(0.92); }
 
         .checkout-footer {
             text-align: center;

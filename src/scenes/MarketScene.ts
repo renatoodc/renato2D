@@ -54,16 +54,10 @@ export class MarketScene extends Phaser.Scene {
           maps: 'https://www.google.com/maps/search/?api=1&query=Supermercado+Carone+Itapo%C3%A3+Vila+Velha'
         },
         { 
-          name: 'Supermercado BH', 
+          name: 'Supermercado BH - Itapoã', 
           img: 'bh.jpg', 
           desc: 'Famosos pelos preços super competitivos e excelente custo-benefício para compras maiores. Muito prático para o dia a dia e para repor bebidas e itens básicos de forma econômica durante a estadia.',
           maps: 'https://www.google.com/maps/search/?api=1&query=Supermercados+BH+Itapu%C3%A3+Vila+Velha'
-        },
-        { 
-          name: 'Multishow Express Itapuã: Carnes e Bebidas', 
-          img: 'multishow.jpg', 
-          desc: 'Como o nome já diz, é o lugar ideal e certeiro para salvar o churrasco do final de semana! Foco em grande variedade de carnes selecionadas, carvão e bebidas geladas.',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Multishow+Express+Rua+Santa+Catarina+402+Itapu%C3%A3+Vila+Velha'
         },
         { 
           name: 'Hipermercado Carrefour (Antigo Walmart)', 
@@ -179,8 +173,7 @@ export class MarketScene extends Phaser.Scene {
         const card = document.createElement('div');
         card.className = 'market-card';
         card.innerHTML = `
-            <div class="card-img" style="background-image: url('assets/market/${item.img}')">
-                <div class="card-img-placeholder">Adicionar Foto: ${item.img}</div>
+            <div class="card-img" style="background-image: url('assets/img/market/${item.img}'); background-size: cover; background-position: center;">
             </div>
             <div class="card-body">
                 <h3>${item.name}</h3>
@@ -257,11 +250,15 @@ export class MarketScene extends Phaser.Scene {
         }
 
         .market-header h1 {
-            margin: 0;
             font-size: 1.1rem;
+            font-weight: 950;
             color: #1e3c72;
-            letter-spacing: 2px;
-            font-weight: 800;
+            margin: 0;
+            letter-spacing: 1px;
+            text-align: center;
+            padding: 0 75px;
+            flex: 1;
+            text-transform: uppercase;
         }
 
         .market-category-menu {
@@ -324,23 +321,12 @@ export class MarketScene extends Phaser.Scene {
         }
 
         .card-img {
-            height: 200px;
+            height: 180px;
+            background-color: #f0f2f5;
             background-size: cover;
             background-position: center;
-            background-color: #eee;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card-img-placeholder {
-            background: rgba(0,0,0,0.5);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            text-align: center;
+            overflow: hidden;
         }
 
         .card-body {
