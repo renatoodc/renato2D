@@ -17,10 +17,6 @@ export default class WelcomeScene extends Phaser.Scene {
   private currentParallaxY = 0;
   private vesselLayer!: Phaser.GameObjects.Container;
   private vessels: (Phaser.GameObjects.Graphics & { speed: number, type: 'ship' | 'boat', phase: number, baseY: number })[] = [];
-  private headerText!: Phaser.GameObjects.Text;
-  private gameButton!: Phaser.GameObjects.Container;
-  private modalContainer: Phaser.GameObjects.Container | null = null;
-  private domModal: Phaser.GameObjects.DOMElement | null = null;
 
   constructor() {
     super('WelcomeScene');
@@ -118,7 +114,6 @@ export default class WelcomeScene extends Phaser.Scene {
 
       const isGame = item.id === 'welcome_game';
       const container = this.createProfessionalIcon(x, y, item.label, !!item.locked, item.emoji, wrapWidth, isGame);
-      if (isGame) this.gameButton = container;
 
       container.setInteractive(new Phaser.Geom.Circle(0, 0, 50), Phaser.Geom.Circle.Contains);
       container.on('pointerdown', () => {
