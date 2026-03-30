@@ -48,8 +48,11 @@ export class RulesScene extends Phaser.Scene {
     // 🗑️ Card: Trash
     this.addRuleCard(content, "🗑️ Descarte de Lixo", "Favor descartar o lixo diariamente nos coletores à direita do portão da garagem.");
 
-    // 🚫 Card: Smoking/Parties
-    this.addRuleCard(content, "🚫 Proibitivo", "É estritamente proibido fumar dentro do imóvel ou realizar festas/eventos.");
+    // 🚗 Card: Parking
+    this.addRuleCard(content, "🚗 Estacionamento", "É permitido apenas um veículo no estacionamento. O cadastro deve ser feito previamente enviando a placa do veículo.");
+
+    // 🚫 Card: Smoking/Parties/Windows
+    this.addRuleCard(content, "🚫 Proibitivo", "Estritamente proibido fumar no imóvel, realizar festas ou pendurar objetos nas grades das janelas. Para roupas, utilize o varal da área de serviço.");
 
     // 🏁 Footer
     const footer = document.createElement('div');

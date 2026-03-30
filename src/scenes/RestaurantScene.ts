@@ -106,7 +106,7 @@ export class RestaurantScene extends Phaser.Scene {
             items: [
                 {
                     name: 'Nona Lu',
-                    desc: 'Eleito o melhor restaurante self-service do Espírito Santo! Fica na rua de trás do apartamento e oferece uma comida caseira de altíssima qualidade. Destaque absoluto para o bacalhau com azeite trufado.',
+                    desc: 'Eleito o melhor restaurante self-service do Espírito Santo! Fica pertinho do apartamento e oferece uma comida caseira de altíssima qualidade. Destaque absoluto para o bacalhau com azeite trufado.',
                     address: 'Rua Goiânia, 7 - Itapuã',
                     maps: 'https://www.google.com/maps/search/?api=1&query=Nona+Lu+Itapuã+Vila+Velha',
                     instagram: 'https://www.instagram.com/nonalurestaurantes/',
@@ -122,9 +122,9 @@ export class RestaurantScene extends Phaser.Scene {
                 },
                 {
                     name: 'Caranguejo do Assis',
-                    desc: 'O almoço capixaba definitivo! Restaurante tradicional para comer a verdadeira Moqueca Capixaba, frutos do mar frescos e caranguejada de frente para a praia de Itapuã.',
-                    address: 'Av. Estudante José Júlio de Souza, 290 - Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Caranguejo+do+Assis+Vila+Velha',
+                    desc: 'O almoço capixaba definitivo! Restaurante tradicional para comer a verdadeira Moqueca Capixaba, frutos do mar frescos e caranguejada na rua de trás da praia de Itapuã.',
+                    address: 'Av. da Praia, 290 - Itapuã',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Caranguejo+do+Assis+Av+da+Praia+290+Vila+Velha',
                     instagram: 'https://www.instagram.com/caranguejodoassis',
                     img: 'caranguejo.jpg'
                 }

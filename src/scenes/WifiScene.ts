@@ -64,6 +64,19 @@ export class WifiScene extends Phaser.Scene {
     `;
     content.appendChild(infoCard);
 
+    // 📺 STREAMING CARD
+    const streamingCard = document.createElement('div');
+    streamingCard.className = 'wifi-info-pro';
+    streamingCard.style.marginTop = '20px';
+    streamingCard.innerHTML = `
+        <div class="info-icon-glow">📺</div>
+        <div class="info-body">
+            <h3>Smart TV e Streaming</h3>
+            <p>Disponibilizamos <strong>Netflix</strong> e <strong>Amazon Prime</strong> diretamente na Smart TV da sala. <br><br>⚠️ <strong>IMPORTANTE:</strong> Por favor, utilize o perfil <strong>"Guest"</strong> em ambas as plataformas.</p>
+        </div>
+    `;
+    content.appendChild(streamingCard);
+
     // 🚀 Inject into Phaser
     this.add.dom(width / 2, height / 2, container);
     
@@ -90,7 +103,7 @@ export class WifiScene extends Phaser.Scene {
     };
 
     const title = document.createElement('h1');
-    title.innerText = 'WI-FI';
+    title.innerText = 'WI-FI E STREAMING';
 
     header.appendChild(backBtn);
     header.appendChild(title);

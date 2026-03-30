@@ -35,7 +35,29 @@ export class CheckoutScene extends Phaser.Scene {
     `;
     content.appendChild(intro);
 
-    // 🕒 Highlight Card: Time
+    // 🕒 Highlight Card: CHECK-IN
+    const checkinCard = document.createElement('div');
+    checkinCard.className = 'highlight-card time-card';
+    checkinCard.style.marginBottom = '20px';
+    checkinCard.innerHTML = `
+        <div class="card-icon">🔑</div>
+        <div class="card-text">
+            <span>Horário de Check-in</span>
+            <strong>Das 08h às 23:59</strong>
+        </div>
+    `;
+    content.appendChild(checkinCard);
+
+    // 💡 Check-in Note
+    const checkinNote = document.createElement('div');
+    checkinNote.className = 'checkout-note';
+    checkinNote.style.marginBottom = '35px';
+    checkinNote.innerHTML = `
+        <p>Check-in totalmente flexível! Para chegadas muito cedo ou de madrugada, favor consultar as condições pelo chat.</p>
+    `;
+    content.appendChild(checkinNote);
+
+    // 🕒 Highlight Card: CHECK-OUT
     const timeCard = document.createElement('div');
     timeCard.className = 'highlight-card time-card';
     timeCard.innerHTML = `
@@ -84,7 +106,7 @@ export class CheckoutScene extends Phaser.Scene {
     ctaSection.className = 'cta-section';
     ctaSection.innerHTML = `
         <h3>Precisa de um tempinho extra?</h3>
-        <p>Caso queira aproveitar um pouco mais a praia, consulte a disponibilidade pelo chat do Airbnb.</p>
+        <p>Caso queira estender o Check-out para aguardar o horário do seu voo ou transporte, consulte a disponibilidade com o anfitrião pelo chat do Airbnb.</p>
         <a href="https://www.airbnb.com.br/guest/inbox" target="_blank" class="cta-button">💬 Abrir Chat Airbnb</a>
     `;
     content.appendChild(ctaSection);
@@ -157,7 +179,7 @@ export class CheckoutScene extends Phaser.Scene {
     };
 
     const title = document.createElement('h1');
-    title.innerText = 'CHECK-OUT';
+    title.innerText = 'CHECK-IN/OUT';
 
     header.appendChild(backBtn);
     header.appendChild(title);

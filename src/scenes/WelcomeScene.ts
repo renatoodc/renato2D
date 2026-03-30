@@ -66,11 +66,11 @@ export default class WelcomeScene extends Phaser.Scene {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('RulesScene'));
       }},
-      { label: 'WI-FI', emoji: '📶', id: 'welcome_wifi', callback: () => {
+      { label: 'WI-FI\nE STREAMING', emoji: '📶', id: 'welcome_wifi', callback: () => {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('WifiScene'));
       }},
-      { label: 'CHECK-OUT', emoji: '🔑', id: 'check_in_out', callback: () => {
+      { label: 'CHECK-IN / OUT', emoji: '🔑', id: 'check_in_out', callback: () => {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('CheckoutScene'));
       }},
@@ -452,16 +452,15 @@ export default class WelcomeScene extends Phaser.Scene {
             const overscan = 100;
 
             // 1. DYNAMIC WATER BODY (Deep Unified Blue)
-            const surgeAlpha = 0.4 + (Math.sin(val) * 0.15); 
-            // Unified Solid Blue (0x3a7bd5) for global ocean continuity
+            // sinVal from -1 to 1. Advanced peak at 1, Retreat peak at -1.
+            const sinVal = Math.sin(val);
+            const surgeAlpha = 0.4 + (sinVal * 0.15); 
             this.tideLayer.fillStyle(0x3a7bd5, surgeAlpha); 
             
             this.tideLayer.beginPath();
-            // Start at the horizon (limitY)
             this.tideLayer.moveTo(-overscan/2, topLimitY);
             this.tideLayer.lineTo(width + overscan, topLimitY);
             
-            // Draw the WAVY BOTTOM edge (Inverted from previous logic)
             for (let i = segments; i >= 0; i--) {
                 const waveY = waveFrontY + Math.sin(val + (i * 0.8)) * 12;
                 this.tideLayer.lineTo(i * step, waveY);
@@ -469,17 +468,20 @@ export default class WelcomeScene extends Phaser.Scene {
             this.tideLayer.closePath();
             this.tideLayer.fillPath();
 
-            // 2. PREMIUM FOAM BORDER (Conditional visibility)
-            // Only show foam when it "touches" the sand (at or below sandY)
-            const foamVisibility = (waveFrontY >= sandY - 5) ? 1 : 0;
-            const foamAlpha = (surgeAlpha * 1.5) * foamVisibility;
+            // 2. PREMIUM FOAM BORDER (Conditional Alpha by Sand Contact)
+            // Foam only exists as it interacts with the sand. 
+            // When waveFrontY is above sandY, it's "in the sea" and foam disappears.
+            const sandContactDepth = Math.max(0, waveFrontY - sandY);
+            const foamAlpha = (surgeAlpha * 1.8) * Phaser.Math.Clamp(sandContactDepth / 12, 0, 1);
             
             this.tideLayer.lineStyle(4, 0xffffff, foamAlpha);
             this.tideLayer.beginPath();
             this.tideLayer.moveTo(-overscan/2, waveFrontY + Math.sin(val) * 12);
             for (let i = 0; i <= segments; i++) {
+                // Subtle horizontal wiggle for the foam edge
+                const dx = Math.sin(val * 2 + i) * 2; 
                 const waveY = waveFrontY + Math.sin(val + (i * 0.8)) * 12;
-                this.tideLayer.lineTo(i * step, waveY);
+                this.tideLayer.lineTo((i * step) + dx, waveY);
             }
             this.tideLayer.strokePath();
         }

@@ -227,9 +227,10 @@ export default class GameScene extends Phaser.Scene {
           if (existing) {
             existing.setPosition(data.x, data.y).setScale(data.scaleX, data.scaleY).setRotation(data.rotation).setDepth(depth);
             if (data.type === 'box') {
-                existing.setSize(data.width, data.height);
-                (existing.body as Phaser.Physics.Arcade.StaticBody).updateFromGameObject();
-                existing.setVisible(this.isEditorEnabled);
+                const rect = existing as Phaser.GameObjects.Rectangle;
+                rect.setSize(data.width, data.height);
+                (rect.body as Phaser.Physics.Arcade.StaticBody).updateFromGameObject();
+                rect.setVisible(this.isEditorEnabled);
             }
             matched.add(existing);
           } else {
@@ -239,7 +240,11 @@ export default class GameScene extends Phaser.Scene {
               this.input.setDraggable(spawned); 
             } else if (data.type === 'box') {
               spawned = (window as any).spawn('box', data.x, data.y);
-              if (spawned) spawned.setSize(data.width, data.height);
+              if (spawned) {
+                  spawned.setSize(data.width, data.height);
+                  (spawned.body as Phaser.Physics.Arcade.StaticBody).updateFromGameObject();
+                  spawned.setVisible(this.isEditorEnabled);
+              }
             }
             else spawned = (window as any).spawn(data.key, data.x, data.y);
             

@@ -47,12 +47,13 @@ export class ContactScene extends Phaser.Scene {
 
     // 🟢 Card: WhatsApp Anfitrião (Urgency)
     const hostCard = document.createElement('div');
-    hostCard.className = 'info-card urgency-card';
+    hostCard.className = 'info-card-pro';
     hostCard.innerHTML = `
-        <div class="card-body">
+        <div class="info-icon-glow">📱</div>
+        <div class="info-body">
             <div class="service-label">ANFITRIÃO (URGÊNCIAS)</div>
             <h3>Renato</h3>
-            <p>Em caso de urgência, ligue ou mande um WhatsApp:</p>
+            <p>Em caso de urgência, ligue ou envie uma mensagem:</p>
             <div class="phone-number">27 99651-5433</div>
             <button class="action-btn wpp-btn" onclick="window.open('https://wa.me/5527996515433', '_blank')">Falar no WhatsApp</button>
         </div>
@@ -61,9 +62,10 @@ export class ContactScene extends Phaser.Scene {
 
     // 🚨 Card: Contato Reserva (Emergency Fallback)
     const emergencyCard = document.createElement('div');
-    emergencyCard.className = 'info-card backup-card';
+    emergencyCard.className = 'info-card-pro';
     emergencyCard.innerHTML = `
-        <div class="card-body">
+        <div class="info-icon-glow">🚨</div>
+        <div class="info-body">
             <div class="service-label">CONTATO RESERVA</div>
             <h3>Emergência</h3>
             <p>Caso não consiga contato com o anfitrião principal:</p>
@@ -241,23 +243,60 @@ export class ContactScene extends Phaser.Scene {
         .action-btn:active { transform: scale(0.98); }
 
         .airbnb-btn { background: #ff385c; color: white; }
-        .wpp-btn { background: #25d366; color: white; margin-top: 15px; }
 
-        .info-card {
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            color: white;
-            border: 1px solid rgba(255,255,255,0.08);
+        .info-card-pro {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 25px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .service-label { font-size: 0.75rem; opacity: 0.7; letter-spacing: 1.5px; margin-bottom: 8px; font-weight: 800; }
-        .phone-number { font-size: 1.4rem; font-weight: 800; margin: 10px 0; color: #ffd700; }
+        .info-icon-glow {
+            background: rgba(255, 255, 255, 0.1);
+            width: 50px; height: 50px;
+            border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(255,255,255,0.1);
+        }
+
+        .info-body { flex: 1; }
         
-        .info-card h3 { margin: 0; font-size: 1.3rem; }
-        .info-card p { margin: 5px 0 0 0; font-size: 0.95rem; opacity: 0.9; }
+        .service-label { 
+            font-size: 0.7rem; 
+            color: rgba(255,255,255,0.7); 
+            letter-spacing: 2px; 
+            margin-bottom: 5px; 
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .phone-number { 
+            font-size: 1.8rem; 
+            font-weight: 950; 
+            margin: 12px 0; 
+            color: #ffcc00; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .info-card-pro h3 { margin: 0; font-size: 1.25rem; color: #ffffff; font-weight: 800; }
+        .info-card-pro p { margin: 5px 0 0 0; font-size: 0.95rem; line-height: 1.5; color: rgba(255,255,255,0.9); }
+
+        .wpp-btn { 
+            background: #25d366; 
+            color: white; 
+            margin-top: 15px; 
+            border-radius: 100px;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
 
         .contact-footer {
             text-align: center;

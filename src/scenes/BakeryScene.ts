@@ -107,7 +107,7 @@ export class BakeryScene extends Phaser.Scene {
                     name: 'Padaria Peter Pão',
                     desc: 'A nossa vizinha de porta! Saia pelo portão de cima e vire à esquerda. Ótima variedade de pães, doces e salgados frescos. Possui almoço self-service.',
                     address: 'Av. Fortaleza, 1200 - Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Padaria+Peter+Pão+Vila+Velha',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Padaria+Peter+Pão+Av.+Fortaleza+1200+Itapuã+Vila+Velha+ES',
                     instagram: 'https://www.instagram.com/peter.pao/',
                     img: 'peter_pao.jpg'
                 },

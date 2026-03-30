@@ -130,8 +130,8 @@ export class LocalGuideScene extends Phaser.Scene {
       }
     ]);
 
-    // 🛍️ Compras
-    this.addCategorySection(content, "🛍️ Compras e Lazer", "section-compras",
+    // 🛍️ Shoppings
+    this.addCategorySection(content, "🛍️ Shoppings e Lazer", "section-compras",
         "Grandes complexos comerciais para um dia de chuva ou lazer noturno.", [
       {
         name: "Shopping Vila Velha",
@@ -264,7 +264,7 @@ export class LocalGuideScene extends Phaser.Scene {
         { label: '🏛️ Histórico', id: 'section-historico' },
         { label: '🏖️ Praias', id: 'section-praias' },
         { label: '🌳 Natureza', id: 'section-natureza' },
-        { label: '🛍️ Compras', id: 'section-compras' }
+        { label: '🛍️ Shoppings', id: 'section-compras' }
     ];
 
     categories.forEach(cat => {
