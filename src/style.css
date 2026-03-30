@@ -8,8 +8,8 @@
   --glass-border: rgba(255, 255, 255, 0.3);
   --blur: blur(14px);
   --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.4);
-  --font-main: 'Inter', sans-serif;
-  --font-title: 'Montserrat', sans-serif;
+  --font-main: "Inter", sans-serif;
+  --font-title: "Montserrat", sans-serif;
 }
 
 * {
@@ -20,13 +20,15 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-body, html {
+body,
+html {
   width: 100%;
   height: 100%;
   overflow: hidden;
   background-color: #0f0f0f;
   font-family: var(--font-main);
   color: #ffffff;
+  height: 100dvh;
 }
 
 #game-container {
@@ -56,7 +58,8 @@ body, html {
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 /* Modern Glass Dialogue Box */
@@ -150,8 +153,10 @@ body, html {
   letter-spacing: 0.5px;
   pointer-events: none;
   opacity: 0;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  transition: opacity 0.3s, transform 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
   transform: translate(-50%, -100%) translateY(-10px);
 }
 
@@ -167,16 +172,16 @@ body, html {
     padding: 20px;
     border-radius: 16px;
   }
-  
+
   .dialogue-text {
     font-size: 15px;
   }
-  
+
   .dialogue-button {
     width: 100%;
     padding: 14px;
   }
-  
+
   .dialogue-speaker {
     font-size: 11px;
   }
@@ -218,8 +223,20 @@ body, html {
   user-select: none; /* Prevent accidental text highlighting while dragging */
   padding: 0 10px 20px 0;
   margin-right: -10px; /* Hide scrollbar padding hack */
-  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
 }
 
 .welcome-modal-scroll:active {
@@ -231,7 +248,7 @@ body, html {
   width: 4px;
 }
 .welcome-modal-scroll::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.05);
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 10px;
 }
 .welcome-modal-scroll::-webkit-scrollbar-thumb {
@@ -249,7 +266,8 @@ body, html {
   padding-bottom: 20px;
 }
 
-.welcome-modal-text b, .welcome-modal-text strong {
+.welcome-modal-text b,
+.welcome-modal-text strong {
   color: #1e293b;
   font-weight: 700;
 }
