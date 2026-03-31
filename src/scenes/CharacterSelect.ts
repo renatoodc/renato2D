@@ -49,13 +49,12 @@ export default class CharacterSelect extends Phaser.Scene {
     }).setOrigin(0.5);
 
     // 3. Character Cards
-    const cardScale = isPortrait ? 0.9 : 1.1;
-    const centerY = isPortrait ? height * 0.52 : height * 0.55;
+    const isSmallScreen = height < 680;
+    const cardScale = isPortrait ? (isSmallScreen ? 0.75 : 0.9) : 1.1;
+    const centerY = isPortrait ? (isSmallScreen ? height * 0.50 : height * 0.52) : height * 0.55;
 
     this.selectionCards = [];
-    // 🕵️ UI Expert: Visual Balance (Renato 1.3, Renata 0.75)
-    // Both characters perfectly synchronized in height
-    const cardGap = isPortrait ? 110 : 160;
+    const cardGap = isPortrait ? (isSmallScreen ? 90 : 110) : 160;
     this.createCharacterCard(width / 2 - cardGap, centerY, 'RENATO', 'male', 'male_walk', cardScale, 1.3);
     this.createCharacterCard(width / 2 + cardGap, centerY, 'RENATA', 'female', 'female_walk', cardScale, 0.75);
 
@@ -162,9 +161,10 @@ export default class CharacterSelect extends Phaser.Scene {
   }
 
   private createFooterConfirmButton(width: number, height: number, isPortrait: boolean) {
+    const isSmallScreen = height < 680;
     const btnW = Math.min(width * 0.85, 320);
-    const btnH = 56;
-    const targetY = height - (isPortrait ? 80 : 60);
+    const btnH = isSmallScreen ? 48 : 56;
+    const targetY = height - (isPortrait ? (isSmallScreen ? 60 : 80) : 60);
 
     this.confirmBtn = this.add.container(width / 2, targetY + 60);
     this.confirmBtn.setAlpha(0).setData('targetY', targetY);
@@ -179,7 +179,7 @@ export default class CharacterSelect extends Phaser.Scene {
     btnBg.fillRoundedRect(-btnW/2, -btnH/2, btnW, btnH/2, { tl: 20, tr: 20, bl: 0, br: 0 });
 
     const btnText = this.add.text(0, 0, 'CONFIRMAR E COMEÇAR', {
-      fontFamily: 'Montserrat', fontSize: '15px', fontStyle: '900', color: '#1e3c72', letterSpacing: 1.5
+      fontFamily: 'Montserrat', fontSize: isSmallScreen ? '13px' : '15px', fontStyle: '900', color: '#1e3c72', letterSpacing: 1.5
     }).setOrigin(0.5);
 
     this.confirmBtn.add([btnBg, btnText]);

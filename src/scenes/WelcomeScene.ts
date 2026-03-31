@@ -30,34 +30,43 @@ export default class WelcomeScene extends Phaser.Scene {
     this.birdLayer = this.add.container(0, 0).setDepth(10);
     this.vesselLayer = this.add.container(0, 0).setDepth(5);
     this.createDynamicBeachBackground(width, height);
+    
+    // 🕵️ UI Expert: Responsive Viewport Engine
+    // Listens for resize events (like mobile address bar toggles) and refreshes the layout
+    this.scale.on('resize', () => {
+        if (this.scene.isActive()) this.scene.restart();
+    });
 
     // 2. Subtle Ocean Vignette
     const vignette = this.add.graphics();
     vignette.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.4, 0.4, 0.0, 0.0);
     vignette.fillRect(0, 0, width, height * 0.3);
 
-    // 3. Header Section (Perfected Typography)
-    const titlePadding = isPortrait ? 0.08 : 0.05;
+    // 🕵️ UI Expert: Responsive Layout Engine
+    const hScale = Math.min(1, height / 800);
+    this.registry.set('globalScale', hScale); // Optional: keep for other scaling needs
+    const isSmallScreen = height < 680;
+    const titlePadding = isPortrait ? (isSmallScreen ? 0.04 : 0.08) : 0.05;
     
     // Header 1: CENTRAL DO HÓSPEDE
     this.add.text(width / 2, height * titlePadding, 'CENTRAL DO HÓSPEDE', {
-      fontFamily: 'Montserrat', fontSize: isPortrait ? '12px' : '16px', color: '#ffffff', fontStyle: 'bold', letterSpacing: 5
+      fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '10px' : '12px') : '16px', color: '#ffffff', fontStyle: 'bold', letterSpacing: isSmallScreen ? 3 : 5
     }).setOrigin(0.5).setAlpha(0.85);
 
-    // Header 2: ITAIPAVA 201 (New)
+    // Header 2: ITAIPAVA 201
     this.add.text(width / 2, height * (titlePadding + 0.035), 'ITAIPAVA 201', {
-      fontFamily: 'Montserrat', fontSize: isPortrait ? '14px' : '18px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
+      fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '12px' : '14px') : '18px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
     }).setOrigin(0.5).setShadow(2, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1);
 
     // Header 3: Bem-vindo!
-    const mainTitle = this.add.text(width / 2, height * (titlePadding + 0.12), 'BEM-VINDO!', {
-      fontFamily: 'Montserrat', fontSize: isPortrait ? '42px' : '58px', color: '#ffffff', fontStyle: '900', letterSpacing: 2
+    const mainTitle = this.add.text(width / 2, height * (titlePadding + 0.11), 'BEM-VINDO!', {
+      fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '32px' : '42px') : '58px', color: '#ffffff', fontStyle: '900', letterSpacing: 2
     }).setOrigin(0.5);
     mainTitle.setShadow(2, 4, 'rgba(0,0,0,0.35)', 10);
 
-    // Header 4: Refúgio em Itapuã (New)
-    this.add.text(width / 2, height * (titlePadding + 0.17), 'REFÚGIO EM ITAPUÃ', {
-      fontFamily: 'Montserrat', fontSize: isPortrait ? '16px' : '20px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
+    // Header 4: Refúgio em Itapuã
+    this.add.text(width / 2, height * (titlePadding + (isSmallScreen ? 0.15 : 0.17)), 'REFÚGIO EM ITAPUÃ', {
+      fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '14px' : '16px') : '20px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
     }).setOrigin(0.5).setShadow(1, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1);
 
     // 4. Icons
@@ -98,15 +107,14 @@ export default class WelcomeScene extends Phaser.Scene {
     ];
 
     const cols = isPortrait ? 3 : 5;
-    const startY = isPortrait ? height * 0.35 : height * 0.38; 
-    const spacingY = isPortrait ? height * 0.25 : height * 0.24; 
+    const startY = isPortrait ? (isSmallScreen ? height * 0.28 : height * 0.35) : height * 0.38; 
+    const spacingY = isPortrait ? (isSmallScreen ? height * 0.22 : height * 0.25) : height * 0.24; 
     
     items.forEach((item, index) => {
       const col = index % cols;
       const row = Math.floor(index / cols);
       
-      // 🕵️ UI Expert: Horizontal Spread Optimization (Reduced margins to 15%)
-      const marginX = isPortrait ? width * 0.15 : width * 0.10;
+      const marginX = isPortrait ? (isSmallScreen ? width * 0.12 : width * 0.15) : width * 0.10;
       const availableWidth = width - (marginX * 2);
       const x = marginX + (col * (availableWidth / (cols - 1)));
       const y = startY + row * spacingY;
@@ -119,7 +127,9 @@ export default class WelcomeScene extends Phaser.Scene {
       const startLocked = item.locked && !this.hasReadRules;
       const visualLocked = startLocked || isJustUnlocked;
 
+      const iconScale = isPortrait && isSmallScreen ? 0.85 : 1;
       const container = this.createProfessionalIcon(x, y, item.label, !!visualLocked, item.emoji, wrapWidth, isGame);
+      container.setScale(iconScale);
       if (isGame) this.gameIcon = container;
 
       container.setInteractive(new Phaser.Geom.Circle(0, 0, 50), Phaser.Geom.Circle.Contains);
@@ -511,10 +521,11 @@ export default class WelcomeScene extends Phaser.Scene {
     iconText.setShadow(0, 0, isGame ? '#ffd700' : '#80deea', 12, true, true);
     container.add(iconText);
 
-    const labelText = this.add.text(0, 56, label.toUpperCase(), {
+    const isSmallScreen = this.scale.height < 680;
+    const labelText = this.add.text(0, isSmallScreen ? 46 : 56, label.toUpperCase(), {
       fontFamily: 'Outfit', 
-      fontSize: '16px', 
-      color: '#ffffff', 
+      fontSize: isSmallScreen ? '13px' : '16px', 
+      color: isLocked ? '#999999' : '#ffffff', 
       fontStyle: '900', 
       letterSpacing: 0.8, 
       align: 'center', 
@@ -539,12 +550,14 @@ export default class WelcomeScene extends Phaser.Scene {
 
   private showToast(msg: string) {
     const { width, height } = this.scale;
+    const hScale = this.registry.get('globalScale') || 1;
     const toast = this.add.container(width / 2, height + 60);
     const bg = this.add.graphics().fillStyle(0x004d40, 0.9).fillRoundedRect(-140, -22, 280, 44, 22);
     const txt = this.add.text(0, 0, msg, { fontFamily: 'Montserrat', fontSize: '12px', color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
     toast.add([bg, txt]);
+    toast.setScale(hScale);
     this.tweens.add({
-      targets: toast, y: height - 100, duration: 500, ease: 'Back.easeOut',
+      targets: toast, y: height - (height < 600 ? 60 : 100), duration: 500, ease: 'Back.easeOut',
       onComplete: () => this.time.delayedCall(2200, () => {
         this.tweens.add({ targets: toast, alpha: 0, duration: 400, onComplete: () => toast.destroy() });
       })

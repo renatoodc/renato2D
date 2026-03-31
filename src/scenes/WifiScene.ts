@@ -157,8 +157,10 @@ export class WifiScene extends Phaser.Scene {
     const style = document.createElement('style');
     style.innerHTML = `
         #wifi-pro-page {
-            width: 100vw;
+            width: 100%;
+            height: 100%;
             height: 100vh;
+            height: 100dvh;
             overflow-y: auto;
             background: radial-gradient(circle at top right, #2a5298, #1e3c72);
             font-family: 'Outfit', sans-serif;

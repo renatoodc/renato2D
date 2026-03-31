@@ -25,8 +25,9 @@ export default class StoryScene extends Phaser.Scene {
       .setAlpha(0.4);
 
     // 💎 Glassmorphism Panel
+    const isSmallScreen = height < 680;
     const panelW = Math.min(width * 0.85, 420);
-    const panelH = height * 0.75;
+    const panelH = isSmallScreen ? height * 0.82 : height * 0.75;
     const panelX = width * 0.5;
     const panelY = height * 0.5;
 
@@ -58,24 +59,27 @@ export default class StoryScene extends Phaser.Scene {
       { icon: '💎', title: 'TESOUROS', text: 'Vasculhe as conchas na praia\ne ache prêmios instantâneos!' }
     ];
 
-    objectives.forEach((obj, i) => {
-      const yPos = panelY - 80 + (i * 100);
+    const spacingY = isSmallScreen ? 70 : 100;
+    const startYOffset = isSmallScreen ? 55 : 80;
+
+    objectives.forEach((obj: any, i: number) => {
+      const yPos = panelY - startYOffset + (i * spacingY);
       
-      this.add.text(panelX - panelW / 2 + 40, yPos, obj.icon, { fontSize: '32px' }).setOrigin(0, 0.5);
+      this.add.text(panelX - panelW / 2 + 30, yPos, obj.icon, { fontSize: isSmallScreen ? '24px' : '32px' }).setOrigin(0, 0.5);
       
-      this.add.text(panelX - panelW / 2 + 90, yPos - 15, obj.title, {
+      this.add.text(panelX - panelW / 2 + 75, yPos - 12, obj.title, {
         fontFamily: 'Montserrat',
-        fontSize: '18px',
+        fontSize: isSmallScreen ? '15px' : '18px',
         color: '#fdbb2d',
         fontStyle: '800'
       }).setOrigin(0, 0.5);
 
-      this.add.text(panelX - panelW / 2 + 90, yPos + 15, obj.text, {
+      this.add.text(panelX - panelW / 2 + 75, yPos + 12, obj.text, {
         fontFamily: 'Montserrat',
-        fontSize: '14px',
+        fontSize: isSmallScreen ? '12px' : '14px',
         color: '#ffffff',
         fontStyle: '500',
-        lineSpacing: 4
+        lineSpacing: isSmallScreen ? 2 : 4
       }).setOrigin(0, 0.5);
     });
 
