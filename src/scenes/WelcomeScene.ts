@@ -513,7 +513,7 @@ export default class WelcomeScene extends Phaser.Scene {
 
     const labelText = this.add.text(0, 56, label.toUpperCase(), {
       fontFamily: 'Outfit', 
-      fontSize: '12.5px', 
+      fontSize: '16px', 
       color: '#ffffff', 
       fontStyle: '900', 
       letterSpacing: 0.8, 
