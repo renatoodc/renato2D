@@ -8,6 +8,10 @@ export default class Preloader extends Phaser.Scene {
   preload() {
     this.load.image('menu_bg', '/assets/menu_bg.png');
     this.load.image('homem_img', '/assets/Homem.png');
+    this.load.image('homem_andando_img', '/assets/spritesheet/homem-andando.png');
+    this.load.image('homem_subindo_img', '/assets/spritesheet/homem-subindo.png');
+    this.load.image('homem_descendo_img', '/assets/spritesheet/homem-descendo.png');
+    this.load.image('homem_idle_img', '/assets/spritesheet/homem-idle.png');
     this.load.image('mulher_img', '/assets/Mulher.png');
     this.load.image('renatao_img', '/assets/renatao.png');
     
@@ -72,6 +76,42 @@ export default class Preloader extends Phaser.Scene {
       });
     }
 
+    if (this.textures.exists('homem_andando_img')) {
+      const img = this.textures.get('homem_andando_img').getSourceImage() as HTMLImageElement;
+      if (this.textures.exists('male_side')) this.textures.remove('male_side');
+      this.textures.addSpriteSheet('male_side', img, { 
+        frameWidth: Math.floor(img.width / 7), 
+        frameHeight: Math.floor(img.height / 7) 
+      });
+    }
+
+    if (this.textures.exists('homem_subindo_img')) {
+      const img = this.textures.get('homem_subindo_img').getSourceImage() as HTMLImageElement;
+      if (this.textures.exists('male_up')) this.textures.remove('male_up');
+      this.textures.addSpriteSheet('male_up', img, { 
+        frameWidth: Math.floor(img.width / 8), 
+        frameHeight: Math.floor(img.height / 8) 
+      });
+    }
+
+    if (this.textures.exists('homem_descendo_img')) {
+      const img = this.textures.get('homem_descendo_img').getSourceImage() as HTMLImageElement;
+      if (this.textures.exists('male_down')) this.textures.remove('male_down');
+      this.textures.addSpriteSheet('male_down', img, { 
+        frameWidth: Math.floor(img.width / 8), 
+        frameHeight: Math.floor(img.height / 8) 
+      });
+    }
+
+    if (this.textures.exists('homem_idle_img')) {
+      const img = this.textures.get('homem_idle_img').getSourceImage() as HTMLImageElement;
+      if (this.textures.exists('male_idle')) this.textures.remove('male_idle');
+      this.textures.addSpriteSheet('male_idle', img, { 
+        frameWidth: Math.floor(img.width / 8), 
+        frameHeight: Math.floor(img.height / 8) 
+      });
+    }
+
     if (this.textures.exists('mulher_img')) {
       const img = this.textures.get('mulher_img').getSourceImage() as HTMLImageElement;
       if (this.textures.exists('female')) this.textures.remove('female');
@@ -90,6 +130,38 @@ export default class Preloader extends Phaser.Scene {
       this.anims.create({
         key: 'male_walk',
         frames: this.anims.generateFrameNumbers('male', { start: 0, end: 11 }),
+        frameRate: 12,
+        repeat: -1
+      });
+    }
+    if (!this.anims.exists('male_walk_side') && this.textures.exists('male_side')) {
+      this.anims.create({
+        key: 'male_walk_side',
+        frames: this.anims.generateFrameNumbers('male_side', { start: 0, end: 48 }),
+        frameRate: 12,
+        repeat: -1
+      });
+    }
+    if (!this.anims.exists('male_walk_up') && this.textures.exists('male_up')) {
+      this.anims.create({
+        key: 'male_walk_up',
+        frames: this.anims.generateFrameNumbers('male_up', { start: 0, end: 63 }),
+        frameRate: 12,
+        repeat: -1
+      });
+    }
+    if (!this.anims.exists('male_walk_down') && this.textures.exists('male_down')) {
+      this.anims.create({
+        key: 'male_walk_down',
+        frames: this.anims.generateFrameNumbers('male_down', { start: 0, end: 63 }),
+        frameRate: 12,
+        repeat: -1
+      });
+    }
+    if (!this.anims.exists('male_idle_anim') && this.textures.exists('male_idle')) {
+      this.anims.create({
+        key: 'male_idle_anim',
+        frames: this.anims.generateFrameNumbers('male_idle', { start: 0, end: 63 }),
         frameRate: 12,
         repeat: -1
       });

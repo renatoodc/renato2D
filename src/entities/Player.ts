@@ -32,9 +32,20 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   freeze(zoom: boolean = false) {
     this.setVelocity(0, 0);
-    if (this.anims.isPlaying) this.stop();
-    this.setFrame(0);
-    this.setScale(zoom ? this.baseScale * 2.0 : this.baseScale);
+    let isMale = this.texture.key === 'male' || this.texture.key === 'male_side' || this.texture.key === 'male_up' || this.texture.key === 'male_down' || this.texture.key === 'male_idle';
+
+    if (isMale && this.scene.anims.exists('male_idle_anim')) {
+      this.play('male_idle_anim', true);
+      const targetHeight = 3.5 * 48;
+      let dynScale = (targetHeight / this.height) * 1.85;
+      this.setScale(zoom ? dynScale * 2.0 : dynScale);
+    } else {
+      if (isMale) this.setTexture('male');
+      if (this.anims.isPlaying) this.stop();
+      this.setFrame(0);
+      this.setScale(zoom ? this.baseScale * 2.0 : this.baseScale);
+    }
+
     if (zoom) this.setDepth(100001); // Bring to front over UI if needed, or just below UI
   }
 
@@ -74,24 +85,63 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.y < 0) this.y = 0;
     if (this.y > 12490) this.y = 12490;
 
+    let isMale = this.texture.key === 'male' || this.texture.key === 'male_side' || this.texture.key === 'male_up' || this.texture.key === 'male_down' || this.texture.key === 'male_idle';
+
     if (speedX !== 0 || speedY !== 0) {
-      const animKey = this.texture.key + '_walk';
+      let animKey = isMale ? 'male_walk' : this.texture.key + '_walk';
+      
+      if (isMale) {
+        if (speedX !== 0) {
+          animKey = 'male_walk_side';
+        } else if (speedY < 0) {
+          animKey = 'male_walk_up';
+        } else if (speedY > 0) {
+          animKey = 'male_walk_down';
+        }
+      }
+
       if (this.scene.anims.exists(animKey)) {
         this.play(animKey, true);
+        
+        // Dynamically adjust scale to guarantee consistent physical size based on actual frame height
+        const targetHeight = 3.5 * 48;
+        let dynScale = (targetHeight / this.height) * 1.85;
+        if (this.texture.key === 'female') dynScale *= 0.85;
+        this.setScale(dynScale);
+
         if (speedX < 0) this.setFlipX(true);
         else if (speedX > 0) this.setFlipX(false);
+
+        // Efeito visual (perspectiva) para as diagonais usando a imagem de andar lateral
+        if (speedX !== 0 && speedY !== 0) {
+            // Se estiver indo pra cima, inclina o corpo na direção da caminhada (12 ou -12 graus)
+            // Se estiver indo pra baixo, faz o inverso
+            this.setAngle(speedY < 0 ? (speedX > 0 ? 12 : -12) : (speedX > 0 ? -12 : 12));
+        } else {
+            this.setAngle(0);
+        }
       } else {
         // Fallback procedural scale
         const time = this.scene.time.now;
         this.setScale(this.baseScale + Math.sin(time / 50) * 0.05, this.baseScale + Math.cos(time / 50) * 0.05);
+        this.setAngle(0);
       }
     } else {
-      const animKey = this.texture.key + '_walk';
-      if (this.scene.anims.exists(animKey)) {
-        this.stop();
-        this.setFrame(0);
+      if (isMale && this.scene.anims.exists('male_idle_anim')) {
+        this.play('male_idle_anim', true);
+        const targetHeight = 3.5 * 48;
+        let dynScale = (targetHeight / this.height) * 1.85;
+        this.setScale(dynScale);
+      } else {
+        if (isMale) this.setTexture('male');
+        const animKey = this.texture.key + '_walk';
+        if (this.scene.anims.exists(animKey)) {
+          this.stop();
+          this.setFrame(0);
+        }
+        this.setScale(this.baseScale);
       }
-      this.setScale(this.baseScale);
+      this.setAngle(0);
     }
   }
 }
