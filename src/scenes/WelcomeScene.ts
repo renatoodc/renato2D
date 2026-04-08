@@ -46,28 +46,49 @@ export default class WelcomeScene extends Phaser.Scene {
     const hScale = Math.min(1, height / 800);
     this.registry.set('globalScale', hScale); // Optional: keep for other scaling needs
     const isSmallScreen = height < 680;
-    const titlePadding = isPortrait ? (isSmallScreen ? 0.04 : 0.08) : 0.05;
+    
+    // 🎨 UI Expert: Stayverse Header Branding
+    let headerYOffset = isPortrait ? (isSmallScreen ? 0.03 : 0.05) : 0.04;
+    if (this.textures.exists('logo_stayverse')) {
+      const logoY = height * headerYOffset;
+      const logo = this.add.image(width / 2, logoY, 'logo_stayverse').setDepth(20);
+      const targetWidth = width * (isPortrait ? (isSmallScreen ? 0.38 : 0.45) : 0.18);
+      const responsiveScale = logo.width > 0 ? targetWidth / logo.width : (isPortrait ? 0.3 : 0.4);
+      logo.setScale(responsiveScale);
+      
+      this.tweens.add({
+        targets: logo,
+        y: logoY - 4,
+        duration: 3000,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut'
+      });
+      headerYOffset += isPortrait ? (isSmallScreen ? 0.06 : 0.08) : 0.09;
+    }
+
+    const titlePadding = headerYOffset;
     
     // Header 1: CENTRAL DO HÓSPEDE
     this.add.text(width / 2, height * titlePadding, 'CENTRAL DO HÓSPEDE', {
       fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '10px' : '12px') : '16px', color: '#ffffff', fontStyle: 'bold', letterSpacing: isSmallScreen ? 3 : 5
-    }).setOrigin(0.5).setAlpha(0.85);
+    }).setOrigin(0.5).setAlpha(0.85).setDepth(20);
 
     // Header 2: ITAIPAVA 201
-    this.add.text(width / 2, height * (titlePadding + 0.035), 'ITAIPAVA 201', {
+    this.add.text(width / 2, height * (titlePadding + 0.03), 'ITAIPAVA 201', {
       fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '12px' : '14px') : '18px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
-    }).setOrigin(0.5).setShadow(2, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1);
+    }).setOrigin(0.5).setShadow(2, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1).setDepth(20);
 
     // Header 3: Bem-vindo!
-    const mainTitle = this.add.text(width / 2, height * (titlePadding + 0.11), 'BEM-VINDO!', {
+    const mainTitle = this.add.text(width / 2, height * (titlePadding + 0.09), 'BEM-VINDO!', {
       fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '32px' : '42px') : '58px', color: '#ffffff', fontStyle: '900', letterSpacing: 2
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(20);
     mainTitle.setShadow(2, 4, 'rgba(0,0,0,0.35)', 10);
 
     // Header 4: Refúgio em Itapuã
-    this.add.text(width / 2, height * (titlePadding + (isSmallScreen ? 0.15 : 0.17)), 'REFÚGIO EM ITAPUÃ', {
+    this.add.text(width / 2, height * (titlePadding + (isSmallScreen ? 0.13 : 0.145)), 'REFÚGIO EM ITAPUÃ', {
       fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '14px' : '16px') : '20px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
-    }).setOrigin(0.5).setShadow(1, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1);
+    }).setOrigin(0.5).setShadow(1, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1).setDepth(20);
 
     // 4. Icons
     const items = [
@@ -107,8 +128,8 @@ export default class WelcomeScene extends Phaser.Scene {
     ];
 
     const cols = isPortrait ? 3 : 5;
-    const startY = isPortrait ? (isSmallScreen ? height * 0.28 : height * 0.35) : height * 0.38; 
-    const spacingY = isPortrait ? (isSmallScreen ? height * 0.22 : height * 0.25) : height * 0.24; 
+    const startY = isPortrait ? (isSmallScreen ? height * 0.30 : height * 0.36) : height * 0.38; 
+    const spacingY = isPortrait ? (isSmallScreen ? height * 0.20 : height * 0.22) : height * 0.22; 
     
     items.forEach((item, index) => {
       const col = index % cols;

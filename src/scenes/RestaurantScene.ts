@@ -50,7 +50,7 @@ export class RestaurantScene extends Phaser.Scene {
     
     const backBtn = document.createElement('button');
     backBtn.className = 'back-button';
-    backBtn.innerHTML = '🔙 Voltar';
+    backBtn.innerHTML = '← Voltar';
     backBtn.onclick = () => {
         this.cameras.main.fadeOut(300, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
@@ -298,35 +298,42 @@ export class RestaurantScene extends Phaser.Scene {
             position: sticky;
             top: 0;
             z-index: 2000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 12px 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
         .back-button {
             position: absolute;
-            left: 15px;
-            background: #f0f2f5;
+            left: 12px;
+            background: rgba(30, 60, 114, 0.08);
             border: none;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-weight: 600;
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #1e3c72;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease-in-out;
         }
 
-        .restaurant-header h1 {
-            font-size: 1.1rem;
-            font-weight: 950;
+        .back-button:hover {
+            background: rgba(30, 60, 114, 0.15);
+        }
+
+        .market-header h1 {
+            font-size: 1rem;
+            font-weight: 800;
             color: #1e3c72;
             margin: 0;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             text-align: center;
-            padding: 0 75px; 
+            padding: 0 60px;
             flex: 1;
             text-transform: uppercase;
         }
@@ -335,23 +342,25 @@ export class RestaurantScene extends Phaser.Scene {
             padding: 15px;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.1);
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
         }
 
         .anchor-menu button {
             background: white;
-            border: none;
-            padding: 14px 10px;
-            border-radius: 16px;
-            font-size: 0.85rem;
+            border: 1px solid rgba(30, 60, 114, 0.1);
+            padding: 12px 8px;
+            border-radius: 14px;
+            font-size: 0.8rem;
             font-weight: 700;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            color: #1e3c72;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s, background 0.2s;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .anchor-menu button:active {

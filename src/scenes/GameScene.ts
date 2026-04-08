@@ -455,13 +455,13 @@ export default class GameScene extends Phaser.Scene {
     // NPC Traffic Timer (Every 1 minute)
     this.time.addEvent({
       delay: 60000,
-      callback: this.spawnNPCFerrari,
+      callback: this.spawnNPC,
       callbackScope: this,
       loop: true
     });
     
     // Initial spawn
-    this.spawnNPCFerrari();
+    this.spawnNPC();
 
     this.game.events.on('dialogueClosed', () => {
         if (this.player) this.player.freeze(false);
@@ -714,14 +714,24 @@ export default class GameScene extends Phaser.Scene {
     }
   }
 
-  private spawnNPCFerrari() {
+  private spawnNPC() {
     if (!this.npcGroup) return;
-    const npc = this.npcGroup.create(0, 8520, 'ferrari');
+    const isPalio = Math.random() > 0.5;
+    const key = isPalio ? 'palio' : 'ferrari';
+    const npc = this.npcGroup.create(0, 8520, key);
     if (!npc) return;
     
-    npc.setOrigin(0.5, 1).setScale(0.5).setDepth(20).setFlipX(true);
-    npc.setVelocityX(500); // 500 pixels per second
-    console.log(`[NPC] Respawned stable Ferrari. Total active: ${this.npcGroup.getLength()}`);
+    npc.setOrigin(0.5, 1).setDepth(20).setFlipX(true);
+    npc.setVelocityX(500); 
+
+    if (isPalio) {
+        npc.setScale(0.28); // Palio is 632px, scaled down it fits better
+        npc.play('palio_drive');
+    } else {
+        npc.setScale(0.5);
+    }
+    
+    console.log(`[NPC] Respawned ${key}. Total active: ${this.npcGroup.getLength()}`);
   }
 
   private handleRestingaCollision() {

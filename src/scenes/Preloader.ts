@@ -31,6 +31,7 @@ export default class Preloader extends Phaser.Scene {
     this.load.image('ilhas_gregas_att', '/assets/ilha_muro.png');
     this.load.image('agua', '/assets/agua.png');
     this.load.image('mar_gif', '/assets/mar.gif');
+    this.load.spritesheet('palio', '/assets/palio.png', { frameWidth: 632, frameHeight: 424 });
     
     // Welcome Scene Icons
     this.load.image('welcome_rules', '/assets/welcome_rules.png');
@@ -38,6 +39,7 @@ export default class Preloader extends Phaser.Scene {
     this.load.image('welcome_visit', '/assets/welcome_visit.png');
     this.load.image('welcome_bakery', '/assets/welcome_bakery.png');
     this.load.image('welcome_wifi', '/assets/welcome_wifi.png');
+    this.load.image('logo_stayverse', '/assets/logo-stayverse.png..png');
     
     // Ensure all individual files are loaded as keys based on their names (for spawn command)
     this.load.image('Homem', '/assets/Homem.png');
@@ -99,6 +101,14 @@ export default class Preloader extends Phaser.Scene {
         key: 'female_walk',
         frames: this.anims.generateFrameNumbers('female', { start: 0, end: 11 }),
         frameRate: 15,
+        repeat: -1
+      });
+    }
+    if (!this.anims.exists('palio_drive') && this.textures.exists('palio')) {
+      this.anims.create({
+        key: 'palio_drive',
+        frames: this.anims.generateFrameNumbers('palio', { start: 0, end: 99 }),
+        frameRate: 24,
         repeat: -1
       });
     }
