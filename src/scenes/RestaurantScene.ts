@@ -10,7 +10,7 @@ export class RestaurantScene extends Phaser.Scene {
 
     // 🌊 UI Expert Background
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x1e3c72, 0x1e3c72, 0x2a5298, 0x2a5298, 1);
+    bg.fillGradientStyle(0x0B1A13, 0x0B1A13, 0x1B4332, 0x1B4332, 1);
     bg.fillRect(0, 0, width, height);
 
     // 🏆 Content Container
@@ -59,7 +59,8 @@ export class RestaurantScene extends Phaser.Scene {
     };
 
     const title = document.createElement('h1');
-    title.innerText = 'RESTAURANTES E BARES';
+    title.innerText = 'FONDUE E BISTRÔS';
+    title.style.fontFamily = 'Cinzel, serif';
 
     header.appendChild(backBtn);
     header.appendChild(title);
@@ -70,10 +71,10 @@ export class RestaurantScene extends Phaser.Scene {
     const menu = document.createElement('div');
     menu.className = 'anchor-menu';
     menu.innerHTML = `
-        <button data-target="almoco">☀️ Almoço</button>
-        <button data-target="jantar">🌙 Jantar</button>
-        <button data-target="bares">🍻 Bares</button>
-        <button data-target="gastro">🍔 Gastro Parks</button>
+        <button data-target="almoco">☀️ Almoço Serrano</button>
+        <button data-target="jantar">🌙 Jantar à Luz de Velas</button>
+        <button data-target="bares">🧀 Queijos & Frios</button>
+        <button data-target="gastro">🫕 Fondue & Vinhos</button>
     `;
 
     menu.querySelectorAll('button').forEach(btn => {
@@ -101,116 +102,108 @@ export class RestaurantScene extends Phaser.Scene {
     const sections = [
         {
             id: 'almoco',
-            title: '☀️ Para Almoçar',
-            intro: 'Preparámos uma seleção com os melhores polos gastronômicos de Vila Velha, divididos por ocasião. Desde o almoço pertinho do apartamento com gosto de comida caseira até os restaurantes mais premiados da cidade.',
+            title: '☀️ Almoço Serrano',
+            intro: 'Para a principal refeição do dia, preparamos uma seleção com a culinária aconchegante da montanha: fogão a lenha, panelas de pedra e tempero colonial.',
             items: [
                 {
-                    name: 'Nona Lu',
-                    desc: 'Eleito o melhor restaurante self-service do Espírito Santo! Fica pertinho do apartamento e oferece uma comida caseira de altíssima qualidade. Destaque absoluto para o bacalhau com azeite trufado.',
-                    address: 'Rua Goiânia, 7 - Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Nona+Lu+Itapuã+Vila+Velha',
-                    instagram: 'https://www.instagram.com/nonalurestaurantes/',
-                    img: 'nona_lu.jpg'
+                    name: 'Fogão de Lenha da Serra',
+                    desc: 'O sabor do campo! Comida caseira servida direto das panelas de barro sobre o fogão a lenha fumegante. O lugar ideal após uma trilha pelas matas da região.',
+                    address: 'Estrada do Parque Central',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Restaurante+Alto+Caparao',
+                    instagram: 'https://www.instagram.com/explore/tags/comidamineira/',
+                    img: 'nona_lu.jpg' 
                 },
                 {
-                    name: 'Aloha Hawaiian Restaurant',
-                    desc: 'Uma ótima opção para almoçar de frente para o mar de Itapuã. Focado na culinária havaiana e praiana, com pratos refrescantes, pokes deliciosos e um clima descontraído.',
-                    address: 'Av. Antônio Gil Veloso, 2728 - Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Aloha+Hawaiian+Restaurant+Vila+Velha',
-                    instagram: 'https://www.instagram.com/alohavilavelha',
+                    name: 'Casa da Truta Montanhesa',
+                    desc: 'Peixe fresco típico das águas geladas da serra. Um restaurante rústico de madeira que serve a melhor truta com pinhão ou amêndoas na manteiga.',
+                    address: 'Rua do Rio de Cristal',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Truta+Caparao',
+                    instagram: 'https://www.instagram.com/explore/tags/caparao/',
                     img: 'aloha.jpg'
                 },
                 {
-                    name: 'Caranguejo do Assis',
-                    desc: 'O almoço capixaba definitivo! Restaurante tradicional para comer a verdadeira Moqueca Capixaba, frutos do mar frescos e caranguejada na rua de trás da praia de Itapuã.',
-                    address: 'Av. da Praia, 290 - Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Caranguejo+do+Assis+Av+da+Praia+290+Vila+Velha',
-                    instagram: 'https://www.instagram.com/caranguejodoassis',
+                    name: 'Estalagem do Caparaó',
+                    desc: 'Localizado no alto da colina, com vista panorâmica. Cortes de carne rústicos ideais para repor a energia no frio cortante da tarde.',
+                    address: 'Rodovia dos Picos',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Iuna+ES+Restaurante',
+                    instagram: 'https://www.instagram.com/explore/',
                     img: 'caranguejo.jpg'
                 }
             ]
         },
         {
             id: 'jantar',
-            title: '🌙 Para Jantar (Os Melhores)',
-            intro: 'Uma curadoria exclusiva dos restaurantes mais sofisticados e premiados de Vila Velha para um jantar inesquecível e memorável.',
+            title: '🌙 Jantar à Luz de Velas',
+            intro: 'Quando a névoa desce e a temperatura cai, não há nada como um ambiente aquecido, música suave e culinária para esquentar a noite.',
             items: [
                 {
-                    name: 'Vila Rusticana (A Melhor Pizzaria)',
-                    desc: 'A mais premiada da cidade. Pizzas artesanais napolitanas incríveis assadas em forno a lenha com ingredientes premium. Ambiente super charmoso e romântico.',
-                    address: 'Av. Antônio Gil Veloso, 1570 - Praia da Costa',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Vila+Rusticana+Pizzaria+Vila+Velha',
-                    instagram: 'https://www.instagram.com/vilarusticana',
+                    name: 'Pizzaria Fogo & Lenha',
+                    desc: 'Reduto quente na vila. Pizzas napolitanas assadas lentamente no calor do forno a lenha, acompanhadas de lareira acessa e bom vinho.',
+                    address: 'Praça da Matriz',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Pizzaria+Alto+Caparao',
+                    instagram: 'https://www.instagram.com/explore/',
                     img: 'rusticana.jpg'
                 },
                 {
-                    name: 'Naha Lounge Sushi (O Melhor Japonês)',
-                    desc: 'O mais sofisticado restaurante japonês de Vila Velha. Oferece cortes extremamente frescos, peças criativas e um atendimento impecável.',
-                    address: 'R. Quinze de Novembro, 535 - Praia da Costa',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Naha+Lounge+Sushi+Vila+Velha',
-                    instagram: 'https://www.instagram.com/nahasushilounge/',
+                    name: 'Bistrô das Araucárias',
+                    desc: 'Iluminação baixa e charme rústico absoluto. Especialistas em risotos trufados e caldos encorpados servidos no pão italiano.',
+                    address: 'Caminho da Penha',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Bistro+Patrimonio+da+Penha',
+                    instagram: 'https://www.instagram.com/explore/',
                     img: 'naha.jpg'
                 },
                 {
-                    name: 'La Cuchilla (A Melhor Carne)',
-                    desc: 'O verdadeiro paraíso para os amantes de um bom churrasco! É o melhor restaurante de cortes nobres e parrilla de Vila Velha. Ambiente extremamente acolhedor, famoso pelo atendimento impecável e carnes suculentas no ponto perfeito. Ideal para um jantar especial.',
-                    address: 'Av. Saturnino Rangel Mauro, 194 - Praia de Itaparica',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=La+Cuchilla+Parrilla+Vila+Velha',
-                    instagram: 'https://www.instagram.com/lacuchillabrasil/',
+                    name: 'Parrilla de Inverno',
+                    desc: 'O calor da brasa na noite gelada. Espeto corrido e cortes nobres uruguaios que são uma verdadeira celebração em volta do fogo.',
+                    address: 'Alameda de Pedra Menina',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Parrilla+Caparao',
+                    instagram: 'https://www.instagram.com/explore/',
                     img: 'lacuchilla.jpg'
                 }
             ]
         },
         {
             id: 'bares',
-            title: '🍻 Bares e Petiscarias',
-            intro: 'Opções animadas para curtir a noite de Itapuã, com cerveja gelada, música ao vivo e ótimos petiscos a poucos passos do apartamento.',
+            title: '🧀 Queijos & Geladas',
+            intro: 'Mesmo no frio, os encontros continuam. Cervejas fortes, licores serranos e tábuas curadas.',
             items: [
                 {
-                    name: 'Sheik\'s Bar',
-                    desc: 'Opção excelente e próxima para uma cerveja estupidamente gelada e assistir jogos! Clima animado, cardápio farto e atendimento rápido.',
-                    address: 'Rua Dr. Jair de Andrade, 434 - Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Sheiks+Bar+Vila+Velha',
-                    instagram: 'https://www.instagram.com/sheiksbar/',
+                    name: 'Refúgio Chopp Artesanal',
+                    desc: 'Ponto de encontro da vila. Cervejas encorpadas feitas na montanha (como as Stouts e IPA) com vista para as ruas de pedra.',
+                    address: 'Centrinho da Serra',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Chopp+Artesanal+Montanha',
+                    instagram: 'https://www.instagram.com/explore/',
                     img: 'sheiks.jpg'
                 },
                 {
-                    name: 'Bar dos Meninos',
-                    desc: 'Um clássico moderno de Itapuã! Porções super generosas, espetinhos deliciosos, chopp no ponto e clima descontraído nas noites da cidade.',
-                    address: 'Rua Goiânia, 293 - Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Bar+dos+Meninos+Itapuã+Vila+Velha',
-                    instagram: 'https://www.instagram.com/bardosmeninos',
+                    name: 'Tábua Serrana & Empório',
+                    desc: 'Esqueça os petiscos fritos comuns; a vez aqui é de geleias caseiras, queijos maturados na caverna e parma curado na serra.',
+                    address: 'Bairro do Lago',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Queijo+Caparao',
+                    instagram: 'https://www.instagram.com/explore/',
                     img: 'meninos.jpg'
-                },
-                {
-                    name: 'Roda Velha Petiscaria',
-                    desc: 'Ambiente rústico charmoso com música ao vivo e espaço kids com monitora. Perfeito para relaxar em família e degustar porções deliciosas.',
-                    address: 'Rua Resplendor, 470 - Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Roda+Velha+Petiscaria+Vila+Velha',
-                    instagram: 'https://www.instagram.com/rodavelhaitapoa/',
-                    img: 'roda_velha.jpg'
                 }
             ]
         },
         {
             id: 'gastro',
-            title: '🍔 Gastro Parks',
-            intro: 'Praças de alimentação a céu aberto com opções para todos os gostos, ambientes ventilados e diversão para as crianças.',
+            title: '🫕 Fondue & Vinhos',
+            intro: 'A coroa imperativa de qualquer visita ao frio. O ritual de mergulhar frutas e carnes sob a luz dourada do fogo.',
             items: [
                 {
-                    name: 'Itapuã Gran Park',
-                    desc: 'Fica pertinho do apartamento! O mais novo espaço gastronômico de Vila Velha, de frente para o mar! Reúne hambúrgueres artesanais, japonês, pizzas e chopp em um ambiente moderno e ventilado.',
-                    address: 'Av. Estudante José Júlio de Souza, 838 - Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Itapuã+Gran+Park+Vila+Velha',
-                    instagram: 'https://www.instagram.com/itapuagranpark',
+                    name: 'Chalet de La Fondue',
+                    desc: 'O autêntico ritual suíço. Sequência mágica: queijos fundidos, cortes nobres ao vinho e o sublime mergulho de morangos recém-colhidos no chocolate belga.',
+                    address: 'Vila Romântica',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Fondue+Montanha',
+                    instagram: 'https://www.instagram.com/explore/',
                     img: 'gran_park.jpg'
                 },
                 {
-                    name: 'Blu Food Park',
-                    desc: 'Complexo moderno na orla da Praia da Costa com pegada urbana. Diversas estações em contêineres e ótima área de recreação infantil.',
-                    address: 'Av. Antônio Gil Veloso, 4000 - Praia da Costa',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Blu+Food+Park+Vila+Velha',
-                    instagram: 'https://www.instagram.com/blufoodpark',
+                    name: 'Adaga e Taça Cave',
+                    desc: 'Vá pelo vinho, fique pelo ambiente envolvente. Descubra harmonizações com queijos da lua nova preparados especialmente pelos sommeliers locais.',
+                    address: 'Boulevard Principal',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Adega+Serra',
+                    instagram: 'https://www.instagram.com/explore/',
                     img: 'blu_park.jpg'
                 }
             ]
@@ -288,8 +281,8 @@ export class RestaurantScene extends Phaser.Scene {
             height: 100vh;
             height: 100dvh;
             overflow-y: auto;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0B1A13 0%, #1B4332 100%);
+            font-family: 'Cinzel', 'Outfit', sans-serif;
             color: #333;
             -webkit-overflow-scrolling: touch;
         }
@@ -298,7 +291,7 @@ export class RestaurantScene extends Phaser.Scene {
             position: sticky;
             top: 0;
             z-index: 2000;
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(11, 26, 19, 0.98);
             backdrop-filter: blur(15px);
             padding: 12px 15px;
             display: flex;
@@ -311,13 +304,13 @@ export class RestaurantScene extends Phaser.Scene {
         .back-button {
             position: absolute;
             left: 12px;
-            background: rgba(30, 60, 114, 0.08);
-            border: none;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid #D4AF37;
             padding: 6px 10px;
             border-radius: 12px;
             font-weight: 700;
             font-size: 0.85rem;
-            color: #1e3c72;
+            color: #D4AF37;
             cursor: pointer;
             transition: all 0.2s ease-in-out;
         }
@@ -329,7 +322,7 @@ export class RestaurantScene extends Phaser.Scene {
         .market-header h1 {
             font-size: 1rem;
             font-weight: 800;
-            color: #1e3c72;
+            color: #D4AF37;
             margin: 0;
             letter-spacing: 0.5px;
             text-align: center;
@@ -348,13 +341,13 @@ export class RestaurantScene extends Phaser.Scene {
         }
 
         .anchor-menu button {
-            background: white;
-            border: 1px solid rgba(30, 60, 114, 0.1);
+            background: #0B1A13;
+            border: 1px solid #D4AF37;
             padding: 12px 8px;
             border-radius: 14px;
             font-size: 0.8rem;
             font-weight: 700;
-            color: #1e3c72;
+            color: #D4AF37;
             box-shadow: 0 4px 15px rgba(0,0,0,0.06);
             cursor: pointer;
             display: flex;
@@ -425,7 +418,7 @@ export class RestaurantScene extends Phaser.Scene {
 
         .card-address {
             font-size: 0.85rem !important;
-            color: #1e3c72 !important;
+            color: #1B4332 !important;
             font-weight: 600;
             margin-bottom: 15px !important;
         }
@@ -455,8 +448,8 @@ export class RestaurantScene extends Phaser.Scene {
         }
 
         .maps-btn {
-            background: #1e3c72;
-            color: white;
+            background: #D4AF37;
+            color: #0B1A13;
         }
 
         .insta-btn {

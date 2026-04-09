@@ -37,13 +37,17 @@ export default class Preloader extends Phaser.Scene {
     this.load.image('mar_gif', '/assets/mar.gif');
     this.load.spritesheet('palio', '/assets/palio.png', { frameWidth: 632, frameHeight: 424 });
     
-    // Welcome Scene Icons
-    this.load.image('welcome_rules', '/assets/welcome_rules.png');
-    this.load.image('welcome_game', '/assets/welcome_game.png');
-    this.load.image('welcome_visit', '/assets/welcome_visit.png');
-    this.load.image('welcome_bakery', '/assets/welcome_bakery.png');
     this.load.image('welcome_wifi', '/assets/welcome_wifi.png');
+
+    // Novos ícones Fotorrealistas (Se não existirem na pasta, o jogo usa o emoji automaticamente)
+    const icons = ['rules', 'wifi', 'game', 'visit', 'bakery', 'restaurant', 'market', 'host', 'check_in_out'];
+    icons.forEach(icon => {
+        this.load.image(`icon_${icon}`, `/assets/icons/${icon}.png`);
+    });
+
     this.load.image('logo_stayverse', '/assets/logo-stayverse.png..png');
+    this.load.image('serrano_bg', '/assets/serrano_bg.png');
+    this.load.image('serrano_bg', '/assets/serrano_bg.png');
     
     // Ensure all individual files are loaded as keys based on their names (for spawn command)
     this.load.image('Homem', '/assets/Homem.png');
