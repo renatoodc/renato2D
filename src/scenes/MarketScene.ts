@@ -10,7 +10,7 @@ export class MarketScene extends Phaser.Scene {
 
     // 🌊 UI Expert Background
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x1e3c72, 0x1e3c72, 0x2a5298, 0x2a5298, 1);
+    bg.fillGradientStyle(0x0B1A13, 0x0B1A13, 0x1B4332, 0x1B4332, 1);
     bg.fillRect(0, 0, width, height);
 
     // 🏆 Content Container
@@ -31,64 +31,40 @@ export class MarketScene extends Phaser.Scene {
     content.className = 'market-guide-content';
     container.appendChild(content);
 
-    // 🛒 Section: Supermercados
-    this.createSection(content, 'supermercados', '🛒 Supermercados', 
-      'Para garantir o máximo de conforto durante a sua estadia, mapeamos os melhores supermercados e lojas de conveniência a poucos passos do apartamento. Seja para comprar os ingredientes de um jantar especial, garantir a carne do churrasco ou apenas repor itens básicos e bebidas geladas, você encontrará opções excelentes sem precisar tirar o carro da garagem (mercados no ES não abrem aos domingos).',
+    // 🛒 Section: Adega e Empórios
+    this.createSection(content, 'supermercados', '🍷 Adegas e Empórios', 
+      'Para garantir o máximo de conforto durante a sua estadia de inverno, mapeamos os melhores locais para comprar queijos selecionados, vinhos encorpados e especiarias para curtir o clima rústico. Uma boa tábua de frios em frente à lareira é um ritual indispensável no chalé.',
       [
         { 
-          name: 'Extrabom Supermercados Itapoã', 
+          name: 'Empório da Serra', 
           img: 'extrabom.jpg', 
-          desc: 'Localizado a menos de 300 metros do apartamento, ideal para ir a pé e resolver as compras da semana. Ótima opção com preços excelentes, boa seção de frutas e verduras frescas e bastante variedade de marcas.',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Extrabom+Supermercados+Itapo%C3%A3+Vila+Velha'
+          desc: 'Excelente para quem busca produtos rústicos, pães artesanais de fermentação natural, frios selecionados e itens de empório gourmet.',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Supermercado+Alto+Caparao'
         },
         { 
-          name: 'Supermercado Perim - Itapuã', 
+          name: 'Adega Alto de Inverno', 
           img: 'perim.jpg', 
-          desc: 'É indiscutivelmente o melhor e mais completo supermercado de toda a região! Estrutura premium, excelente para quem busca produtos diferenciados, importados, uma padaria de altíssima qualidade e cortes de carnes especiais.',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Supermercado+Perim+Rua+Deolindo+Perim+350+Vila+Velha'
-        },
-        { 
-          name: 'Supermercado Carone - Itapoã', 
-          img: 'carone.jpg', 
-          desc: 'A cerca de 3 minutinhos de caminhada. É um dos supermercados mais completos e premium do bairro. Excelente opção para comprar carnes para churrasco, vinhos, queijos e lanches rápidos.',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Supermercado+Carone+Itapo%C3%A3+Vila+Velha'
-        },
-        { 
-          name: 'Supermercado BH - Itapoã', 
-          img: 'bh.jpg', 
-          desc: 'Famosos pelos preços super competitivos e excelente custo-benefício para compras maiores. Muito prático para o dia a dia e para repor bebidas e itens básicos de forma econômica durante a estadia.',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Supermercados+BH+Itapu%C3%A3+Vila+Velha'
-        },
-        { 
-          name: 'Hipermercado Carrefour (Antigo Walmart)', 
-          img: 'carrefour.jpg', 
-          desc: 'Localizado dentro do Shopping Vila Velha, unindo a conveniência das compras com um passeio completo. Hipermercado gigantesco, ideal para grandes volumes. (Dica: por estar dentro do Shopping, é um dos únicos mercados aberto aos domingos).',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Shopping+Vila+Velha+Carrefour'
+          desc: 'Especializada em vinhos de altitude, licores serranos e chocolates. O lugar perfeito para escolher a bebida da sua noite.',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Emporio+Caparao'
         }
       ]
     );
 
-    // 🍅 Section: Feiras Livres
-    this.createSection(content, 'feiras', '🍅 Feiras e Mercados Tradicionais', 
-      'Nada melhor do que viver a experiência local visitando as tradicionais feiras da nossa cidade! Elas acontecem pela manhã e são perfeitas para comprar produtos frescos, artesanatos e tomar aquele clássico café da manhã de rua.',
+    // 🍅 Section: Itens Básicos e Lenha
+    this.createSection(content, 'feiras', '🛒 Supermercados Essenciais', 
+      'Para as necessidades básicas, reposição de café, água, produtos de higiene ou até mesmo lenha e acendedores (quando disponíveis), você encontrará o essencial aqui bem perto.',
       [
         { 
-          name: 'Feira Livre de Itapuã', 
+          name: 'Supermercado Vila Alpina', 
           img: 'feira_itapua.jpg', 
-          desc: 'Sábados, 04h às 13h, na Rua Jaime Duarte (próximo ao Estádio Tupy). Fica super pertinho do apartamento! É uma das maiores feiras da região, ideal para frutas, temperos e o tradicional pastel com caldo de cana.',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Rua+Jaime+Duarte+Nascimento+Itapuã+Vila+Velha'
+          desc: 'Opção robusta para compras gerais. Conta com açougue, padaria básica e tudo que você precisa para manter o chalé abastecido durante a viagem.',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Feira+Placa+Caparao'
         },
         { 
-          name: 'Feira Parque das Castanheiras', 
+          name: 'Mercadinho Local (Lenha e Carvão)', 
           img: 'feira_castanheiras.jpg', 
-          desc: 'Sábados pela manhã, na Rua João Joaquim da Mota (Praia da Costa). Uma feirinha com pegada "premium" e super charmosa. Excelente lugar para hortifrúti selecionado, artesanato, decoração e flores.',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Rua+João+Joaquim+da+Mota+Parque+das+Castanheiras+Vila+Velha'
-        },
-        { 
-          name: 'Mercado de Peixes da Prainha', 
-          img: 'peixes_prainha.jpg', 
-          desc: 'Sábados e domingos pela manhã (até as 13h), localizado no Parque da Prainha. O ponto mais tradicional da cidade para comprar pescados e frutos do mar super frescos, tanto no varejo quanto atacado.',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Mercado+de+Peixe+da+Prainha+Vila+Velha'
+          desc: 'Simples, mas salva vidas. Geralmente possui sacos de lenha, fósforos longos e carvão. Ideal para repor itens rapidamente.',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Feira+Artesanato+Caparao'
         }
       ]
     );
@@ -118,7 +94,8 @@ export class MarketScene extends Phaser.Scene {
     };
 
     const title = document.createElement('h1');
-    title.innerText = 'MERCADOS E FEIRAS';
+    title.innerText = 'EMPÓRIO & VINHOS';
+    title.style.fontFamily = 'Cinzel, serif';
 
     header.appendChild(backBtn);
     header.appendChild(title);
@@ -129,8 +106,8 @@ export class MarketScene extends Phaser.Scene {
     const menu = document.createElement('div');
     menu.className = 'market-category-menu';
     menu.innerHTML = `
-        <button class="cat-btn active" data-target="supermercados">🛒 Supermercados</button>
-        <button class="cat-btn" data-target="feiras">🍅 Feiras Livres</button>
+        <button class="cat-btn active" data-target="supermercados">🍷 Adegas</button>
+        <button class="cat-btn" data-target="feiras">🛒 Essenciais & Lenha</button>
     `;
 
     menu.querySelectorAll('.cat-btn').forEach(btn => {
@@ -221,8 +198,8 @@ export class MarketScene extends Phaser.Scene {
             height: 100vh;
             height: 100dvh;
             overflow-y: auto;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            font-family: 'Outfit', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0B1A13 0%, #1B4332 100%);
+            font-family: 'Cinzel', 'Outfit', 'Inter', sans-serif;
             color: #333;
             -webkit-overflow-scrolling: touch;
         }
@@ -231,7 +208,7 @@ export class MarketScene extends Phaser.Scene {
             position: sticky;
             top: 0;
             z-index: 2000;
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(11, 26, 19, 0.98);
             backdrop-filter: blur(15px);
             padding: 12px 15px;
             display: flex;
@@ -244,13 +221,13 @@ export class MarketScene extends Phaser.Scene {
         .back-button {
             position: absolute;
             left: 12px;
-            background: rgba(30, 60, 114, 0.08);
-            border: none;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid #D4AF37;
             padding: 6px 10px;
             border-radius: 12px;
             font-weight: 700;
             font-size: 0.85rem;
-            color: #1e3c72;
+            color: #D4AF37;
             cursor: pointer;
             transition: all 0.2s ease-in-out;
         }
@@ -262,7 +239,7 @@ export class MarketScene extends Phaser.Scene {
         .market-header h1 {
             font-size: 1rem;
             font-weight: 800;
-            color: #1e3c72;
+            color: #D4AF37;
             margin: 0;
             letter-spacing: 0.5px;
             text-align: center;
@@ -275,7 +252,7 @@ export class MarketScene extends Phaser.Scene {
             position: sticky;
             top: 55px;
             z-index: 1500;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(11, 26, 19, 0.9);
             backdrop-filter: blur(5px);
             padding: 10px;
             display: flex;
@@ -297,9 +274,9 @@ export class MarketScene extends Phaser.Scene {
         }
 
         .cat-btn.active {
-            background: #1e3c72;
-            color: white;
-            border-color: #1e3c72;
+            background: #D4AF37;
+            color: #0B1A13;
+            border-color: #D4AF37;
         }
 
         .market-guide-content {
@@ -345,7 +322,7 @@ export class MarketScene extends Phaser.Scene {
 
         .card-body h3 {
             margin: 0 0 10px 0;
-            color: #1e3c72;
+            color: #1B4332;
             font-size: 1.25rem;
         }
 
@@ -367,7 +344,7 @@ export class MarketScene extends Phaser.Scene {
         }
 
         .maps-btn {
-            background: #1e3c72;
+            background: #1B4332;
             color: white;
         }
         
