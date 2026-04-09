@@ -271,7 +271,6 @@ export default class WelcomeScene extends Phaser.Scene {
       this.mistParticles.setDepth(2);
   }
 
-
   private transitionTo(sceneName: string) {
       this.cameras.main.fadeOut(500, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start(sceneName));

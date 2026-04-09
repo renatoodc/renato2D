@@ -16,7 +16,7 @@ export default class Preloader extends Phaser.Scene {
         loadingText.setText(`CARREGANDO... ${Math.round(value * 100)}%`);
     });
 
-    // Icons
+    // Icons - Novos ícones Urbanos
     const icons = ['rules', 'wifi', 'game', 'visit', 'bakery', 'restaurant', 'market', 'host', 'check_in_out'];
     icons.forEach(icon => {
         this.load.image(`icon_${icon}`, `/assets/icons/${icon}.png`);
@@ -38,64 +38,5 @@ export default class Preloader extends Phaser.Scene {
 
   create() {
     this.scene.start('WelcomeScene');
-  }
-
-  private createAnimations() {
-    if (!this.anims.exists('male_walk') && this.textures.exists('male')) {
-      this.anims.create({
-        key: 'male_walk',
-        frames: this.anims.generateFrameNumbers('male', { start: 0, end: 11 }),
-        frameRate: 12,
-        repeat: -1
-      });
-    }
-    if (!this.anims.exists('male_walk_side') && this.textures.exists('male_side')) {
-      this.anims.create({
-        key: 'male_walk_side',
-        frames: this.anims.generateFrameNumbers('male_side', { start: 0, end: 48 }),
-        frameRate: 12,
-        repeat: -1
-      });
-    }
-    if (!this.anims.exists('male_walk_up') && this.textures.exists('male_up')) {
-      this.anims.create({
-        key: 'male_walk_up',
-        frames: this.anims.generateFrameNumbers('male_up', { start: 0, end: 63 }),
-        frameRate: 12,
-        repeat: -1
-      });
-    }
-    if (!this.anims.exists('male_walk_down') && this.textures.exists('male_down')) {
-      this.anims.create({
-        key: 'male_walk_down',
-        frames: this.anims.generateFrameNumbers('male_down', { start: 0, end: 63 }),
-        frameRate: 12,
-        repeat: -1
-      });
-    }
-    if (!this.anims.exists('male_idle_anim') && this.textures.exists('male_idle')) {
-      this.anims.create({
-        key: 'male_idle_anim',
-        frames: this.anims.generateFrameNumbers('male_idle', { start: 0, end: 63 }),
-        frameRate: 12,
-        repeat: -1
-      });
-    }
-    if (!this.anims.exists('female_walk') && this.textures.exists('female')) {
-      this.anims.create({
-        key: 'female_walk',
-        frames: this.anims.generateFrameNumbers('female', { start: 0, end: 11 }),
-        frameRate: 15,
-        repeat: -1
-      });
-    }
-    if (!this.anims.exists('palio_drive') && this.textures.exists('palio')) {
-      this.anims.create({
-        key: 'palio_drive',
-        frames: this.anims.generateFrameNumbers('palio', { start: 0, end: 99 }),
-        frameRate: 24,
-        repeat: -1
-      });
-    }
   }
 }
