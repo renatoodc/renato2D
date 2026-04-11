@@ -31,17 +31,9 @@ export class LocalGuideScene extends Phaser.Scene {
     content.className = 'guide-content';
     container.appendChild(content);
 
-<<<<<<< HEAD
-
-
-    // 🏛️ Histórico
-    this.addCategorySection(content, "🏛️ Pontos Históricos", "section-historico",
-        "Vila Velha não é apenas um destino de belas praias, mas também o berço da história capixaba. Fundada em 1535, nossa cidade reserva tesouros arquitetônicos e religiosos que sobreviveram aos séculos.", [
-=======
     // 🏔️ Parques e Picos
     this.addCategorySection(content, "🏔️ Parques e Picos", "section-picos",
         "O coração da região do Caparaó é marcado por montanhas imponentes e vistas de tirar o fôlego. O clima frio e a altitude formam um cenário perfeito para aventureiros.", [
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
       {
         name: "Parque Nacional do Caparaó",
         desc: "Acesso capixaba (Pedra Menina). Trilhas cênicas, vegetação de altitude e o imponente Pico da Bandeira, o terceiro ponto mais alto do Brasil.",

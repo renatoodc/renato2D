@@ -31,17 +31,9 @@ export class MarketScene extends Phaser.Scene {
     content.className = 'market-guide-content';
     container.appendChild(content);
 
-<<<<<<< HEAD
-
-
-    // 🛒 Section: Supermercados
-    this.createSection(content, 'supermercados', '🛒 Supermercados', 
-      'Para garantir o máximo de conforto durante a sua estadia, mapeamos os melhores supermercados e lojas de conveniência a poucos passos do apartamento. Seja para comprar os ingredientes de um jantar especial, garantir a carne do churrasco ou apenas repor itens básicos e bebidas geladas, você encontrará opções excelentes sem precisar tirar o carro da garagem (mercados no ES não abrem aos domingos).',
-=======
     // 🛒 Section: Adega e Empórios
     this.createSection(content, 'supermercados', '🍷 Adegas e Empórios', 
       'Para garantir o máximo de conforto durante a sua estadia de inverno, mapeamos os melhores locais para comprar queijos selecionados, vinhos encorpados e especiarias para curtir o clima rústico. Uma boa tábua de frios em frente à lareira é um ritual indispensável no chalé.',
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
       [
         { 
           name: 'Empório da Serra', 
