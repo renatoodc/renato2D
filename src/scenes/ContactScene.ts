@@ -38,7 +38,7 @@ export class ContactScene extends Phaser.Scene {
     airbnbCard.className = 'contact-hero-card airbnb-theme';
     airbnbCard.innerHTML = `
         <div class="card-badge">PREFERENCIAL</div>
-        <div class="card-icon">💬</div>
+        <img src="/assets/icons/host.png" style="width: 140px; height: 140px; margin: 0 auto 20px; display: block;">
         <h3>Chat do Airbnb</h3>
         <p>Para dúvidas gerais, check-in, check-out e solicitações, fale conosco preferencialmente por aqui.</p>
         <button class="action-btn airbnb-btn" onclick="window.open('https://www.airbnb.com.br/guest/inbox', '_blank')">Abrir Chat Airbnb</button>
@@ -85,7 +85,7 @@ export class ContactScene extends Phaser.Scene {
     this.add.dom(width / 2, height / 2, container);
     
     // 🔍 Setup Interaction Logic
-    this.setupManualScroll(container);
+    this.setupManualScroll(container, content);
 
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
@@ -113,22 +113,22 @@ export class ContactScene extends Phaser.Scene {
     return header;
   }
 
-  private setupManualScroll(container: HTMLElement) {
+  private setupManualScroll(container: HTMLElement, scrollTarget: HTMLElement) {
     let startY = 0;
     let startScrollTop = 0;
     let isDragging = false;
-
+ 
     container.addEventListener('touchstart', (e) => {
         startY = e.touches[0].pageY;
-        startScrollTop = container.scrollTop;
+        startScrollTop = scrollTarget.scrollTop;
         isDragging = true;
     }, { passive: true });
-
+ 
     container.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
         const pageY = e.touches[0].pageY;
         const deltaY = pageY - startY;
-        container.scrollTop = startScrollTop - deltaY;
+        scrollTarget.scrollTop = startScrollTop - deltaY;
     }, { passive: true });
 
     container.addEventListener('touchend', () => {
@@ -140,28 +140,27 @@ export class ContactScene extends Phaser.Scene {
     const style = document.createElement('style');
     style.innerHTML = `
         #contact-pro-page {
+            position: relative;
             width: 100%;
-            height: 100%;
-            height: 100vh;
             height: 100dvh;
-            overflow-y: auto;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            overflow: hidden;
+            background: radial-gradient(circle at top right, #1e3c72, #2a5298);
             font-family: 'Outfit', 'Inter', sans-serif;
             color: #333;
-            -webkit-overflow-scrolling: touch;
         }
 
         .contact-header {
-            position: sticky;
-            top: 0;
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 60px;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: white;
             padding: 15px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
         }
 
         .back-button {
@@ -181,16 +180,25 @@ export class ContactScene extends Phaser.Scene {
             color: #1e3c72;
             letter-spacing: 1px;
             font-weight: 950;
-            text-align: center;
-            padding: 0 75px; 
-            flex: 1;
+            text-align: left;
+            padding-left: 110px;
+            padding-right: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             text-transform: uppercase;
         }
 
         .contact-content {
-            padding: 20px;
+            position: absolute;
+            top: 60px; left: 0; right: 0; bottom: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 20px 20px 80px;
             max-width: 500px;
             margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .contact-intro p {

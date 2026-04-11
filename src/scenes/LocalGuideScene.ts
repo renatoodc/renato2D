@@ -31,6 +31,8 @@ export class LocalGuideScene extends Phaser.Scene {
     content.className = 'guide-content';
     container.appendChild(content);
 
+
+
     // 🏛️ Histórico
     this.addCategorySection(content, "🏛️ Pontos Históricos", "section-historico",
         "Vila Velha não é apenas um destino de belas praias, mas também o berço da história capixaba. Fundada em 1535, nossa cidade reserva tesouros arquitetônicos e religiosos que sobreviveram aos séculos.", [
@@ -166,7 +168,7 @@ export class LocalGuideScene extends Phaser.Scene {
     this.add.dom(width / 2, height / 2, container);
     
     // 🕵️ UI Expert: Touch-to-Dismiss Logic
-    this.setupTouchDismiss(container);
+    this.setupTouchDismiss(container, content);
 
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
@@ -175,15 +177,15 @@ export class LocalGuideScene extends Phaser.Scene {
     this.setupScrollReveal();
   }
 
-  private setupTouchDismiss(container: HTMLElement) {
+  private setupTouchDismiss(container: HTMLElement, scrollTarget: HTMLElement) {
     let startY = 0;
     let startScrollTop = 0;
     let currentY = 0;
     let isDragging = false;
-
+ 
     container.addEventListener('touchstart', (e) => {
         startY = e.touches[0].pageY;
-        startScrollTop = container.scrollTop;
+        startScrollTop = scrollTarget.scrollTop;
         isDragging = true;
         container.style.transition = 'none';
     }, { passive: true });
@@ -196,7 +198,7 @@ export class LocalGuideScene extends Phaser.Scene {
 
         // 🔍 UI Expert Detail: Manual Scrolling Emulation
         // This ensures the page is scrollable even if Phaser blocks native input.
-        container.scrollTop = startScrollTop - deltaY;
+        scrollTarget.scrollTop = startScrollTop - deltaY;
         
         // Reset transform to ensure it stays pinned
         container.style.transform = 'translateY(0)';
@@ -364,15 +366,13 @@ export class LocalGuideScene extends Phaser.Scene {
     const style = document.createElement('style');
     style.innerHTML = `
         #guide-landing-page {
+            position: relative;
             width: 100%;
-            height: 100%;
-            height: 100vh;
             height: 100dvh;
-            overflow-y: auto;
+            overflow: hidden;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             font-family: 'Outfit', 'Inter', sans-serif;
             color: #333;
-            -webkit-overflow-scrolling: touch;
         }
 
         /* 🎬 Scroll Reveal Effects */
@@ -387,16 +387,17 @@ export class LocalGuideScene extends Phaser.Scene {
         }
 
         .guide-header {
-            position: sticky;
-            top: 0;
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 60px;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: white;
             padding: 15px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
         }
 
         .back-button {
@@ -418,9 +419,13 @@ export class LocalGuideScene extends Phaser.Scene {
             letter-spacing: 2px;
             font-weight: 950;
             text-transform: uppercase;
-            text-align: center;
-            padding: 0 70px; /* Evita sobreposição com o botão Voltar */
-            flex: 1;
+            text-align: left;
+            padding-left: 110px;
+            padding-right: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-transform: uppercase;
         }
 
         .anchor-menu {
@@ -452,9 +457,15 @@ export class LocalGuideScene extends Phaser.Scene {
         }
 
         .guide-content {
-            padding: 20px;
+            position: absolute;
+            top: 60px; left: 0; right: 0; bottom: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 20px 20px 80px;
             max-width: 600px;
             margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .category-section h2 {

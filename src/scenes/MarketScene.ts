@@ -31,6 +31,8 @@ export class MarketScene extends Phaser.Scene {
     content.className = 'market-guide-content';
     container.appendChild(content);
 
+
+
     // 🛒 Section: Supermercados
     this.createSection(content, 'supermercados', '🛒 Supermercados', 
       'Para garantir o máximo de conforto durante a sua estadia, mapeamos os melhores supermercados e lojas de conveniência a poucos passos do apartamento. Seja para comprar os ingredientes de um jantar especial, garantir a carne do churrasco ou apenas repor itens básicos e bebidas geladas, você encontrará opções excelentes sem precisar tirar o carro da garagem (mercados no ES não abrem aos domingos).',
@@ -97,7 +99,7 @@ export class MarketScene extends Phaser.Scene {
     this.add.dom(width / 2, height / 2, container);
     
     // 🕵️ UI Expert: Manual Scrolling
-    this.setupManualScroll(container);
+    this.setupManualScroll(container, content);
 
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
@@ -189,22 +191,22 @@ export class MarketScene extends Phaser.Scene {
     parent.appendChild(section);
   }
 
-  private setupManualScroll(container: HTMLElement) {
+  private setupManualScroll(container: HTMLElement, scrollTarget: HTMLElement) {
     let startY = 0;
     let startScrollTop = 0;
     let isDragging = false;
-
+ 
     container.addEventListener('touchstart', (e) => {
         startY = e.touches[0].pageY;
-        startScrollTop = container.scrollTop;
+        startScrollTop = scrollTarget.scrollTop;
         isDragging = true;
     }, { passive: true });
-
+ 
     container.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
         const pageY = e.touches[0].pageY;
         const deltaY = pageY - startY;
-        container.scrollTop = startScrollTop - deltaY;
+        scrollTarget.scrollTop = startScrollTop - deltaY;
     }, { passive: true });
 
     container.addEventListener('touchend', () => {
@@ -216,29 +218,28 @@ export class MarketScene extends Phaser.Scene {
     const style = document.createElement('style');
     style.innerHTML = `
         #market-pro-page {
+            position: relative;
             width: 100%;
-            height: 100%;
-            height: 100vh;
             height: 100dvh;
-            overflow-y: auto;
+            overflow: hidden;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             font-family: 'Outfit', 'Inter', sans-serif;
             color: #333;
-            -webkit-overflow-scrolling: touch;
         }
 
         .market-header {
-            position: sticky;
-            top: 0;
-            z-index: 2000;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(15px);
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            z-index: 1000;
+            background: white;
             padding: 12px 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-sizing: border-box;
         }
 
         .back-button {
@@ -265,9 +266,12 @@ export class MarketScene extends Phaser.Scene {
             color: #1e3c72;
             margin: 0;
             letter-spacing: 0.5px;
-            text-align: center;
-            padding: 0 60px;
-            flex: 1;
+            text-align: left;
+            padding-left: 110px;
+            padding-right: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             text-transform: uppercase;
         }
 
@@ -303,9 +307,15 @@ export class MarketScene extends Phaser.Scene {
         }
 
         .market-guide-content {
-            padding: 20px;
+            position: absolute;
+            top: 60px; left: 0; right: 0; bottom: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 20px 20px 80px;
             max-width: 600px;
             margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .market-section h2 {

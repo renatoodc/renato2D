@@ -27,6 +27,8 @@ export class RulesScene extends Phaser.Scene {
     content.className = 'rules-content';
     container.appendChild(content);
 
+
+
     // 👋 Intro Message
     const intro = document.createElement('div');
     intro.className = 'rules-intro';
@@ -64,7 +66,8 @@ export class RulesScene extends Phaser.Scene {
     this.add.dom(width / 2, height / 2, container);
     
     // 🕵️ UI Expert: Manual Scrolling
-    this.setupManualScroll(container);
+    // 🕵️ Enable Touch Drag-to-Scroll
+    this.setupManualScroll(container, content);
 
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
@@ -115,14 +118,14 @@ export class RulesScene extends Phaser.Scene {
     return header;
   }
 
-  private setupManualScroll(container: HTMLElement) {
+  private setupManualScroll(container: HTMLElement, scrollTarget: HTMLElement) {
     let startY = 0;
     let startScrollTop = 0;
     let isDragging = false;
 
     container.addEventListener('touchstart', (e) => {
         startY = e.touches[0].pageY;
-        startScrollTop = container.scrollTop;
+        startScrollTop = scrollTarget.scrollTop;
         isDragging = true;
     }, { passive: true });
 
@@ -130,7 +133,7 @@ export class RulesScene extends Phaser.Scene {
         if (!isDragging) return;
         const pageY = e.touches[0].pageY;
         const deltaY = pageY - startY;
-        container.scrollTop = startScrollTop - deltaY;
+        scrollTarget.scrollTop = startScrollTop - deltaY;
     }, { passive: true });
 
     container.addEventListener('touchend', () => {
@@ -142,28 +145,26 @@ export class RulesScene extends Phaser.Scene {
     const style = document.createElement('style');
     style.innerHTML = `
         #rules-pro-page {
+            position: relative;
             width: 100%;
-            height: 100%;
-            height: 100vh;
             height: 100dvh;
-            overflow-y: auto;
+            overflow: hidden;
             background: radial-gradient(circle at top right, #2a5298, #1e3c72);
             font-family: 'Outfit', sans-serif;
             color: white;
-            padding-bottom: 50px;
         }
 
         .rules-header {
-            position: sticky;
-            top: 0;
-            z-index: 2000;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(15px);
-            padding: 18px 20px;
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 70px;
+            z-index: 1000;
+            background: white;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+            box-sizing: border-box;
         }
 
         .back-button {
@@ -186,16 +187,25 @@ export class RulesScene extends Phaser.Scene {
             color: #1e3c72;
             letter-spacing: 1px;
             font-weight: 950;
-            text-align: center;
-            padding: 0 75px; 
-            flex: 1;
+            text-align: left;
+            padding-left: 110px;
+            padding-right: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             text-transform: uppercase;
         }
 
         .rules-content {
-            padding: 30px 20px;
+            position: absolute;
+            top: 70px; left: 0; right: 0; bottom: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 30px 20px 80px;
             max-width: 480px;
             margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .rules-intro p {

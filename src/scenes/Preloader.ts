@@ -7,6 +7,7 @@ export default class Preloader extends Phaser.Scene {
 
   preload() {
     this.load.image('menu_bg', '/assets/menu_bg.png');
+    this.load.image('praia_bg', '/assets/praia bg.jpg');
     this.load.image('homem_img', '/assets/Homem.png');
     this.load.image('homem_andando_img', '/assets/spritesheet/homem-andando.png');
     this.load.image('homem_subindo_img', '/assets/spritesheet/homem-subindo.png');
@@ -37,12 +38,16 @@ export default class Preloader extends Phaser.Scene {
     this.load.image('mar_gif', '/assets/mar.gif');
     this.load.spritesheet('palio', '/assets/palio.png', { frameWidth: 632, frameHeight: 424 });
     
-    // Welcome Scene Icons
-    this.load.image('welcome_rules', '/assets/welcome_rules.png');
-    this.load.image('welcome_game', '/assets/welcome_game.png');
-    this.load.image('welcome_visit', '/assets/welcome_visit.png');
-    this.load.image('welcome_bakery', '/assets/welcome_bakery.png');
-    this.load.image('welcome_wifi', '/assets/welcome_wifi.png');
+    // Welcome Scene Icons - Powered by Premium Custom Assets
+    this.load.image('welcome_rules', '/assets/icons/rules.png');
+    this.load.image('welcome_game', '/assets/icons/game.png');
+    this.load.image('welcome_visit', '/assets/icons/visit.png');
+    this.load.image('welcome_bakery', '/assets/icons/bakery.png');
+    this.load.image('welcome_wifi', '/assets/icons/wifi.png');
+    this.load.image('welcome_check_in_out', '/assets/icons/check_in_out.png');
+    this.load.image('welcome_restaurant', '/assets/icons/restaurant.png');
+    this.load.image('welcome_market', '/assets/icons/market.png');
+    this.load.image('welcome_host', '/assets/icons/host.png');
     this.load.image('logo_stayverse', '/assets/logo-stayverse.png..png');
     
     // Ensure all individual files are loaded as keys based on their names (for spawn command)

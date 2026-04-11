@@ -40,7 +40,7 @@ export class CheckoutScene extends Phaser.Scene {
     checkinCard.className = 'highlight-card time-card';
     checkinCard.style.marginBottom = '20px';
     checkinCard.innerHTML = `
-        <div class="card-icon">🔑</div>
+        <div class="card-icon">🕒</div>
         <div class="card-text">
             <span>Horário de Check-in</span>
             <strong>Das 08h às 23:59</strong>
@@ -124,21 +124,22 @@ export class CheckoutScene extends Phaser.Scene {
     this.add.dom(width / 2, height / 2, container);
     
     // 🕵️ UI Expert: Touch-to-Dismiss Logic
-    this.setupTouchDismiss(container);
+    // 🕵️ UI Expert: Touch-to-Dismiss Logic
+    this.setupTouchDismiss(container, content);
 
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
   }
 
-  private setupTouchDismiss(container: HTMLElement) {
+  private setupTouchDismiss(container: HTMLElement, scrollTarget: HTMLElement) {
     let startY = 0;
     let startScrollTop = 0;
     let currentY = 0;
     let isDragging = false;
-
+ 
     container.addEventListener('touchstart', (e) => {
         startY = e.touches[0].pageY;
-        startScrollTop = container.scrollTop;
+        startScrollTop = scrollTarget.scrollTop;
         isDragging = true;
         container.style.transition = 'none';
     }, { passive: true });
@@ -146,11 +147,11 @@ export class CheckoutScene extends Phaser.Scene {
     container.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
         
-        currentY = e.touches[0].pageY;
+         currentY = e.touches[0].pageY;
         const deltaY = currentY - startY;
-
+ 
         // 🔍 UI Expert Detail: Manual Scrolling Emulation
-        container.scrollTop = startScrollTop - deltaY;
+        scrollTarget.scrollTop = startScrollTop - deltaY;
         
         container.style.transform = 'translateY(0)';
         container.style.opacity = '1';
@@ -190,28 +191,26 @@ export class CheckoutScene extends Phaser.Scene {
     const style = document.createElement('style');
     style.innerHTML = `
         #checkout-pro-page {
+            position: relative;
             width: 100%;
-            height: 100%;
-            height: 100vh;
             height: 100dvh;
-            overflow-y: auto;
+            overflow: hidden;
             background: radial-gradient(circle at top right, #2a5298, #1e3c72);
             font-family: 'Outfit', sans-serif;
             color: white;
-            padding-bottom: 50px;
         }
 
         .checkout-header {
-            position: sticky;
-            top: 0;
-            z-index: 2000;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(15px);
-            padding: 18px 20px;
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 70px;
+            z-index: 1000;
+            background: white;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+            box-sizing: border-box;
         }
 
         .back-button {
@@ -234,16 +233,25 @@ export class CheckoutScene extends Phaser.Scene {
             color: #1e3c72;
             letter-spacing: 1px;
             font-weight: 950;
-            text-align: center;
-            padding: 0 75px; 
-            flex: 1;
+            text-align: left;
+            padding-left: 110px;
+            padding-right: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             text-transform: uppercase;
         }
 
         .checkout-content {
-            padding: 30px 20px;
+            position: absolute;
+            top: 70px; left: 0; right: 0; bottom: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 30px 20px 80px;
             max-width: 480px;
             margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .checkout-intro p {
