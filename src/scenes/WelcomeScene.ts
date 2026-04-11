@@ -73,24 +73,6 @@ export default class WelcomeScene extends Phaser.Scene {
     let headerYOffset = isPortrait ? (isSmallScreen ? 0.03 : 0.05) : 0.04;
     if (this.textures.exists('logo_stayverse')) {
       const logoY = height * headerYOffset;
-<<<<<<< HEAD
-
-      const capsuleW = width * (isPortrait ? 0.5 : 0.22);
-      const capsuleH = isSmallScreen ? 50 : 60;
-      const capsule = this.add.graphics().setDepth(19);
-      capsule.fillStyle(0x000000, 0.6);
-      capsule.fillRoundedRect(width / 2 - capsuleW / 2, logoY - capsuleH / 2, capsuleW, capsuleH, capsuleH / 2);
-      capsule.lineStyle(1.5, 0xffffff, 0.3);
-      capsule.strokeRoundedRect(width / 2 - capsuleW / 2, logoY - capsuleH / 2, capsuleW, capsuleH, capsuleH / 2);
-
-      const logo = this.add.image(width / 2, logoY, 'logo_stayverse').setDepth(20);
-      logo.setInteractive({ useHandCursor: true });
-      logo.on('pointerdown', () => {
-        window.open('https://www.instagram.com/stayverse.br/', '_blank');
-      });
-      logo.setTintFill(0xffffff);
-=======
-      
       // Glass Capsule Background for Contrast
       const capsule = this.add.graphics().setDepth(19);
       const capsuleW = width * (isPortrait ? 0.5 : 0.22);
@@ -99,8 +81,11 @@ export default class WelcomeScene extends Phaser.Scene {
       capsule.lineStyle(1.5, 0xffffff, 0.3).strokeRoundedRect(width/2 - capsuleW/2, logoY - capsuleH/2, capsuleW, capsuleH, capsuleH/2);
 
       const logo = this.add.image(width / 2, logoY, 'logo_stayverse').setDepth(20);
+      logo.setInteractive({ useHandCursor: true });
+      logo.on('pointerdown', () => {
+        window.open('https://www.instagram.com/stayverse.br/', '_blank');
+      });
       logo.setTintFill(0xffffff); // Força a logo a ficar totalmente branca (contraste máximo)
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
       const targetWidth = width * (isPortrait ? (isSmallScreen ? 0.38 : 0.45) : 0.18);
       const responsiveScale = logo.width > 0 ? targetWidth / logo.width : (isPortrait ? 0.3 : 0.4);
       logo.setScale(responsiveScale);
@@ -118,69 +103,6 @@ export default class WelcomeScene extends Phaser.Scene {
 
     const titlePadding = headerYOffset;
     
-<<<<<<< HEAD
-    // Header 1 (Top): ITAIPAVA 201
-    this.add.text(width / 2, height * (titlePadding + 0.01), 'ITAIPAVA 201', {
-      fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '14px' : '16px') : '18px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
-    }).setOrigin(0.5).setShadow(1, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1).setDepth(20);
-
-    // Header 2 (Middle/Main): TEMPORADA NA PRAIA (Premium Bronze Script)
-    const mainTitle = this.add.text(width / 2, height * (titlePadding + 0.05), 'Temporada na Praia', {
-      fontFamily: '"Dancing Script", "Pacifico", "Brush Script MT", cursive', 
-      fontSize: isPortrait ? (isSmallScreen ? '38px' : '44px') : '56px', 
-      color: '#f0c48e', // Bright bronze/gold base
-      fontStyle: 'normal'
-    }).setOrigin(0.5).setDepth(20);
-    
-    // Metallic edge and soft etched shadow
-    mainTitle.setStroke('#8b4513', 3); 
-    mainTitle.setShadow(2, 4, 'rgba(0,0,0,0.6)', 8);
-
-    // Header 3 (Bottom): CENTRAL DO HÓSPEDE
-    this.add.text(width / 2, height * (titlePadding + 0.115), 'CENTRAL DO HÓSPEDE', {
-      fontFamily: 'Montserrat', 
-      fontSize: isPortrait ? (isSmallScreen ? '18px' : '23px') : '28px', 
-      color: '#E0E6ED', 
-      fontStyle: 'light', 
-      letterSpacing: 5
-    }).setOrigin(0.5).setStroke('#000000', 3).setShadow(2, 2, 'rgba(0,0,0,0.5)', 4).setDepth(20);
-
-    // 4. Icons
-    const items = [
-      { label: 'REGRAS\nDA CASA', icon: 'welcome_rules', callback: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('RulesScene'));
-      }},
-      { label: 'WI-FI\nE STREAMING', icon: 'welcome_wifi', callback: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('WifiScene'));
-      }},
-      { label: 'CHECK-IN / OUT', icon: 'welcome_check_in_out', callback: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('CheckoutScene'));
-      }},
-      { label: 'GUIA\nTURÍSTICO', icon: 'welcome_visit', callback: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('LocalGuideScene'));
-      }},
-      { label: 'PADARIAS\n& CAFÉS', icon: 'welcome_bakery', callback: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('BakeryScene'));
-      }},
-      { label: 'BARES &\nRESTAURANTES', icon: 'welcome_restaurant', callback: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('RestaurantScene'));
-      }},
-      { label: 'BENEFÍCIO\nVIP', icon: 'welcome_game', callback: () => this.startGame(), locked: true },
-      { label: 'MERCADOS', icon: 'welcome_market', callback: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('MarketScene'));
-      }},
-      { label: 'CONTATO', icon: 'welcome_host', callback: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('ContactScene'));
-      }},
-=======
     // Header 1: REFÚGIO NA CIDADE
     this.add.text(width / 2, height * titlePadding, 'REFÚGIO NA CIDADE', {
       fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '10px' : '12px') : '16px', color: '#FFFFFF', fontStyle: 'light', letterSpacing: isSmallScreen ? 3 : 5
@@ -210,7 +132,7 @@ export default class WelcomeScene extends Phaser.Scene {
       { label: 'BENEFÍCIO\nVIP', emoji: '🗝️', id: 'welcome_game', callback: () => this.startGame(), locked: true },
       { label: 'MERCADOS', emoji: '🍷', id: 'welcome_market', callback: () => this.transitionTo('MarketScene') },
       { label: 'CONTATO', emoji: '📞', id: 'welcome_host', callback: () => this.transitionTo('ContactScene') },
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
+    ];
     ];
 
     const cols = isPortrait ? 3 : 5;
@@ -226,16 +148,6 @@ export default class WelcomeScene extends Phaser.Scene {
       const x = marginX + (col * (availableWidth / (cols - 1)));
       const y = startY + row * spacingY;
       
-<<<<<<< HEAD
-      const wrapWidth = 140;
-
-      const isGame = item.icon === 'welcome_game';
-      const isJustUnlocked = isGame && this.game.registry.get('justUnlocked');
-      const startLocked = item.locked && !this.hasReadRules;
-      const visualLocked = startLocked || isJustUnlocked;
-
-      const container = this.createProfessionalIcon(x, y, item.label, !!visualLocked, item.icon, wrapWidth, isGame);
-=======
       const wrapWidth = (availableWidth / cols) * 1.3;
 
       const isGame = item.id === 'welcome_game';
@@ -286,7 +198,6 @@ export default class WelcomeScene extends Phaser.Scene {
 
       const container = this.createProfessionalIcon(x, y, item.label, !!visualLocked, item.emoji, textureKey, wrapWidth, isGame, isContact, customSize, customY, customX);
       container.setScale(isPortrait && isSmallScreen ? 0.85 : 1);
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
       if (isGame) this.gameIcon = container;
 
       // 🌊 Subtile River Reflection for last row icons
@@ -323,68 +234,6 @@ export default class WelcomeScene extends Phaser.Scene {
     // this.createBirds(width, height); // Pássaros removidos
   }
 
-<<<<<<< HEAD
-  private animateUnlockSequence() {
-    if (!this.gameIcon) return;
-    const lock = this.gameIcon.getByName('lock_icon') as Phaser.GameObjects.Text;
-    const overlay = this.gameIcon.getByName('lock_overlay') as Phaser.GameObjects.Graphics;
-    
-    // 1. Shake the whole icon (it's "preparing" to burst)
-    this.tweens.add({
-        targets: this.gameIcon,
-        x: this.gameIcon.x + 8,
-        duration: 80,
-        yoyo: true,
-        repeat: 4,
-        onComplete: () => {
-            // 2. Expand & Flash
-            this.tweens.add({
-                targets: this.gameIcon,
-                scale: 1.4,
-                duration: 450,
-                ease: 'Cubic.easeOut',
-                onStart: () => {
-                    if (lock) {
-                        this.tweens.add({
-                            targets: lock,
-                            alpha: 0,
-                            y: lock.y - 60,
-                            scale: 3,
-                            rotation: 0.5,
-                            duration: 700,
-                            ease: 'Power2.easeIn',
-                            onComplete: () => lock.destroy()
-                        });
-                    }
-                    if (overlay) {
-                        this.tweens.add({
-                            targets: overlay,
-                            alpha: 0,
-                            scale: 2,
-                            duration: 600,
-                            onComplete: () => overlay.destroy()
-                        });
-                    }
-                },
-                onComplete: () => {
-                    // 3. Settling and Celebration
-                    this.tweens.add({
-                        targets: this.gameIcon,
-                        scale: 1.15, // Return to normal spec scale
-                        duration: 800,
-                        ease: 'Elastic.easeOut'
-                    });
-                    
-                    // Celebration Flash
-                    const flash = this.add.graphics({ x: this.gameIcon.x, y: this.gameIcon.y })
-                        .fillStyle(0xffd700, 0.6)
-                        .fillCircle(0, 0, 60);
-                    this.tweens.add({ targets: flash, alpha: 0, scale: 2.5, duration: 1000, onComplete: () => flash.destroy() });
-                }
-            });
-        }
-    });
-=======
   private addReflection(parent: Phaser.GameObjects.Container, x: number, y: number) {
       // Create a simplified mirror of the base
       const reflection = this.add.graphics();
@@ -429,7 +278,6 @@ export default class WelcomeScene extends Phaser.Scene {
   private transitionTo(sceneName: string) {
       this.cameras.main.fadeOut(500, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start(sceneName));
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
   }
 
   update() {
@@ -445,23 +293,6 @@ export default class WelcomeScene extends Phaser.Scene {
     this.currentParallaxX += (this.targetParallaxX - this.currentParallaxX) * 0.05;
     this.currentParallaxY += (this.targetParallaxY - this.currentParallaxY) * 0.05;
 
-<<<<<<< HEAD
-    const factor = 40; 
-    if (this.skyLayer) {
-        // Increased from 0.01 to 0.5 for a visible 20px shift
-        const parallaxOffsetX = this.currentParallaxX * factor * 0.5;
-        const parallaxOffsetY = this.currentParallaxY * factor * 0.5;
-        this.skyLayer.setPosition(midX + parallaxOffsetX, midY + parallaxOffsetY);
-    }
-    if (this.sunLayer) this.sunLayer.setPosition((this.scale.width * 0.05) + (this.currentParallaxX * factor * 0.8), (this.scale.height * 0.05) + (this.currentParallaxY * factor * 0.8));
-    if (this.seaLayer) this.seaLayer.setPosition(this.currentParallaxX * factor * -1.2, this.currentParallaxY * factor * -1.2);
-    if (this.sandLayer) this.sandLayer.setPosition(this.currentParallaxX * factor * 0.2, this.currentParallaxY * factor * 0.2);
-    if (this.wetSandLayer) this.wetSandLayer.setPosition(this.currentParallaxX * factor * 0.2, this.currentParallaxY * factor * 0.2);
-    if (this.glossLayer) this.glossLayer.setPosition(this.currentParallaxX * factor * -0.3, this.currentParallaxY * factor * -0.3);
-    if (this.tideLayer) this.tideLayer.setPosition(this.currentParallaxX * factor * -1.2, this.currentParallaxY * factor * -1.2);
-    if (this.birdLayer) this.birdLayer.setPosition(this.currentParallaxX * factor * -1.5, this.currentParallaxY * factor * -1.5);
-    if (this.vesselLayer) this.vesselLayer.setPosition(this.currentParallaxX * factor * -1.0, this.currentParallaxY * factor * -1.0);
-=======
     const factor = 20; 
     if (this.background) {
         this.background.setPosition((this.scale.width / 2) + this.videoOffsetX + this.currentParallaxX * factor, (this.scale.height / 2) + this.currentParallaxY * factor);
@@ -474,7 +305,6 @@ export default class WelcomeScene extends Phaser.Scene {
             }
         }
     }
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
 
     const time = Date.now();
     this.birds.forEach(bird => {
@@ -486,87 +316,6 @@ export default class WelcomeScene extends Phaser.Scene {
         }
         bird.y = bird.baseYSine + (Math.sin(time * 0.0006 * bird.speed + bird.phase) * 12);
         const wingVal = Math.sin(time * 0.005 * bird.speed + bird.phase);
-<<<<<<< HEAD
-        const wingSpan = 10 * wingVal;
-        
-        bird.clear();
-        bird.lineStyle(1.6, 0xffffff, 0.6); // White seagull silhouette
-        bird.beginPath();
-        // Left Wing (Gull Curve via Segments - Stable)
-        bird.moveTo(-14, 0 + (wingVal * 1.5));
-        bird.lineTo(-7, wingSpan - 1);
-        bird.lineTo(0, 3);
-        // Right Wing (Gull Curve via Segments - Stable)
-        bird.lineTo(7, wingSpan - 1);
-        bird.lineTo(14, 0 + (wingVal * 1.5));
-        bird.strokePath();
-    });
-  }
-
-  private createDynamicBeachBackground(width: number, height: number) {
-    // Carregar a imagem da praia como fundo base
-    const bg = this.add.image(width / 2, height / 2, 'praia_bg');
-    
-    // Scale bg para cobrir a tela sem distorcer + um pequeno overscan para o parallax (1.1x)
-    const scale = Math.max(width / bg.width, height / bg.height) * 1.1;
-    bg.setScale(scale).setScrollFactor(0);
-    
-    // Aplicar a imagem na variável skyLayer para que o parallax a mova um pouco
-    this.skyLayer = bg;
-
-    // Criar pássaros e sol
-    this.createSun(width, height);
-    this.createBirds(width, height);
-  }
-
-  private createSun(width: number, height: number) {
-    this.sunLayer = this.add.container(width * 0.05, height * 0.05).setDepth(1);
-    
-    // 🎨 Sun Rays: Estilo clássico com rotação
-    const rays = this.add.graphics();
-    rays.fillStyle(0xffe082, 0.3);
-    const numRays = 12;
-    for (let i = 0; i < numRays; i++) {
-        const angle = (i / numRays) * Math.PI * 2;
-        const length = 110;
-        rays.beginPath();
-        rays.moveTo(Math.cos(angle) * 30, Math.sin(angle) * 30);
-        rays.lineTo(Math.cos(angle - 0.08) * length, Math.sin(angle - 0.08) * length);
-        rays.lineTo(Math.cos(angle + 0.08) * length, Math.sin(angle + 0.08) * length);
-        rays.closePath();
-        rays.fillPath();
-    }
-    
-    const glow = this.add.graphics();
-    glow.fillGradientStyle(0xffe082, 0xffe082, 0xffe082, 0xffe082, 0.2, 0.2, 0, 0);
-    glow.fillCircle(0, 0, 80);
-    
-    const core = this.add.graphics();
-    core.fillStyle(0xfff9c4, 0.8);
-    core.fillCircle(0, 0, 35);
-    
-    this.sunLayer.add([rays, glow, core]);
-    
-    // Pulsação suave (Core e Glow)
-    this.tweens.add({
-      targets: [glow, core, rays],
-      scale: 1.1,
-      alpha: 0.9,
-      duration: 4000,
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.easeInOut'
-    });
-
-    // Rotação lenta dos raios
-    this.tweens.add({
-        targets: rays,
-        angle: 360,
-        duration: 30000,
-        repeat: -1,
-        ease: 'Linear'
-    });
-=======
         bird.clear().lineStyle(1.6, 0xD4AF37, 0.4).beginPath();
         bird.moveTo(-14, 0 + (wingVal * 1.5)).lineTo(-7, (10 * wingVal) - 1).lineTo(0, 3).lineTo(7, (10 * wingVal) - 1).lineTo(14, 0 + (wingVal * 1.5)).strokePath();
     });
@@ -576,27 +325,17 @@ export default class WelcomeScene extends Phaser.Scene {
     const bg = this.add.graphics();
     bg.fillGradientStyle(0x0f0f12, 0x0f0f12, 0x1f1f23, 0x1f1f23, 1);
     bg.fillRect(0, 0, width, height);
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
   }
 
   private createBirds(width: number, height: number) {
     this.birds = [];
-<<<<<<< HEAD
 
-=======
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
     for (let i = 0; i < 3; i++) {
         const x = Math.random() * width;
         const y = height * (0.15 + Math.random() * 0.2);
         const bird = this.add.graphics() as any;
         bird.setPosition(x, y);
-<<<<<<< HEAD
-        
-        bird.speed = 0.35 + Math.random() * 0.3;
-        bird.lift = 8 + Math.random() * 8;      
-=======
         bird.speed = 0.2 + Math.random() * 0.2; 
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
         bird.phase = Math.random() * Math.PI * 2; 
         bird.baseYSine = y;
         this.birds.push(bird);
@@ -604,58 +343,6 @@ export default class WelcomeScene extends Phaser.Scene {
     }
   }
 
-<<<<<<< HEAD
-  private createProfessionalIcon(x: number, y: number, label: string, isLocked: boolean, iconKey: string, wrapWidth: number, isGame: boolean = false) {
-    const container = this.add.container(x, y);
-
-    // 3. Base dos Ícones - Efeito Glass, Círculos e Borda
-    const baseGraphics = this.add.graphics();
-    // Shadow
-    baseGraphics.fillStyle(0x000000, 0.4).fillCircle(1, 4, 38);
-    // Base Redonda (Glassmorphism) e Ring Border
-    if (isGame) {
-      baseGraphics.fillStyle(0xffffff, 0.35).fillCircle(0, 0, 40);
-      baseGraphics.lineStyle(1.5, 0xffffff, 0.7).strokeCircle(0, 0, 40);
-    } else {
-      baseGraphics.fillStyle(0x07070a, 0.2).fillCircle(0, 0, 40);
-      baseGraphics.lineStyle(1.5, 0xe0e6ed, 0.7).strokeCircle(0, 0, 40);
-    }
-    container.add(baseGraphics);
-
-    // 4. O Efeito 3D Pop-out Switch/Case
-    let size = 115;
-    let offsetY = -8;
-    switch (iconKey) {
-      case 'welcome_rules':
-      case 'welcome_check_in_out':
-      case 'welcome_wifi':
-        size = 115; offsetY = -8; break;
-      case 'welcome_market':
-        size = 125; offsetY = -8; break;
-      case 'welcome_game':
-        size = 130; offsetY = -15; break;
-      case 'welcome_visit':
-        size = 148; offsetY = -10; break;
-      case 'welcome_restaurant':
-        size = 155; offsetY = -10; break;
-      case 'welcome_bakery':
-        size = 160; offsetY = -12; break;
-      case 'welcome_host':
-        size = 160; offsetY = -15; break;
-    }
-
-    // Instancia a imagem para pegar dimensões e aplicar scale do Pop-out
-    const iconImg = this.add.image(0, offsetY, iconKey).setOrigin(0.5);
-    const scale = Math.min(size / iconImg.width, size / iconImg.height);
-    iconImg.setScale(scale);
-    
-    // Shadow DropShadow
-    const iconShadow = this.add.image(0, offsetY + 4, iconKey).setOrigin(0.5);
-    iconShadow.setScale(scale).setTintFill(0x000000).setAlpha(0.3);
-    container.add(iconShadow);
-
-    container.add(iconImg);
-=======
   private createProfessionalIcon(x: number, y: number, label: string, isLocked: boolean, emoji: string, textureKey: string, wrapWidth: number, isGame: boolean = false, isContact: boolean = false, iconSize: number = 95, offsetY: number = -10, offsetX: number = 0) {
     const container = this.add.container(x, y).setDepth(5);
     const shadow = this.add.graphics().fillStyle(0x000000, 0.4).fillCircle(1, 4, 38);
@@ -694,55 +381,9 @@ export default class WelcomeScene extends Phaser.Scene {
         }
         container.add(iconText);
     }
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
 
     // Texto Rótulo
     const isSmallScreen = this.scale.height < 680;
-<<<<<<< HEAD
-    const labelY = isSmallScreen ? 46 : 56;
-    const labelText = this.add.text(0, labelY, label.toUpperCase(), { 
-      fontFamily: 'Outfit', 
-      fontSize: isSmallScreen ? '11px' : '12px',
-      color: '#ffffff', 
-      fontStyle: '900', 
-      letterSpacing: 1, 
-      align: 'center', 
-      wordWrap: { width: wrapWidth, useAdvancedWrap: true },
-      lineSpacing: -3
-    }).setOrigin(0.5, 0);
-    
-    labelText.setStroke('#000000', 3);
-    labelText.setShadow(2, 2, 'rgba(0,0,0,0.8)', 4);
-    container.add(labelText);
-
-    if (isLocked) {
-      const lockOverlay = this.add.graphics().fillStyle(0x000000, 0.2).fillCircle(0, 0, 40);
-      lockOverlay.setName('lock_overlay');
-      container.add(lockOverlay);
-      const lock = this.add.text(28, 28, '🔒', { fontSize: '14px' }).setOrigin(0.5);
-      lock.setName('lock_icon');
-      container.add(lock);
-    }
-
-    // 5. Interações Físicas (Hover / Touch)
-    container.on('pointerover', () => {
-        if (isLocked && !this.hasReadRules) return;
-        this.tweens.add({
-            targets: container,
-            scale: 1.15,
-            angle: 2,
-            duration: 250,
-            ease: 'Back.easeOut'
-        });
-        
-        const originalAlpha = baseGraphics.alpha;
-        this.tweens.add({
-            targets: baseGraphics,
-            alpha: originalAlpha + 0.15,
-            duration: 150,
-            yoyo: true,
-            repeat: 0
-=======
     const labelText = this.add.text(0, isSmallScreen ? 46 : 56, label.toUpperCase(), {
       fontFamily: 'Outfit', fontSize: isSmallScreen ? '11px' : '15px', color: isLocked ? '#7da2a9' : '#ffffff', fontStyle: '900', letterSpacing: isSmallScreen ? 0 : 1, align: 'center', wordWrap: { width: wrapWidth, useAdvancedWrap: true }, lineSpacing: -2
     }).setOrigin(0.5, 0);
@@ -770,20 +411,10 @@ export default class WelcomeScene extends Phaser.Scene {
             duration: 150,
             yoyo: true,
             repeat: 1
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
         });
     });
 
     container.on('pointerout', () => {
-<<<<<<< HEAD
-        this.tweens.add({
-            targets: container,
-            scale: 1.0,
-            angle: 0,
-            duration: 200,
-            ease: 'Cubic.easeOut'
-        });
-=======
         this.tweens.add({ 
             targets: container, 
             scale: 1.0, 
@@ -792,7 +423,6 @@ export default class WelcomeScene extends Phaser.Scene {
             ease: 'Cubic.easeOut' 
         });
         base.setAlpha(baseAlpha);
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
     });
 
     return container;
