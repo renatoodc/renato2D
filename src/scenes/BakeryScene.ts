@@ -10,7 +10,7 @@ export class BakeryScene extends Phaser.Scene {
 
     // 🌊 UI Expert Background
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x0B1A13, 0x0B1A13, 0x1B4332, 0x1B4332, 1);
+    bg.fillGradientStyle(0x2a5298, 0x2a5298, 0x1e3c72, 0x1e3c72, 1);
     bg.fillRect(0, 0, width, height);
 
     // 🏆 Content Container
@@ -61,8 +61,11 @@ export class BakeryScene extends Phaser.Scene {
     };
 
     const title = document.createElement('h1');
-    title.innerText = 'CAFÉ E LAREIRA';
-    title.style.fontFamily = 'Cinzel, serif';
+    title.innerText = 'PADARIAS E CAFÉS';
+    title.style.fontFamily = 'Outfit, sans-serif';
+    title.style.color = '#1e3c72';
+    title.style.textAlign = 'center';
+    title.style.margin = '0 auto';
 
     header.appendChild(backBtn);
     header.appendChild(title);
@@ -74,8 +77,8 @@ export class BakeryScene extends Phaser.Scene {
     menu.className = 'anchor-menu';
     menu.style.gridTemplateColumns = '1fr 1fr'; // 2 columns for 2 categories
     menu.innerHTML = `
-        <button data-target="padarias">🚪 Cestas no Chalé</button>
-        <button data-target="cafes">☕ Cafés Coloniais</button>
+        <button data-target="padarias">🥐 Padarias</button>
+        <button data-target="cafes">☕ Cafeterias</button>
     `;
 
     menu.querySelectorAll('button').forEach(btn => {
@@ -103,54 +106,54 @@ export class BakeryScene extends Phaser.Scene {
     const sections = [
         {
             id: 'padarias',
-            title: '🚪 Cestas Matinais no Chalé',
-            intro: 'Nada grita "férias de inverno" mais do que um café da manhã farto sendo entregue na sua porta. Geleias, pães quentes e facilidade.',
+            title: '🍞 Padarias',
+            intro: 'Seja para garantir o pão fresco logo pela manhã ou tomar um pequeno-almoço reforçado, selecionámos as melhores opções a poucos passos do apartamento.',
             items: [
                 {
-                    name: 'Cestas do Caparaó - Delivery',
-                    desc: 'Especialistas em cestas de piquenique e café da manhã, que entregam diretamente no chalé. Pães de fermentação natural, queijos da região e café moído na hora.',
-                    address: 'Entregas em toda região',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Biscoiteria+Caparao',
-                    instagram: 'https://www.instagram.com/explore/',
+                    name: 'Padaria Peter Pão',
+                    desc: 'A nossa vizinha de porta! Saia pelo portão de cima e vire à esquerda. Ótima variedade de pães, doces e salgados frescos. Possui almoço self-service.',
+                    address: 'Av. Fortaleza, 1200 - Itapuã',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Padaria+Peter+Pao+Vila+Velha',
+                    instagram: 'https://www.instagram.com/peterpao/',
                     img: 'peter_pao.jpg'
                 },
                 {
-                    name: 'Padaria Pedra Menina (Retirada)',
-                    desc: 'Para os mais tradicionais que gostam de sair cedo. Pão francês quentinho, queijo minas curado e bolos simples perfeitos para o fim de tarde.',
-                    address: 'Praça de Pedra Menina',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Padaria+Pedra+Menina',
-                    instagram: 'https://www.instagram.com/explore/',
+                    name: 'Padaria Monza Itapuã',
+                    desc: 'Uma das mais tradicionais e famosas do bairro. Ambiente agradável, ideal para um café completo, lanche da tarde ou buffet variado.',
+                    address: 'Rua São Paulo, 2224 - Itapuã',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Padaria+Monza+Itapua+Vila+Velha',
+                    instagram: 'https://www.instagram.com/padariamonza/',
                     img: 'monza.jpg'
                 }
             ]
         },
         {
             id: 'cafes',
-            title: '☕ Cafés Coloniais nas Nuvens',
-            intro: 'A região do Caparaó é internacionalmente premiada por contar com os melhores grãos arábica. Sente-se à mesa e deixe-se servir com as delícias coloniais da montanha.',
+            title: '☕ Cafetarias Especiais',
+            intro: 'Para uma pausa no dia ou um café de altíssima qualidade. Locais charmosos e sofisticados para relaxar ou levar para a praia.',
             items: [
                 {
-                    name: 'Recanto Vó Maria',
-                    desc: 'A super experiência do Café Colonial! Uma mesa farta com bolo de milho, broa cremosa, biscoitos amanteigados e muito café quente.',
-                    address: 'Estrada do Parque Central',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Cafeteria+Alto+Caparao',
-                    instagram: 'https://www.instagram.com/explore/',
+                    name: 'The Coffee',
+                    desc: 'Conceito moderno e minimalista inspirado no Japão. Especialistas em cafés to-go (para levar), perfeitos para acompanhar uma caminhada até à praia.',
+                    address: 'Av. Hugo Musso, 1754 - Itapuã',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=The+Coffee+Itapua+Vila+Velha',
+                    instagram: 'https://www.instagram.com/thecoffee.jp/',
                     img: 'the_coffee.jpg'
                 },
                 {
-                    name: 'Armazém do Café Especial',
-                    desc: 'Deguste cafés 100% arábica torrados na hora, utilizando métodos filtrados e prensa francesa. Tudo isso enquanto aprecia a névoa cobrindo as colinas.',
-                    address: 'Centro comercial Rústico',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Cafe+Especial+Iuna',
-                    instagram: 'https://www.instagram.com/explore/',
+                    name: 'Caffè Lorenzon',
+                    desc: 'Aconchegante e sofisticado. Oferece grãos selecionados e uma confeitaria impecável. Ótimo lugar para relaxar ou trabalhar um pouco.',
+                    address: 'Av. Hugo Musso, 1243 - Praia da Costa',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Caffe+Lorenzon+Vila+Velha',
+                    instagram: 'https://www.instagram.com/caffelorenzon/',
                     img: 'lorenzon.jpg'
                 },
                 {
-                    name: 'Bistrô do Sítio',
-                    desc: 'Perfeito para o fim de tarde. Ambiente com mini-lareiras ou aquecedores perto da mesa, servindo chocolate quente cremoso autêntico.',
-                    address: 'Patrimônio da Penha',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Cafe+Patrimonio+da+Penha',
-                    instagram: 'https://www.instagram.com/explore/',
+                    name: 'Terrafé',
+                    desc: 'De frente para o mar! Valorizam os grãos capixabas com diferentes métodos de extração. Ideal para um final de tarde saboreando um bom café na orla.',
+                    address: 'Av. Antônio Gil Veloso, 1000 - Praia da Costa',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Terrafe+Cafe+Praia+da+Costa',
+                    instagram: 'https://www.instagram.com/terrafe/',
                     img: 'terrafe.jpg'
                 }
             ]
@@ -226,32 +229,18 @@ export class BakeryScene extends Phaser.Scene {
             position: relative;
             width: 100%;
             height: 100dvh;
-<<<<<<< HEAD
-            overflow: hidden;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            font-family: 'Outfit', sans-serif;
-=======
             overflow-y: auto;
-            background: linear-gradient(135deg, #0B1A13 0%, #1B4332 100%);
-            font-family: 'Cinzel', 'Outfit', sans-serif;
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            font-family: 'Outfit', sans-serif;
             color: #333;
         }
 
         .market-header {
-<<<<<<< HEAD
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 60px;
-            z-index: 1000;
-            background: white;
-=======
             position: sticky;
             top: 0;
             z-index: 2000;
-            background: rgba(11, 26, 19, 0.98);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(15px);
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
             padding: 12px 15px;
             display: flex;
             align-items: center;
@@ -270,7 +259,7 @@ export class BakeryScene extends Phaser.Scene {
             border-radius: 12px;
             font-weight: 700;
             font-size: 0.85rem;
-            color: #D4AF37;
+            color: #1e3c72;
             cursor: pointer;
             transition: all 0.2s ease-in-out;
         }
@@ -282,7 +271,7 @@ export class BakeryScene extends Phaser.Scene {
         .market-header h1 {
             font-size: 1rem;
             font-weight: 800;
-            color: #D4AF37;
+            color: #1e3c72;
             margin: 0;
             letter-spacing: 0.5px;
             text-align: left;
@@ -303,14 +292,14 @@ export class BakeryScene extends Phaser.Scene {
         }
 
         .anchor-menu button {
-            background: #0B1A13;
-            border: 1px solid #D4AF37;
+            background: white;
+            border: 1px solid #2a5298;
             padding: 12px 8px;
             border-radius: 14px;
             font-size: 0.8rem;
             font-weight: 700;
-            color: #D4AF37;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            color: #1e3c72;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -414,8 +403,8 @@ export class BakeryScene extends Phaser.Scene {
         }
 
         .maps-btn {
-            background: #D4AF37;
-            color: #0B1A13;
+            background: #2a5298;
+            color: white;
         }
 
         .insta-btn {

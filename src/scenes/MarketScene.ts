@@ -10,7 +10,7 @@ export class MarketScene extends Phaser.Scene {
 
     // 🌊 UI Expert Background
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x0B1A13, 0x0B1A13, 0x1B4332, 0x1B4332, 1);
+    bg.fillGradientStyle(0x2a5298, 0x2a5298, 0x1e3c72, 0x1e3c72, 1);
     bg.fillRect(0, 0, width, height);
 
     // 🏆 Content Container
@@ -31,40 +31,40 @@ export class MarketScene extends Phaser.Scene {
     content.className = 'market-guide-content';
     container.appendChild(content);
 
-    // 🛒 Section: Adega e Empórios
-    this.createSection(content, 'supermercados', '🍷 Adegas e Empórios', 
-      'Para garantir o máximo de conforto durante a sua estadia de inverno, mapeamos os melhores locais para comprar queijos selecionados, vinhos encorpados e especiarias para curtir o clima rústico. Uma boa tábua de frios em frente à lareira é um ritual indispensável no chalé.',
+    // 🛒 Section: Supermercados
+    this.createSection(content, 'supermercados', '🛒 Supermercados', 
+      'Para garantir o máximo de conforto durante a sua estadia na praia, mapeamos os melhores locais para fazer suas compras.',
       [
         { 
-          name: 'Empório da Serra', 
+          name: 'Supermercado Extrabom', 
           img: 'extrabom.jpg', 
-          desc: 'Excelente para quem busca produtos rústicos, pães artesanais de fermentação natural, frios selecionados e itens de empório gourmet.',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Supermercado+Alto+Caparao'
+          desc: 'Excelente para quem busca produtos frescos, padaria completa e itens de utilidade geral bem pertinho do apartamento.',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Supermercado+Extrabom+Itapua'
         },
         { 
-          name: 'Adega Alto de Inverno', 
+          name: 'Supermercado Perim', 
           img: 'perim.jpg', 
-          desc: 'Especializada em vinhos de altitude, licores serranos e chocolates. O lugar perfeito para escolher a bebida da sua noite.',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Emporio+Caparao'
+          desc: 'Um supermercado completo com ótima variedade de produtos, seção de hortifrúti fresco e excelente adega.',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Supermercado+Perim+Itapua'
         }
       ]
     );
 
-    // 🍅 Section: Itens Básicos e Lenha
-    this.createSection(content, 'feiras', '🛒 Supermercados Essenciais', 
-      'Para as necessidades básicas, reposição de café, água, produtos de higiene ou até mesmo lenha e acendedores (quando disponíveis), você encontrará o essencial aqui bem perto.',
+    // 🍅 Section: Feiras
+    this.createSection(content, 'feiras', '🍎 Feiras Livres', 
+      'Aproveite para comprar frutas tropicais frescas, castanhas, queijos e pastel frito na hora nas tradicionais feiras livres do bairro.',
       [
         { 
-          name: 'Supermercado Vila Alpina', 
+          name: 'Feira de Itapuã', 
           img: 'feira_itapua.jpg', 
-          desc: 'Opção robusta para compras gerais. Conta com açougue, padaria básica e tudo que você precisa para manter o chalé abastecido durante a viagem.',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Feira+Placa+Caparao'
+          desc: 'Acontece semanalmente e oferece uma variedade enorme de produtos frescos locais. Perfeito para comprar aquele suco de caldo de cana pós-praia!',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Feira+de+Itapua'
         },
         { 
-          name: 'Mercadinho Local (Lenha e Carvão)', 
+          name: 'Feira das Castanheiras', 
           img: 'feira_castanheiras.jpg', 
-          desc: 'Simples, mas salva vidas. Geralmente possui sacos de lenha, fósforos longos e carvão. Ideal para repor itens rapidamente.',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Feira+Artesanato+Caparao'
+          desc: 'Uma feira rica em opções de quitandas, verduras selecionadas, queijos da fazenda e ótimas opções para um lanche rápido.',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Feira+Praia+da+Costa'
         }
       ]
     );
@@ -106,8 +106,8 @@ export class MarketScene extends Phaser.Scene {
     const menu = document.createElement('div');
     menu.className = 'market-category-menu';
     menu.innerHTML = `
-        <button class="cat-btn active" data-target="supermercados">🍷 Adegas</button>
-        <button class="cat-btn" data-target="feiras">🛒 Essenciais & Lenha</button>
+        <button class="cat-btn active" data-target="supermercados">🛒 Supermercados</button>
+        <button class="cat-btn" data-target="feiras">🍎 Feiras Livres</button>
     `;
 
     menu.querySelectorAll('.cat-btn').forEach(btn => {
@@ -196,32 +196,18 @@ export class MarketScene extends Phaser.Scene {
             position: relative;
             width: 100%;
             height: 100dvh;
-<<<<<<< HEAD
-            overflow: hidden;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            font-family: 'Outfit', 'Inter', sans-serif;
-=======
             overflow-y: auto;
-            background: linear-gradient(135deg, #0B1A13 0%, #1B4332 100%);
-            font-family: 'Cinzel', 'Outfit', 'Inter', sans-serif;
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            font-family: 'Outfit', 'Inter', sans-serif;
             color: #333;
         }
 
         .market-header {
-<<<<<<< HEAD
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 60px;
-            z-index: 1000;
-            background: white;
-=======
             position: sticky;
             top: 0;
             z-index: 2000;
-            background: rgba(11, 26, 19, 0.98);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(15px);
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
             padding: 12px 15px;
             display: flex;
             align-items: center;
@@ -240,7 +226,7 @@ export class MarketScene extends Phaser.Scene {
             border-radius: 12px;
             font-weight: 700;
             font-size: 0.85rem;
-            color: #D4AF37;
+            color: #1e3c72;
             cursor: pointer;
             transition: all 0.2s ease-in-out;
         }
@@ -252,7 +238,7 @@ export class MarketScene extends Phaser.Scene {
         .market-header h1 {
             font-size: 1rem;
             font-weight: 800;
-            color: #D4AF37;
+            color: #1e3c72;
             margin: 0;
             letter-spacing: 0.5px;
             text-align: left;
@@ -290,9 +276,9 @@ export class MarketScene extends Phaser.Scene {
         }
 
         .cat-btn.active {
-            background: #D4AF37;
-            color: #0B1A13;
-            border-color: #D4AF37;
+            background: #2a5298;
+            color: white;
+            border-color: #2a5298;
         }
 
         .market-guide-content {
@@ -366,7 +352,7 @@ export class MarketScene extends Phaser.Scene {
         }
 
         .maps-btn {
-            background: #1B4332;
+            background: #2a5298;
             color: white;
         }
         

@@ -10,7 +10,7 @@ export class LocalGuideScene extends Phaser.Scene {
 
     // 🌊 UI Expert Skill: Mountain Elite Background
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x0B1A13, 0x0B1A13, 0x1B4332, 0x1B4332, 1);
+    bg.fillGradientStyle(0x2a5298, 0x2a5298, 0x1e3c72, 0x1e3c72, 1);
     bg.fillRect(0, 0, width, height);
 
     // 🏆 Landing Page Container (HTML/CSS Overlay)
@@ -22,102 +22,144 @@ export class LocalGuideScene extends Phaser.Scene {
     const header = this.createHeader();
     container.appendChild(header);
 
-    // 🔗 Anchor Menu (Quick-Jump)
-    const anchorMenu = this.createAnchorMenu();
-    container.appendChild(anchorMenu);
-
     // 📄 Main Content Wrapper
     const content = document.createElement('div');
     content.className = 'guide-content';
     container.appendChild(content);
 
-    // 🏔️ Parques e Picos
-    this.addCategorySection(content, "🏔️ Parques e Picos", "section-picos",
-        "O coração da região do Caparaó é marcado por montanhas imponentes e vistas de tirar o fôlego. O clima frio e a altitude formam um cenário perfeito para aventureiros.", [
+    // 🔗 Anchor Menu (Quick-Jump)
+    const anchorMenu = this.createAnchorMenu();
+    content.appendChild(anchorMenu);
+
+    // 🏛️ Histórico
+    this.addCategorySection(content, "🏛️ Pontos Históricos", "section-historico",
+        "Vila Velha não é apenas um destino de belas praias, mas também o berço da história capixaba. Fundada em 1535, nossa cidade reserva tesouros arquitetônicos e religiosos que sobreviveram aos séculos.", [
       {
-        name: "Parque Nacional do Caparaó",
-        desc: "Acesso capixaba (Pedra Menina). Trilhas cênicas, vegetação de altitude e o imponente Pico da Bandeira, o terceiro ponto mais alto do Brasil.",
-        trip: "https://www.tripadvisor.com.br/Attraction_Review-g1589146-d2408332-Reviews-Caparao_National_Park-Alto_Caparao_State_of_Minas_Gerais.html",
-        maps: "https://www.google.com/maps/search/Portaria+Pedra+Menina+Parque+Nacional+do+Caparaó",
-        tag: "picos"
+        name: "Convento da Penha",
+        desc: "O maior símbolo do estado, localizado no topo de um penhasco com uma vista deslumbrante.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d2408107-Reviews-Nossa_Senhora_da_Penha_Convent-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Convento+da+Penha",
+        tag: "historico"
       },
       {
-        name: "Pico da Bandeira",
-        desc: "Aos 2.892 metros de altitude, assistir ao nascer do sol no topo das nuvens é a experiência suprema da região.",
-        trip: "https://www.tripadvisor.com.br/Attraction_Review-g1589146-d2408332-Reviews-Caparao_National_Park-Alto_Caparao_State_of_Minas_Gerais.html",
-        maps: "https://www.google.com/maps/search/Pico+da+Bandeira",
-        tag: "picos"
+        name: "Farol Santa Luzia",
+        desc: "Marco histórico charmoso, construído com peças trazidas da Escócia em 1870.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d8533291-Reviews-Farol_de_Santa_Luzia-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Farol+Santa+Luzia+Vila+Velha",
+        tag: "historico"
+      },
+      {
+        name: "Igreja Matriz de Nossa Senhora do Rosário",
+        desc: "O marco religioso mais antigo em funcionamento no Brasil. Tesouro da colonização.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d6589501-Reviews-Igreja_De_Nossa_Senhora_Do_Rosario-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Igreja+Matriz+Nossa+Senhora+do+Rosario+Vila+Velha",
+        tag: "historico"
+      },
+      {
+        name: "Fábrica de Chocolates Garoto",
+        desc: "Viagem ao mundo dos doces em uma das fábricas mais icônicas da América Latina.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d10807919-Reviews-Museu_Garoto-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Fabrica+Chocolates+Garoto",
+        tag: "historico"
+      },
+      {
+        name: "Casa da Memória de Vila Velha",
+        desc: "O guardião da rica história capixaba, situado em um casarão antigo preservado.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d4377763-Reviews-Casa_da_Memoria_de_Vila_Velha-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Casa+da+Memoria+Vila+Velha",
+        tag: "historico"
+      },
+      {
+        name: "Parque da Prainha",
+        desc: "A praça que marca o local exato onde a cidade foi fundada em 1535.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d8821555-Reviews-Parque_da_Prainha-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Parque+da+Prainha+Vila+Velha",
+        tag: "historico"
       }
     ]);
 
-    // 💦 Cachoeiras
-    this.addCategorySection(content, "💦 Cachoeiras", "section-cachoeiras",
-        "As águas cristalinas (e geladas!) que descem das montanhas formam poços e quedas d'água perfeitos para renovar as energias.", [
+    // 🏖️ Praias
+    this.addCategorySection(content, "🏖️ Melhores Praias", "section-praias",
+        "Com mais de 32 km de litoral, Vila Velha é dona de algumas das praias mais cobiçadas do Sudeste. O sol brilha o ano todo!", [
       {
-        name: "Cachoeiras de Patrimônio da Penha",
-        desc: "Uma vila mística no Caparaó Capixaba com trilhas curtas que revelam poços deslumbrantes como a Cachoeira do Arco-Íris.",
-        trip: "https://www.tripadvisor.com.br/Attraction_Review-g2343207-d10037110-Reviews-Cachoeira_Veu_de_Noiva-Divino_de_Sao_Lourenco_State_of_Espirito_Santo.html",
-        maps: "https://www.google.com/maps/search/Patrimônio+da+Penha",
-        tag: "cachoeiras"
+        name: "Praia da Costa",
+        desc: "A praia urbana mais famosa da cidade. Extensa faixa de areia dourada e águas claras.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d2408104-Reviews-Praia_da_Costa-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Praia+da+Costa",
+        tag: "praias"
       },
       {
-        name: "Poço do Egito",
-        desc: "Em Iúna, este poço de águas cristalinas com tons verde-esmeralda é um dos refúgios mais bonitos da serra.",
-        trip: "https://www.tripadvisor.com.br/Attraction_Review-g2343217-d23805908-Reviews-Poco_Do_Egito-Iuna_State_of_Espirito_Santo.html",
-        maps: "https://www.google.com/maps/search/Poço+do+Egito+Iúna",
-        tag: "cachoeiras"
+        name: "Praia de Itapuã",
+        desc: "A poucos passos do nosso apartamento! Ambiente familiar e ponto de partida para ilhas.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d2408105-Reviews-Praia_de_Itapua-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Praia+de+Itapua+Vila+Velha",
+        tag: "praias"
       },
       {
-        name: "Cachoeira da Fumaça",
-        desc: "Uma queda exuberante e forte no Parque Estadual da Cachoeira da Fumaça. Ótimo acesso.",
-        trip: "https://www.tripadvisor.com.br/Attraction_Review-g2343167-d8675402-Reviews-Cachoeira_da_Fumaca-Alegre_State_of_Espirito_Santo.html",
-        maps: "https://www.google.com/maps/search/Cachoeira+da+Fumaça+Alegre",
-        tag: "cachoeiras"
+        name: "Praia da Sereia",
+        desc: "Refúgio de águas calmas que parecem uma piscina natural. Super segura.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d4056565-Reviews-Praia_da_Sereia-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Praia+da+Sereia+Vila+Velha",
+        tag: "praias"
+      },
+      {
+        name: "Praia Secreta",
+        desc: "Refúgio altamente fotogênico escondido próximo ao Farol, com águas cristalinas.",
+        trip: "https://www.tripadvisor.com.br/LocationPhotoDirectLink-g303319-d15837903-i415886611-Praia_Secreta_de_Vila_Velha-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Praia+Secreta+Vila+Velha",
+        tag: "praias"
       }
     ]);
 
-    // ☕ Rotas do Café
-    this.addCategorySection(content, "☕ Café Especial e Agroturismo", "section-cafes", 
-        "A região do Caparaó e as Montanhas Capixabas ganharam prêmios globais por seus cafés especiais. Visite as propriedades e deguste direto na fonte.", [
+    // 🌳 Natureza
+    this.addCategorySection(content, "🌳 Natureza e Aventura", "section-natureza",
+        "Contraste entre a cidade e a Mata Atlântica. Pôr do sol cinematográfico e agroturismo no interior.", [
       {
-        name: "Tecelagem e Cafés de Dores do Rio Preto",
-        desc: "Propriedades rurais que combinam a tradição do café especial com artesanato primoroso e queijos premiados.",
-        trip: "https://www.tripadvisor.com.br/Tourism-g2343208-Dores_do_Rio_Preto_State_of_Espirito_Santo-Vacations.html",
-        maps: "https://www.google.com/maps/search/Cafés+Dores+do+Rio+Preto",
-        tag: "cafes"
+        name: "Morro do Moreno",
+        desc: "Mirante natural espetacular. Ideal para assistir ao nascer ou pôr do sol.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d3536151-Reviews-Morro_do_Moreno-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Morro+do+Moreno",
+        tag: "natureza"
       },
       {
-        name: "Roteiro do Café em Iúna e Irupi",
-        desc: "Degustação guiada em fazendas familiares, onde é possível conhecer desde a plantação até a torra do café nas montanhas.",
-        trip: "https://www.tripadvisor.com.br/Tourism-g2343217-Iuna_State_of_Espirito_Santo-Vacations.html",
-        maps: "https://www.google.com/maps/search/Rotas+do+café+Caparaó+Capixaba",
-        tag: "cafes"
+        name: "Fazenda Rico Caipira",
+        desc: "Refúgio perfeito de agroturismo com charrete, tirolesa e comida no fogão a lenha.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d9796897-Reviews-Fazenda_Rico_Caipira-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Fazenda+Rico+Caipira",
+        tag: "natureza"
       }
     ]);
 
-    // 🏡 Vilas e Lazer
-    this.addCategorySection(content, "🏡 Vilas Charmosas", "section-vilas",
-        "Centrinhos rústicos ideais para tomar um vinho, passear à noite e curtir o clima de chalé.", [
+    // 🛍️ Shoppings
+    this.addCategorySection(content, "🛍️ Shoppings e Lazer", "section-shoppings",
+        "Grandes complexos comerciais para um dia de chuva ou lazer noturno.", [
       {
-        name: "Centro de Patrimônio da Penha",
-        desc: "Ruas charmosas de paralelepípedo, lojinhas místicas, cervejarias artesanais e gastronomia com ingredientes locais.",
-        trip: "https://www.tripadvisor.com.br/Tourism-g2343207-Divino_de_Sao_Lourenco_State_of_Espirito_Santo-Vacations.html",
-        maps: "https://www.google.com/maps/search/Centro+Patrimônio+da+Penha",
-        tag: "vilas"
+        name: "Shopping Vila Velha",
+        desc: "O maior centro de compras e entretenimento do estado. Ideal para lazer noturno.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d7133210-Reviews-Shopping_Vila_Velha-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Shopping+Vila+Velha",
+        tag: "shoppings"
       },
       {
-        name: "Vila de Pedra Menina",
-        desc: "Último povoado antes da portaria do Parque Nacional, repleto de pousadas rústicas e opções para jantar após a trilha.",
-        trip: "https://www.tripadvisor.com.br/Tourism-g2343208-Dores_do_Rio_Preto_State_of_Espirito_Santo-Vacations.html",
-        maps: "https://www.google.com/maps/search/Pedra+Menina+ES",
-        tag: "vilas"
+        name: "Shopping Praia da Costa",
+        desc: "Ambiente íntimo, charmoso e sofisticado, com foco em moda e gastronomia gourmet.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d4126472-Reviews-Shopping_Praia_Da_Costa-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Shopping+Praia+da+Costa",
+        tag: "shoppings"
+      },
+      {
+        name: "Boulevard Shopping Vila Velha",
+        desc: "Arquitetura moderna, corredores espaçosos e farta área de lazer infantil.",
+        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d3929041-Reviews-Boulevard_Shopping-Vila_Velha_State_of_Espirito_Santo.html",
+        maps: "https://www.google.com/maps/search/Boulevard+Shopping+Vila+Velha",
+        tag: "shoppings"
       }
     ]);
 
     // Footer
     const footer = document.createElement('div');
     footer.className = 'guide-footer';
-    footer.innerHTML = `👋 Tenha uma excelente estadia nas Montanhas Capixabas!`;
+    footer.innerHTML = `👋 Tenha uma excelente estadia em Vila Velha!`;
     content.appendChild(footer);
 
     // 🚀 Inject into Phaser
@@ -205,8 +247,12 @@ export class LocalGuideScene extends Phaser.Scene {
     };
 
     const title = document.createElement('h1');
-    title.innerText = 'AVENTURA & NATUREZA';
-    title.style.fontFamily = 'Cinzel, serif';
+    title.innerText = 'PONTOS TURÍSTICOS';
+    title.style.fontFamily = 'Outfit, sans-serif';
+    title.style.color = '#1e3c72'; // Dark blue matching the image
+    title.style.textAlign = 'center';
+    title.style.margin = '0 auto';
+    title.style.color = '#1e3c72'; // Dark blue matching the image
 
     header.appendChild(backBtn);
     header.appendChild(title);
@@ -220,10 +266,10 @@ export class LocalGuideScene extends Phaser.Scene {
     menu.className = 'anchor-menu';
     
     const categories = [
-        { label: '🏔️ Picos', id: 'section-picos' },
-        { label: '💦 Cachoeiras', id: 'section-cachoeiras' },
-        { label: '☕ Grãos', id: 'section-cafes' },
-        { label: '🏡 Vilas', id: 'section-vilas' }
+        { label: '🏛️ Histórico', id: 'section-historico' },
+        { label: '🏖️ Praias', id: 'section-praias' },
+        { label: '🌳 Natureza', id: 'section-natureza' },
+        { label: '🛍️ Shoppings', id: 'section-shoppings' }
     ];
 
     categories.forEach(cat => {
@@ -326,15 +372,9 @@ export class LocalGuideScene extends Phaser.Scene {
             position: relative;
             width: 100%;
             height: 100dvh;
-<<<<<<< HEAD
-            overflow: hidden;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            font-family: 'Outfit', 'Inter', sans-serif;
-=======
             overflow-y: auto;
-            background: linear-gradient(135deg, #0B1A13 0%, #1B4332 100%);
-            font-family: 'Cinzel', 'Outfit', 'Inter', sans-serif;
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            font-family: 'Outfit', 'Inter', sans-serif;
             color: #333;
         }
 
@@ -354,12 +394,7 @@ export class LocalGuideScene extends Phaser.Scene {
             top: 0; left: 0; right: 0;
             height: 60px;
             z-index: 1000;
-<<<<<<< HEAD
             background: white;
-=======
-            background: rgba(11, 26, 19, 0.95);
-            backdrop-filter: blur(10px);
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
             padding: 15px 20px;
             display: flex;
             align-items: center;
@@ -376,7 +411,7 @@ export class LocalGuideScene extends Phaser.Scene {
             padding: 8px 12px;
             border-radius: 20px;
             font-weight: 600;
-            color: #D4AF37;
+            color: #1e3c72;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -384,7 +419,7 @@ export class LocalGuideScene extends Phaser.Scene {
         .guide-header h1 {
             margin: 0;
             font-size: 1.15rem;
-            color: #D4AF37;
+            color: #1e3c72;
             letter-spacing: 2px;
             font-weight: 950;
             text-transform: uppercase;
@@ -403,17 +438,19 @@ export class LocalGuideScene extends Phaser.Scene {
             grid-template-columns: 1fr 1fr;
             gap: 12px;
             background: rgba(11, 26, 19, 0.1);
+            margin-bottom: 20px;
+            border-radius: 12px;
         }
 
         .anchor-menu button {
-            background: #0B1A13;
-            border: 1px solid #D4AF37;
-            padding: 14px 10px;
-            border-radius: 16px;
+            background: white;
+            border: 2px solid #2a5298;
+            padding: 12px 10px;
+            border-radius: 12px;
             font-size: 0.85rem;
-            font-weight: 700;
-            color: #D4AF37;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            font-weight: 800;
+            color: #1e3c72;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             cursor: pointer;
             display: flex;
             align-items: center;

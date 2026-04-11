@@ -10,7 +10,7 @@ export class WifiScene extends Phaser.Scene {
 
     // 🌊 UI Expert Background
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x0B1A13, 0x0B1A13, 0x1B4332, 0x1B4332, 1);
+    bg.fillGradientStyle(0x2a5298, 0x2a5298, 0x1e3c72, 0x1e3c72, 1);
     bg.fillRect(0, 0, width, height);
 
     // 🏆 Content Container
@@ -30,7 +30,7 @@ export class WifiScene extends Phaser.Scene {
     // 👋 Intro Message
     const intro = document.createElement('div');
     intro.className = 'wifi-intro';
-    intro.innerHTML = `<p>Fique conectado e aproveite o clima da Montanha!</p>`;
+    intro.innerHTML = `<p>Fique conectado e aproveite sua estadia em Itapuã!</p>`;
     content.appendChild(intro);
 
     // ⚡ HERO CARD: WiFi Info
@@ -122,8 +122,8 @@ export class WifiScene extends Phaser.Scene {
             btn.style.color = 'white';
             setTimeout(() => {
                 btn.innerHTML = '📋 Copiar Senha';
-                btn.style.background = 'linear-gradient(135deg, #0B1A13, #1B4332)';
-                btn.style.color = '#D4AF37';
+                btn.style.background = '#2a5298';
+                btn.style.color = 'white';
             }, 2000);
         });
       };
@@ -160,13 +160,8 @@ export class WifiScene extends Phaser.Scene {
             position: relative;
             width: 100%;
             height: 100dvh;
-<<<<<<< HEAD
-            overflow: hidden;
-            background: radial-gradient(circle at top right, #2a5298, #1e3c72);
-=======
             overflow-y: auto;
-            background: linear-gradient(135deg, #0B1A13 0%, #1B4332 100%);
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
             font-family: 'Outfit', sans-serif;
             color: white;
         }
@@ -192,7 +187,7 @@ export class WifiScene extends Phaser.Scene {
             padding: 10px 16px;
             border-radius: 12px;
             font-weight: 700;
-            color: #D4AF37;
+            color: #1e3c72;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -253,7 +248,7 @@ export class WifiScene extends Phaser.Scene {
             position: absolute;
             bottom: 0; left: 0; right: 0;
             height: 10px;
-            background: linear-gradient(90deg, #D4AF37, #ffaa00);
+            background: linear-gradient(90deg, #ffcc00, #ffaa00);
         }
 
         .card-icon { 
@@ -279,15 +274,15 @@ export class WifiScene extends Phaser.Scene {
         }
         .wifi-row strong { 
             font-size: 2.2rem; 
-            color: #1B4332; 
+            color: #1e3c72; 
             font-weight: 900;
             display: block;
         }
 
         .copy-btn {
-            background: linear-gradient(135deg, #0B1A13, #1B4332);
-            color: #D4AF37;
-            border: 1px solid #D4AF37;
+            background: #2a5298;
+            color: white;
+            border: none;
             padding: 16px 32px;
             border-radius: 100px;
             font-weight: 800;

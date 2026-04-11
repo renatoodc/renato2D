@@ -10,7 +10,7 @@ export class RulesScene extends Phaser.Scene {
 
     // 🌊 UI Expert Background
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x0B1A13, 0x0B1A13, 0x1B4332, 0x1B4332, 1);
+    bg.fillGradientStyle(0x2a5298, 0x2a5298, 0x1e3c72, 0x1e3c72, 1);
     bg.fillRect(0, 0, width, height);
 
     // 🏆 Content Container
@@ -148,13 +148,8 @@ export class RulesScene extends Phaser.Scene {
             position: relative;
             width: 100%;
             height: 100dvh;
-<<<<<<< HEAD
-            overflow: hidden;
-            background: radial-gradient(circle at top right, #2a5298, #1e3c72);
-=======
             overflow-y: auto;
-            background: linear-gradient(135deg, #0B1A13 0%, #1B4332 100%);
->>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
             font-family: 'Outfit', sans-serif;
             color: white;
         }
@@ -180,7 +175,7 @@ export class RulesScene extends Phaser.Scene {
             padding: 10px 16px;
             border-radius: 12px;
             font-weight: 700;
-            color: #D4AF37;
+            color: #1e3c72;
             cursor: pointer;
             font-size: 0.9rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -189,7 +184,7 @@ export class RulesScene extends Phaser.Scene {
         .rules-header h1 {
             margin: 0;
             font-size: 1.1rem;
-            color: #D4AF37;
+            color: #1e3c72;
             letter-spacing: 1px;
             font-weight: 950;
             text-align: left;

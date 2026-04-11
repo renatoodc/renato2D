@@ -49,7 +49,7 @@ export default class Preloader extends Phaser.Scene {
     this.load.image('welcome_market', '/assets/icons/market.png');
     this.load.image('welcome_host', '/assets/icons/host.png');
 
-    this.load.image('logo_stayverse', '/assets/logo-stayverse.png..png');
+    this.load.image('logo_stayverse', '/assets/logo-stayverse.png');
     this.load.video('metropolis_bg', '/assets/metropolis_bg.mp4');
     
     this.load.on('loaderror', (file: any) => {

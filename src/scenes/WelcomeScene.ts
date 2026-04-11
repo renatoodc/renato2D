@@ -27,16 +27,18 @@ export default class WelcomeScene extends Phaser.Scene {
     const { width, height } = this.scale;
     const isPortrait = height > width;
 
+    this.birdLayer = this.add.container(0, 0).setDepth(10);
+
     // 1. Dynamic Beach Background Integration
     this.createDynamicBeachBackground(width, height);
 
-    // 2. Canyon Vignette & Lighting
+    // 2. Canyon Vignette & Lighting (REMOVIDO para evitar aspecto escuro)
+    /*
     const vignetteLayer = this.add.graphics();
     vignetteLayer.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.3, 0.3, 0.7, 0.7);
     vignetteLayer.fillRect(0, 0, width, height);
     vignetteLayer.setDepth(1);
-
-    this.birdLayer = this.add.container(0, 0).setDepth(10);
+    */
     
     this.scale.on('resize', () => {
         if (this.scene.isActive()) this.scene.restart();
@@ -294,17 +296,16 @@ export default class WelcomeScene extends Phaser.Scene {
         this.birdLayer.add(bird);
     }
   }
-
   private createProfessionalIcon(x: number, y: number, label: string, isLocked: boolean, iconKey: string, wrapWidth: number, isGame: boolean = false) {
     const container = this.add.container(x, y);
     const baseGraphics = this.add.graphics();
     baseGraphics.fillStyle(0x000000, 0.4).fillCircle(1, 4, 38);
     if (isGame) {
-      baseGraphics.fillStyle(0xffffff, 0.35).fillCircle(0, 0, 40);
-      baseGraphics.lineStyle(1.5, 0xffffff, 0.7).strokeCircle(0, 0, 40);
+      baseGraphics.fillStyle(0x111115, 0.3).fillCircle(0, 0, 40);
+      baseGraphics.lineStyle(2, 0xffaa00, 0.8).strokeCircle(0, 0, 40);
     } else {
-      baseGraphics.fillStyle(0x07070a, 0.2).fillCircle(0, 0, 40);
-      baseGraphics.lineStyle(1.5, 0xe0e6ed, 0.7).strokeCircle(0, 0, 40);
+      baseGraphics.fillStyle(0xffffff, 0.15).fillCircle(0, 0, 40);
+      baseGraphics.lineStyle(2, 0xffffff, 0.5).strokeCircle(0, 0, 40);
     }
     container.add(baseGraphics);
     let size = 115;
