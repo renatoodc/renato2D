@@ -14,9 +14,9 @@ export default class StoryScene extends Phaser.Scene {
   create() {
     const { width, height } = this.scale;
 
-    // 🌅 Cinematic Background - Gradient Sunset (Fallback for high styling)
+    // 🌅 Cinematic Background - Mountain Night
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x1a2a6c, 0xb21f1f, 0xfdbb2d, 0xfdbb2d, 1);
+    bg.fillGradientStyle(0x07110c, 0x0B1A13, 0x1B4332, 0x1B4332, 1);
     bg.fillRect(0, 0, width, height);
 
     // 🧥 Portrait of the selected character
@@ -38,10 +38,10 @@ export default class StoryScene extends Phaser.Scene {
     panelBg.strokeRoundedRect(panelX - panelW / 2, panelY - panelH / 2, panelW, panelH, 30);
 
     // ✍️ Typography & Objectives
-    this.add.text(panelX, panelY - panelH / 2 + 60, 'BEM-VINDO À ITAPUÃ', {
+    this.add.text(panelX, panelY - panelH / 2 + 60, 'BEM-VINDO AO CAPARAÓ', {
       fontFamily: 'Montserrat',
       fontSize: '28px',
-      color: '#ffffff',
+      color: '#D4AF37',
       fontStyle: '900',
       align: 'center'
     }).setOrigin(0.5);
@@ -54,9 +54,9 @@ export default class StoryScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     const objectives = [
-      { icon: '📍', title: 'A ORLA', text: 'Explore o famoso calçadão\ne sinta a energia Capixaba.' },
-      { icon: '🏝️', title: 'O ACESSO', text: 'Encontre o caminho de areia\npara chegar até a praia.' },
-      { icon: '💎', title: 'TESOUROS', text: 'Vasculhe as conchas na praia\ne ache prêmios instantâneos!' }
+      { icon: '📍', title: 'A VILA', text: 'Explore o centrinho rústico\ne sinta o clima do Caparaó.' },
+      { icon: '🏕️', title: 'O ACESSO', text: 'Encontre a trilha certa\npara chegar à cachoeira.' },
+      { icon: '💎', title: 'TESOUROS', text: 'Vasculhe as pedras\ne ache prêmios da montanha!' }
     ];
 
     const spacingY = isSmallScreen ? 70 : 100;
@@ -70,7 +70,7 @@ export default class StoryScene extends Phaser.Scene {
       this.add.text(panelX - panelW / 2 + 75, yPos - 12, obj.title, {
         fontFamily: 'Montserrat',
         fontSize: isSmallScreen ? '15px' : '18px',
-        color: '#fdbb2d',
+        color: '#D4AF37',
         fontStyle: '800'
       }).setOrigin(0, 0.5);
 

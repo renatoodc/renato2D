@@ -10,7 +10,7 @@ export class CheckoutScene extends Phaser.Scene {
 
     // 🌊 UI Expert Skill: Resort Elite Background (Consistent with Guide)
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x1e3c72, 0x1e3c72, 0x2a5298, 0x2a5298, 1);
+    bg.fillGradientStyle(0x0B1A13, 0x0B1A13, 0x1B4332, 0x1B4332, 1);
     bg.fillRect(0, 0, width, height);
 
     // 🏆 Content Container (HTML/CSS Overlay)
@@ -31,7 +31,7 @@ export class CheckoutScene extends Phaser.Scene {
     const intro = document.createElement('div');
     intro.className = 'checkout-intro';
     intro.innerHTML = `
-        <p>Esperamos que você tenha aproveitado ao máximo sua estadia e leve ótimas lembranças de Itapuã!</p>
+        <p>Esperamos que você tenha aproveitado ao máximo sua estadia e leve ótimas lembranças da Montanha!</p>
     `;
     content.appendChild(intro);
 
@@ -116,7 +116,7 @@ export class CheckoutScene extends Phaser.Scene {
     footer.className = 'checkout-footer';
     footer.innerHTML = `
         <p>Obrigado por escolher nosso espaço!</p>
-        <strong>Boa viagem de volta! 🌊</strong>
+        <strong>Boa viagem de volta! 🏔️☕</strong>
     `;
     content.appendChild(footer);
 
@@ -194,8 +194,13 @@ export class CheckoutScene extends Phaser.Scene {
             position: relative;
             width: 100%;
             height: 100dvh;
+<<<<<<< HEAD
             overflow: hidden;
             background: radial-gradient(circle at top right, #2a5298, #1e3c72);
+=======
+            overflow-y: auto;
+            background: linear-gradient(135deg, #0B1A13 0%, #1B4332 100%);
+>>>>>>> 0ae1c626049b3f7fbf97f56a19d48a58009428c0
             font-family: 'Outfit', sans-serif;
             color: white;
         }
@@ -221,7 +226,7 @@ export class CheckoutScene extends Phaser.Scene {
             padding: 10px 16px;
             border-radius: 12px;
             font-weight: 700;
-            color: #1e3c72;
+            color: #D4AF37;
             cursor: pointer;
             font-size: 0.9rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -230,7 +235,7 @@ export class CheckoutScene extends Phaser.Scene {
         .checkout-header h1 {
             margin: 0;
             font-size: 1.1rem;
-            color: #1e3c72;
+            color: #D4AF37;
             letter-spacing: 1px;
             font-weight: 950;
             text-align: left;
@@ -285,7 +290,7 @@ export class CheckoutScene extends Phaser.Scene {
 
         .time-card .card-icon { font-size: 2.5rem; background: #f8f9fa; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
         .time-card .card-text span { display: block; font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 4px; }
-        .time-card .card-text strong { display: block; font-size: 2.22rem; color: #1e3c72; font-weight: 900; line-height: 1; }
+        .time-card .card-text strong { display: block; font-size: 2.22rem; color: #1B4332; font-weight: 900; line-height: 1; }
 
         .checkout-note p {
             color: rgba(255,255,255,0.85);
@@ -326,8 +331,8 @@ export class CheckoutScene extends Phaser.Scene {
 
         .cta-button {
             display: inline-block;
-            background: linear-gradient(135deg, #ffcc00, #ffaa00);
-            color: #1e3c72;
+            background: linear-gradient(135deg, #D4AF37, #ffaa00);
+            color: #0B1A13;
             text-decoration: none;
             padding: 18px 36px;
             border-radius: 100px;
