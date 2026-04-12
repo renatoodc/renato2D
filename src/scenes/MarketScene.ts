@@ -33,38 +33,62 @@ export class MarketScene extends Phaser.Scene {
 
     // 🛒 Section: Supermercados
     this.createSection(content, 'supermercados', '🛒 Supermercados', 
-      'Para garantir o máximo de conforto durante a sua estadia na praia, mapeamos os melhores locais para fazer suas compras.',
+      'Para garantir o máximo de conforto durante a sua estadia, mapeamos os melhores supermercados e lojas de conveniência a poucos passos do apartamento. Seja para comprar os ingredientes de um jantar especial, garantir a carne do churrasco ou apenas repor itens básicos e bebidas geladas, você encontrará opções excelentes sem precisar tirar o carro da garagem (mercados no ES não abrem aos domingos).',
       [
         { 
-          name: 'Supermercado Extrabom', 
+          name: 'Extrabom Supermercados Itapoã', 
           img: 'extrabom.jpg', 
-          desc: 'Excelente para quem busca produtos frescos, padaria completa e itens de utilidade geral bem pertinho do apartamento.',
+          desc: 'Localizado a menos de 300 metros do apartamento, ideal para ir a pé e resolver as compras da semana. Ótima opção com preços excelentes, boa seção de frutas e verduras frescas e bastante variedade de marcas.',
           maps: 'https://www.google.com/maps/search/?api=1&query=Supermercado+Extrabom+Itapua'
         },
         { 
-          name: 'Supermercado Perim', 
+          name: 'Supermercado Perim - Itapuã', 
           img: 'perim.jpg', 
-          desc: 'Um supermercado completo com ótima variedade de produtos, seção de hortifrúti fresco e excelente adega.',
+          desc: 'É indiscutivelmente o melhor e mais completo supermercado de toda a região! Estrutura premium, excelente para quem busca produtos diferenciados, importados, uma padaria de altíssima qualidade e cortes de carnes especiais.',
           maps: 'https://www.google.com/maps/search/?api=1&query=Supermercado+Perim+Itapua'
+        },
+        { 
+          name: 'Supermercado Carone - Itapoã', 
+          img: 'carone.jpg', 
+          desc: 'A cerca de 3 minutinhos de caminhada. É um dos supermercados mais completos e premium do bairro. Excelente opção para comprar carnes para churrasco, vinhos, queijos e lanches rápidos.',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Supermercado+Carone+Itapua'
+        },
+        { 
+          name: 'Supermercado BH - Itapoã', 
+          img: 'bh.jpg', 
+          desc: 'Famosos pelos preços super competitivos e excelente custo-benefício para compras maiores. Muito prático para o dia a dia e para repor bebidas e itens básicos de forma econômica durante a estadia.',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Supermercado+BH+Itapua'
+        },
+        { 
+          name: 'Hipermercado Carrefour (Antigo Walmart)', 
+          img: 'carrefour.jpg', 
+          desc: 'Localizado dentro do Shopping Vila Velha, unindo a conveniência das compras com um passeio completo. Hipermercado gigantesco, ideal para grandes volumes. (Dica: por estar dentro do Shopping, é um dos únicos mercados aberto aos domingos).',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Carrefour+Shopping+Vila+Velha'
         }
       ]
     );
 
     // 🍅 Section: Feiras
-    this.createSection(content, 'feiras', '🍎 Feiras Livres', 
-      'Aproveite para comprar frutas tropicais frescas, castanhas, queijos e pastel frito na hora nas tradicionais feiras livres do bairro.',
+    this.createSection(content, 'feiras', '🍅 Feiras e Mercados Tradicionais', 
+      'Nada melhor do que viver a experiência local visitando as tradicionais feiras da nossa cidade! Elas acontecem pela manhã e são perfeitas para comprar produtos frescos, artesanatos e tomar aquele clássico café da manhã de rua.',
       [
         { 
-          name: 'Feira de Itapuã', 
+          name: 'Feira Livre de Itapuã', 
           img: 'feira_itapua.jpg', 
-          desc: 'Acontece semanalmente e oferece uma variedade enorme de produtos frescos locais. Perfeito para comprar aquele suco de caldo de cana pós-praia!',
+          desc: 'Sábados, 04h às 13h, na Rua Jaime Duarte (próximo ao Estádio Tupy). Fica super pertinho do apartamento! É uma das maiores feiras da região, ideal para frutas, temperos e o tradicional pastel com caldo de cana.',
           maps: 'https://www.google.com/maps/search/?api=1&query=Feira+de+Itapua'
         },
         { 
-          name: 'Feira das Castanheiras', 
+          name: 'Feira Parque das Castanheiras', 
           img: 'feira_castanheiras.jpg', 
-          desc: 'Uma feira rica em opções de quitandas, verduras selecionadas, queijos da fazenda e ótimas opções para um lanche rápido.',
+          desc: 'Sábados pela manhã, na Rua João Joaquim da Mota (Praia da Costa). Uma feirinha com pegada "premium" e super charmosa. Excelente lugar para hortifrúti selecionado, artesanato, decoração e flores.',
           maps: 'https://www.google.com/maps/search/?api=1&query=Feira+Praia+da+Costa'
+        },
+        { 
+          name: 'Mercado de Peixes da Prainha', 
+          img: 'mercado_peixes.jpg', 
+          desc: 'Sábados e domingos pela manhã (até as 13h), localizado no Parque da Prainha. O ponto mais tradicional da cidade para comprar pescados e frutos do mar super frescos, tanto no varejo quanto atacado.',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Mercado+de+Peixes+Vila+Velha'
         }
       ]
     );
@@ -94,8 +118,8 @@ export class MarketScene extends Phaser.Scene {
     };
 
     const title = document.createElement('h1');
-    title.innerText = 'EMPÓRIO & VINHOS';
-    title.style.fontFamily = 'Cinzel, serif';
+    title.innerText = 'MERCADOS & FEIRAS';
+    title.style.fontFamily = 'Outfit, sans-serif';
 
     header.appendChild(backBtn);
     header.appendChild(title);

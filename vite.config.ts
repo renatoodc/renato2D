@@ -37,6 +37,7 @@ export default defineConfig({
     port: 3005
   },
   build: {
-    assetsInlineLimit: 0
+    assetsInlineLimit: 0,
+    chunkSizeWarningLimit: 2000
   }
 });

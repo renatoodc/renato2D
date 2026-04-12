@@ -31,7 +31,7 @@ export class CheckoutScene extends Phaser.Scene {
     const intro = document.createElement('div');
     intro.className = 'checkout-intro';
     intro.innerHTML = `
-        <p>Esperamos que você tenha aproveitado ao máximo sua estadia e leve ótimas lembranças da Montanha!</p>
+        <p>Esperamos que você tenha aproveitado ao máximo sua estadia e leve ótimas lembranças da Praia!</p>
     `;
     content.appendChild(intro);
 
@@ -116,7 +116,7 @@ export class CheckoutScene extends Phaser.Scene {
     footer.className = 'checkout-footer';
     footer.innerHTML = `
         <p>Obrigado por escolher nosso espaço!</p>
-        <strong>Boa viagem de volta! 🏔️☕</strong>
+        <strong>Boa viagem de volta! 🏖️🌊</strong>
     `;
     content.appendChild(footer);
 

@@ -14,9 +14,9 @@ export default class StoryScene extends Phaser.Scene {
   create() {
     const { width, height } = this.scale;
 
-    // 🌅 Cinematic Background - Mountain Night
+    // 🌅 Cinematic Background - Beach Blue
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x07110c, 0x0B1A13, 0x1B4332, 0x1B4332, 1);
+    bg.fillGradientStyle(0x2a5298, 0x2a5298, 0x1e3c72, 0x1e3c72, 1);
     bg.fillRect(0, 0, width, height);
 
     // 🧥 Portrait of the selected character
@@ -38,7 +38,7 @@ export default class StoryScene extends Phaser.Scene {
     panelBg.strokeRoundedRect(panelX - panelW / 2, panelY - panelH / 2, panelW, panelH, 30);
 
     // ✍️ Typography & Objectives
-    this.add.text(panelX, panelY - panelH / 2 + 60, 'BEM-VINDO AO CAPARAÓ', {
+    this.add.text(panelX, panelY - panelH / 2 + 60, 'BEM-VINDO A ITAPUÃ', {
       fontFamily: 'Montserrat',
       fontSize: '28px',
       color: '#D4AF37',
@@ -46,7 +46,7 @@ export default class StoryScene extends Phaser.Scene {
       align: 'center'
     }).setOrigin(0.5);
 
-    this.add.text(panelX, panelY - panelH / 2 + 120, 'Sua jornada começa agora...', {
+    this.add.text(panelX, panelY - panelH / 2 + 120, 'Sua estadia na praia começa agora...', {
       fontFamily: 'Montserrat',
       fontSize: '16px',
       color: '#cccccc',
@@ -54,9 +54,9 @@ export default class StoryScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     const objectives = [
-      { icon: '📍', title: 'A VILA', text: 'Explore o centrinho rústico\ne sinta o clima do Caparaó.' },
-      { icon: '🏕️', title: 'O ACESSO', text: 'Encontre a trilha certa\npara chegar à cachoeira.' },
-      { icon: '💎', title: 'TESOUROS', text: 'Vasculhe as pedras\ne ache prêmios da montanha!' }
+      { icon: '📍', title: 'A ORLA', text: 'Explore o calçadão de Itapuã\ne sinta a brisa do mar.' },
+      { icon: '🏖️', title: 'A PRAIA', text: 'Aproveite o sol e encontre\no seu lugar na areia.' },
+      { icon: '🐚', title: 'CONCHAS', text: 'Inspecione as conchas\ne ganhe prêmios exclusivos!' }
     ];
 
     const spacingY = isSmallScreen ? 70 : 100;
