@@ -12,6 +12,49 @@
     <!-- UI Overlay for Dialogue and DOM Elements -->
     <div id="ui-layer" class="ui-layer">
       <div id="interaction-hint" class="interaction-hint">PRESSIONE PARA INSPECIONAR</div>
+      
+      <!-- Welcome Scene DOM Overlay -->
+      <div id="welcome-overlay" class="welcome-overlay" style="display: none;">
+        <div class="welcome-grid">
+          <div class="grid-item" data-action="rules">
+            <div class="icon-wrapper"><img src="/assets/icons/rules.png" alt="Rules"></div>
+            <span>REGRAS DA CASA</span>
+          </div>
+          <div class="grid-item" data-action="wifi">
+            <div class="icon-wrapper"><img src="/assets/icons/wifi.png" alt="Wi-Fi"></div>
+            <span>WI-FI E STREAMING</span>
+          </div>
+          <div class="grid-item" data-action="checkout">
+            <div class="icon-wrapper"><img src="/assets/icons/check_in_out.png" alt="Check-in"></div>
+            <span>CHECK-IN / OUT</span>
+          </div>
+          <div class="grid-item" data-action="visit">
+            <div class="icon-wrapper"><img src="/assets/icons/visit.png" alt="Guia"></div>
+            <span>GUIA TURÍSTICO</span>
+          </div>
+          <div class="grid-item" data-action="bakery">
+            <div class="icon-wrapper"><img src="/assets/icons/bakery.png" alt="Padaria"></div>
+            <span>PADARIAS & CAFÉS</span>
+          </div>
+          <div class="grid-item" data-action="restaurant">
+            <div class="icon-wrapper"><img src="/assets/icons/restaurant.png" alt="Restaurante"></div>
+            <span>BARES & RESTAURANTES</span>
+          </div>
+          <div class="grid-item" data-action="game" id="btn-game">
+            <div class="icon-wrapper"><img src="/assets/icons/game.png" alt="VIP"></div>
+            <span>BENEFÍCIO VIP</span>
+          </div>
+          <div class="grid-item" data-action="market">
+            <div class="icon-wrapper"><img src="/assets/icons/market.png" alt="Mercado"></div>
+            <span>MERCADOS</span>
+          </div>
+          <div class="grid-item" data-action="host">
+            <div class="icon-wrapper"><img src="/assets/icons/host.png" alt="Contato"></div>
+            <span>CONTATO</span>
+          </div>
+        </div>
+      </div>
+
       <div id="dialogue-box-v2" class="dialogue-box" style="display: none;">
         <div class="dialogue-speaker" id="dialogue-speaker"></div>
         <div class="dialogue-text" id="dialogue-text"></div>
