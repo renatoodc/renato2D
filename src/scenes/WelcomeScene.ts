@@ -102,7 +102,7 @@ export default class WelcomeScene extends Phaser.Scene {
     // Header 3 (Bottom): CENTRAL DO HÓSPEDE
     this.add.text(width / 2, height * (titlePadding + 0.115), 'CENTRAL DO HÓSPEDE', {
       fontFamily: 'Montserrat', 
-      fontSize: isPortrait ? (isSmallScreen ? '18px' : '23px') : '28px', 
+      fontSize: isPortrait ? (isSmallScreen ? '24px' : '30px') : '36px', 
       color: '#E0E6ED', 
       fontStyle: 'light', 
       letterSpacing: 5
@@ -146,9 +146,9 @@ export default class WelcomeScene extends Phaser.Scene {
     ];
 
     const cols = isPortrait ? 3 : 5;
-    const startY = isPortrait ? (isSmallScreen ? height * 0.30 : height * 0.36) : height * 0.38;
-    const spacingY = isPortrait ? (isSmallScreen ? height * 0.20 : height * 0.22) : height * 0.22;
-    const marginX = isPortrait ? (isSmallScreen ? width * 0.12 : width * 0.15) : width * 0.10;
+    const startY = isPortrait ? (isSmallScreen ? height * 0.28 : height * 0.32) : height * 0.38;
+    const spacingY = isPortrait ? (isSmallScreen ? height * 0.21 : height * 0.24) : height * 0.23;
+    const marginX = isPortrait ? (isSmallScreen ? width * 0.10 : width * 0.12) : width * 0.10;
     const availableWidth = width - (marginX * 2);
 
     items.forEach((item, index) => {
@@ -227,7 +227,7 @@ export default class WelcomeScene extends Phaser.Scene {
         bird.x += bird.speed;
         if (bird.x > this.scale.width + 100) {
             bird.x = -100;
-            bird.y = this.scale.height * (0.1 + Math.random() * 0.2); 
+            bird.y = this.scale.height * (0.08 + Math.random() * 0.14); 
             bird.baseYSine = bird.y;
         }
         bird.y = bird.baseYSine + (Math.sin(time * 0.0006 * bird.speed + bird.phase) * 12);
@@ -285,7 +285,7 @@ export default class WelcomeScene extends Phaser.Scene {
     this.birds = [];
     for (let i = 0; i < 3; i++) {
         const x = Math.random() * width;
-        const y = height * (0.15 + Math.random() * 0.2);
+        const y = height * (0.08 + Math.random() * 0.14);
         const bird = this.add.graphics() as any;
         bird.setPosition(x, y);
         bird.speed = 0.35 + Math.random() * 0.3;
@@ -308,18 +308,19 @@ export default class WelcomeScene extends Phaser.Scene {
       baseGraphics.lineStyle(2, 0xffffff, 0.5).strokeCircle(0, 0, 40);
     }
     container.add(baseGraphics);
-    let size = 115;
+    const isPortrait = this.scale.height > this.scale.width;
+    let size = isPortrait ? 100 : 115;
     let offsetY = -8;
     switch (iconKey) {
-      case 'welcome_rules':
+      case 'welcome_rules': size = isPortrait ? 100 : 115; offsetY = -15; break;
       case 'welcome_check_in_out':
-      case 'welcome_wifi': size = 115; offsetY = -8; break;
-      case 'welcome_market': size = 125; offsetY = -8; break;
-      case 'welcome_game': size = 130; offsetY = -15; break;
-      case 'welcome_visit': size = 148; offsetY = -10; break;
-      case 'welcome_restaurant': size = 155; offsetY = -10; break;
-      case 'welcome_bakery': size = 160; offsetY = -12; break;
-      case 'welcome_host': size = 160; offsetY = -15; break;
+      case 'welcome_wifi': size = isPortrait ? 100 : 115; offsetY = -8; break;
+      case 'welcome_market': size = isPortrait ? 110 : 125; offsetY = -8; break;
+      case 'welcome_game': size = isPortrait ? 115 : 130; offsetY = -15; break;
+      case 'welcome_visit': size = isPortrait ? 125 : 148; offsetY = -10; break;
+      case 'welcome_restaurant': size = isPortrait ? 130 : 155; offsetY = -10; break;
+      case 'welcome_bakery': size = isPortrait ? 135 : 160; offsetY = -12; break;
+      case 'welcome_host': size = isPortrait ? 140 : 160; offsetY = -15; break;
     }
     const iconImg = this.add.image(0, offsetY, iconKey).setOrigin(0.5);
     const scale = Math.min(size / iconImg.width, size / iconImg.height);
@@ -328,7 +329,7 @@ export default class WelcomeScene extends Phaser.Scene {
     container.add(iconShadow);
     container.add(iconImg);
     const isSmallScreen = this.scale.height < 680;
-    const labelY = isSmallScreen ? 46 : 56;
+    const labelY = isPortrait ? (isSmallScreen ? 50 : 64) : (isSmallScreen ? 46 : 56);
     const labelText = this.add.text(0, labelY, label.toUpperCase(), { 
       fontFamily: 'Outfit', fontSize: isSmallScreen ? '11px' : '12px', color: '#ffffff', fontStyle: '900', letterSpacing: 1, align: 'center', wordWrap: { width: wrapWidth, useAdvancedWrap: true }, lineSpacing: -3
     }).setOrigin(0.5, 0);
