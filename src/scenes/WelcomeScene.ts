@@ -108,112 +108,173 @@ export default class WelcomeScene extends Phaser.Scene {
       letterSpacing: 5
     }).setOrigin(0.5).setStroke('#000000', 3).setShadow(2, 2, 'rgba(0,0,0,0.5)', 4).setDepth(20);
 
-    // 4. Icons (DOM Integrated)
-    this.setupDOMGrid();
-  }
+    // 4. Icons (Professional Phaser Distribuition)
+    const items = [
+      { label: 'REGRAS\nDA CASA', icon: 'welcome_rules', callback: () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('RulesScene'));
+      }},
+      { label: 'WI-FI\nE STREAMING', icon: 'welcome_wifi', callback: () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('WifiScene'));
+      }},
+      { label: 'CHECK-IN / OUT', icon: 'welcome_check_in_out', callback: () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('CheckoutScene'));
+      }},
+      { label: 'GUIA\nTURÍSTICO', icon: 'welcome_visit', callback: () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('LocalGuideScene'));
+      }},
+      { label: 'PADARIAS\n& CAFÉS', icon: 'welcome_bakery', callback: () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('BakeryScene'));
+      }},
+      { label: 'BARES &\nRESTAURANTES', icon: 'welcome_restaurant', callback: () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('RestaurantScene'));
+      }},
+      { label: 'BENEFÍCIO\nVIP', icon: 'welcome_game', callback: () => this.startGame(), locked: true },
+      { label: 'MERCADOS', icon: 'welcome_market', callback: () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('MarketScene'));
+      }},
+      { label: 'CONTATO', icon: 'welcome_host', callback: () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('ContactScene'));
+      }},
+    ];
 
-  private setupDOMGrid() {
-    const overlay = document.getElementById('welcome-overlay');
-    if (!overlay) return;
+    const cols = isPortrait ? 3 : 5;
+    // UI Professional: Better StartY to clear Logo and Spacing for Breathing Room
+    const startY = isPortrait ? (isSmallScreen ? height * 0.38 : height * 0.40) : height * 0.42;
+    const spacingY = isPortrait ? (isSmallScreen ? height * 0.21 : height * 0.22) : height * 0.24;
+    // UI Professional: marginX 12% is the "Magic Number" to prevent cutting on curved screens
+    const marginX = isPortrait ? (width * 0.12) : (width * 0.14);
+    const availableWidth = width - (marginX * 2);
 
-    overlay.style.display = 'flex';
-    // Trigger CSS animation
-    setTimeout(() => overlay.classList.add('visible'), 50);
+    items.forEach((item, index) => {
+      const col = index % cols;
+      const row = Math.floor(index / cols);
+      
+      const x = marginX + (col * (availableWidth / (cols - 1)));
+      const y = startY + row * spacingY;
+      
+      const wrapWidth = isPortrait ? 130 : 150;
 
-    const actions: Record<string, () => void> = {
-      rules: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => {
-          overlay.style.display = 'none';
-          overlay.classList.remove('visible');
-          this.scene.start('RulesScene');
-        });
-      },
-      wifi: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => {
-          overlay.style.display = 'none';
-          overlay.classList.remove('visible');
-          this.scene.start('WifiScene');
-        });
-      },
-      checkout: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => {
-          overlay.style.display = 'none';
-          overlay.classList.remove('visible');
-          this.scene.start('CheckoutScene');
-        });
-      },
-      visit: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => {
-          overlay.style.display = 'none';
-          overlay.classList.remove('visible');
-          this.scene.start('LocalGuideScene');
-        });
-      },
-      bakery: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => {
-          overlay.style.display = 'none';
-          overlay.classList.remove('visible');
-          this.scene.start('BakeryScene');
-        });
-      },
-      restaurant: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => {
-          overlay.style.display = 'none';
-          overlay.classList.remove('visible');
-          this.scene.start('RestaurantScene');
-        });
-      },
-      game: () => {
-        if (!this.hasReadRules) {
+      const isGame = item.icon === 'welcome_game';
+      const isJustUnlocked = isGame && this.game.registry.get('justUnlocked');
+      const visualLocked = (item.locked && !this.hasReadRules) || isJustUnlocked;
+
+      const container = this.createProfessionalIcon(x, y, item.label, !!visualLocked, item.icon, wrapWidth, isGame);
+      if (isGame) this.gameIcon = container;
+
+      container.setInteractive(new Phaser.Geom.Circle(0, 0, 50), Phaser.Geom.Circle.Contains);
+      container.on('pointerdown', () => {
+        if (item.locked && !this.hasReadRules) {
           this.showToast('Leia as Regras da Casa para Desbloquear!');
-          const btnVip = document.getElementById('btn-game');
-          if (btnVip) {
-            btnVip.style.animation = 'none';
-            void btnVip.offsetHeight; // trigger reflow
-            btnVip.style.animation = 'shake 0.4s ease';
-          }
+          this.tweens.add({ targets: container, x: x + 6, yoyo: true, duration: 60, repeat: 2 });
           return;
         }
-        this.startGame();
-      },
-      market: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => {
-          overlay.style.display = 'none';
-          overlay.classList.remove('visible');
-          this.scene.start('MarketScene');
-        });
-      },
-      host: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => {
-          overlay.style.display = 'none';
-          overlay.classList.remove('visible');
-          this.scene.start('ContactScene');
-        });
-      }
-    };
+        item.callback();
+      });
 
-    // VIP Visibility state
-    const btnVip = document.getElementById('btn-game');
-    if (btnVip) {
-      const img = btnVip.querySelector('img');
-      if (img) img.style.opacity = this.hasReadRules ? '1' : '0.4';
-    }
-
-    document.querySelectorAll('.grid-item').forEach(el => {
-      const actionKey = el.getAttribute('data-action');
-      if (actionKey && actions[actionKey]) {
-        el.onclick = () => actions[actionKey]();
-      }
+      container.setAlpha(0).setY(y + 30);
+      this.time.delayedCall(index * 60, () => {
+        this.tweens.add({ targets: container, alpha: 1, y: y, duration: 450, ease: 'Back.easeOut' });
+      });
     });
 
+    if (this.game.registry.get('justUnlocked')) {
+      this.game.registry.set('justUnlocked', false);
+      this.time.delayedCall(1200, () => this.animateUnlockSequence());
+    }
+  }
+
+  private createProfessionalIcon(x: number, y: number, label: string, isLocked: boolean, iconKey: string, wrapWidth: number, isGame: boolean = false) {
+    const container = this.add.container(x, y);
+    const baseGraphics = this.add.graphics();
+    baseGraphics.fillStyle(0x000000, 0.4).fillCircle(1, 4, 38);
+    if (isGame) {
+      baseGraphics.fillStyle(0x111115, 0.3).fillCircle(0, 0, 40);
+      baseGraphics.lineStyle(2, 0xffaa00, 0.8).strokeCircle(0, 0, 40);
+    } else {
+      baseGraphics.fillStyle(0xffffff, 0.15).fillCircle(0, 0, 40);
+      baseGraphics.lineStyle(1.5, 0xffffff, 0.3).strokeCircle(0, 0, 40);
+    }
+    container.add(baseGraphics);
+
+    let size = 110;
+    let offsetY = -8;
+    // UI Expert Fine-tuning for each icon type
+    switch (iconKey) {
+      case 'welcome_rules': size = 110; offsetY = -15; break;
+      case 'welcome_check_in_out':
+      case 'welcome_wifi': size = 110; offsetY = -8; break;
+      case 'welcome_market': size = 120; offsetY = -8; break;
+      case 'welcome_game': size = 125; offsetY = -15; break;
+      case 'welcome_visit': size = 135; offsetY = -10; break;
+      case 'welcome_restaurant': size = 140; offsetY = -10; break;
+      case 'welcome_bakery': size = 145; offsetY = -12; break;
+      case 'welcome_host': size = 145; offsetY = -15; break;
+    }
+
+    const iconImg = this.add.image(0, offsetY, iconKey).setOrigin(0.5);
+    const scale = Math.min(size / iconImg.width, size / iconImg.height);
+    iconImg.setScale(scale);
+    const iconShadow = this.add.image(0, offsetY + 4, iconKey).setOrigin(0.5).setScale(scale).setTintFill(0x000000).setAlpha(0.2);
+    container.add(iconShadow);
+    container.add(iconImg);
+
+    const isSmallScreen = this.scale.height < 680;
+    const labelY = 65;
+    const labelText = this.add.text(0, labelY, label.toUpperCase(), { 
+      fontFamily: 'Outfit', fontSize: isSmallScreen ? '11px' : '12px', color: '#ffffff', fontStyle: '900', letterSpacing: 1, align: 'center', wordWrap: { width: wrapWidth, useAdvancedWrap: true }, lineSpacing: -3
+    }).setOrigin(0.5, 0);
+    labelText.setStroke('#000000', 3).setShadow(2, 2, 'rgba(0,0,0,0.8)', 4);
+    container.add(labelText);
+
+    if (isLocked) {
+      const lockOverlay = this.add.graphics().fillStyle(0x000000, 0.2).fillCircle(0, 0, 40);
+      lockOverlay.setName('lock_overlay');
+      container.add(lockOverlay);
+      const lock = this.add.text(28, 28, '🔒', { fontSize: '14px' }).setOrigin(0.5).setName('lock_icon');
+      container.add(lock);
+    }
+
+    container.on('pointerover', () => {
+        if (isLocked && !this.hasReadRules) return;
+        this.tweens.add({ targets: container, scale: 1.15, angle: 2, duration: 250, ease: 'Back.easeOut' });
+    });
+    container.on('pointerout', () => {
+        this.tweens.add({ targets: container, scale: 1.0, angle: 0, duration: 200, ease: 'Cubic.easeOut' });
+    });
+
+    return container;
+  }
+
+  private animateUnlockSequence() {
+    if (!this.gameIcon) return;
+    const lock = this.gameIcon.getByName('lock_icon') as Phaser.GameObjects.Text;
+    const overlay = this.gameIcon.getByName('lock_overlay') as Phaser.GameObjects.Graphics;
+    this.tweens.add({
+        targets: this.gameIcon, x: this.gameIcon.x + 8, duration: 80, yoyo: true, repeat: 4,
+        onComplete: () => {
+            this.tweens.add({
+                targets: this.gameIcon, scale: 1.4, duration: 450, ease: 'Cubic.easeOut',
+                onStart: () => {
+                    if (lock) this.tweens.add({ targets: lock, alpha: 0, y: lock.y - 60, scale: 3, rotation: 0.5, duration: 700, ease: 'Power2.easeIn', onComplete: () => lock.destroy() });
+                    if (overlay) this.tweens.add({ targets: overlay, alpha: 0, scale: 2, duration: 600, onComplete: () => overlay.destroy() });
+                },
+                onComplete: () => {
+                    this.tweens.add({ targets: this.gameIcon, scale: 1.15, duration: 800, ease: 'Elastic.easeOut' });
+                    const flash = this.add.graphics({ x: this.gameIcon.x, y: this.gameIcon.y }).fillStyle(0xffd700, 0.6) .fillCircle(0, 0, 60);
+                    this.tweens.add({ targets: flash, alpha: 0, scale: 2.5, duration: 1000, onComplete: () => flash.destroy() });
+                }
+            });
+        }
+    });
+  }
 
   update() {
     const midX = this.scale.width / 2;
