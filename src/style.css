@@ -26,7 +26,8 @@ html {
   height: 100%;
   height: 100vh;
   height: 100dvh;
-  overflow: hidden;
+  overflow-x: hidden; /* Strict lock to prevent horizontal scroll */
+  overflow-y: hidden; /* Keep hidden as per app requirements */
   background-color: #0f0f0f;
   font-family: var(--font-main);
   color: #ffffff;
@@ -343,11 +344,12 @@ html {
 
 .welcome-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  padding: 0 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* Strict minmax to prevent container expansion */
+  gap: 3vw;
+  padding: 0 5vw; /* Generous viewport-based horizontal padding */
   width: 100%;
-  max-width: 480px; /* Elegant constraint for larger mobiles */
+  max-width: 500px;
+  box-sizing: border-box; /* Guaranteed border-box layout */
   pointer-events: auto;
 }
 
@@ -355,8 +357,9 @@ html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
+  width: 100%;
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -366,8 +369,9 @@ html {
 
 .icon-wrapper {
   width: 100%;
-  max-width: 75px; 
+  max-width: 80px; /* Precise max-width per brand ideal */
   aspect-ratio: 1 / 1;
+  margin: 0 auto;
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -376,9 +380,9 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: clamp(10px, 2vw, 15px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  transition: border-color 0.3s, background 0.3s;
+  box-sizing: border-box;
 }
 
 .grid-item:hover .icon-wrapper {
@@ -395,7 +399,7 @@ html {
 
 .grid-item span {
   font-family: 'Outfit', sans-serif;
-  font-size: 11px;
+  font-size: clamp(10px, 3vw, 14px); /* Responsive fluid typography */
   font-weight: 900;
   color: #FFFFFF;
   text-align: center;
@@ -404,8 +408,10 @@ html {
   line-height: 1.2;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
   width: 100%;
-  overflow-wrap: break-word; /* Senior tip: handle long text like BARES & RESTAURANTES */
-  word-break: break-word;
+  /* Strict anti-cutoff text rules */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 /* Specific styling for the VIP button */
