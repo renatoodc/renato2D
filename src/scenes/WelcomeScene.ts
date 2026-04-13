@@ -146,9 +146,9 @@ export default class WelcomeScene extends Phaser.Scene {
     ];
 
     const cols = isPortrait ? 3 : 5;
-    const startY = isPortrait ? (isSmallScreen ? height * 0.28 : height * 0.32) : height * 0.38;
-    const spacingY = isPortrait ? (isSmallScreen ? height * 0.21 : height * 0.24) : height * 0.23;
-    const marginX = isPortrait ? (isSmallScreen ? width * 0.10 : width * 0.12) : width * 0.10;
+    const startY = isPortrait ? (isSmallScreen ? height * 0.32 : height * 0.38) : height * 0.38;
+    const spacingY = isPortrait ? (isSmallScreen ? height * 0.23 : height * 0.25) : height * 0.23;
+    const marginX = isPortrait ? (isSmallScreen ? width * 0.08 : width * 0.08) : width * 0.10;
     const availableWidth = width - (marginX * 2);
 
     items.forEach((item, index) => {
@@ -309,18 +309,18 @@ export default class WelcomeScene extends Phaser.Scene {
     }
     container.add(baseGraphics);
     const isPortrait = this.scale.height > this.scale.width;
-    let size = isPortrait ? 100 : 115;
+    let size = isPortrait ? 110 : 115;
     let offsetY = -8;
     switch (iconKey) {
-      case 'welcome_rules': size = isPortrait ? 100 : 115; offsetY = -15; break;
+      case 'welcome_rules': size = isPortrait ? 110 : 115; offsetY = -15; break;
       case 'welcome_check_in_out':
-      case 'welcome_wifi': size = isPortrait ? 100 : 115; offsetY = -8; break;
-      case 'welcome_market': size = isPortrait ? 110 : 125; offsetY = -8; break;
-      case 'welcome_game': size = isPortrait ? 115 : 130; offsetY = -15; break;
-      case 'welcome_visit': size = isPortrait ? 125 : 148; offsetY = -10; break;
-      case 'welcome_restaurant': size = isPortrait ? 130 : 155; offsetY = -10; break;
-      case 'welcome_bakery': size = isPortrait ? 135 : 160; offsetY = -12; break;
-      case 'welcome_host': size = isPortrait ? 140 : 160; offsetY = -15; break;
+      case 'welcome_wifi': size = isPortrait ? 110 : 115; offsetY = -8; break;
+      case 'welcome_market': size = isPortrait ? 120 : 125; offsetY = -8; break;
+      case 'welcome_game': size = isPortrait ? 125 : 130; offsetY = -15; break;
+      case 'welcome_visit': size = isPortrait ? 135 : 148; offsetY = -10; break;
+      case 'welcome_restaurant': size = isPortrait ? 140 : 155; offsetY = -10; break;
+      case 'welcome_bakery': size = isPortrait ? 145 : 160; offsetY = -12; break;
+      case 'welcome_host': size = isPortrait ? 145 : 160; offsetY = -15; break;
     }
     const iconImg = this.add.image(0, offsetY, iconKey).setOrigin(0.5);
     const scale = Math.min(size / iconImg.width, size / iconImg.height);
@@ -329,7 +329,7 @@ export default class WelcomeScene extends Phaser.Scene {
     container.add(iconShadow);
     container.add(iconImg);
     const isSmallScreen = this.scale.height < 680;
-    const labelY = isPortrait ? (isSmallScreen ? 50 : 64) : (isSmallScreen ? 46 : 56);
+    const labelY = isPortrait ? (isSmallScreen ? 55 : 70) : (isSmallScreen ? 46 : 56);
     const labelText = this.add.text(0, labelY, label.toUpperCase(), { 
       fontFamily: 'Outfit', fontSize: isSmallScreen ? '11px' : '12px', color: '#ffffff', fontStyle: '900', letterSpacing: 1, align: 'center', wordWrap: { width: wrapWidth, useAdvancedWrap: true }, lineSpacing: -3
     }).setOrigin(0.5, 0);
