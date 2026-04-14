@@ -94,15 +94,14 @@ export default class WelcomeScene extends Phaser.Scene {
     mainTitle.setStroke('#8b4513', 3); 
     mainTitle.setShadow(2, 4, 'rgba(0,0,0,0.6)', 8);
 
-    // Header 3 (Bottom): CENTRAL DO HÓSPEDE — grande, extenso perto das bordas
-    const centralFontSize = Math.floor(width * 0.22); // grande para preencher a tela
+    // Header 3 (Bottom): CENTRAL DO HÓSPEDE — 30px bold
     this.add.text(width / 2, height * (titlePadding + 0.14), 'CENTRAL DO HÓSPEDE', {
       fontFamily: 'Montserrat', 
-      fontSize: `${centralFontSize}px`, 
-      color: '#E0E6ED', 
-      fontStyle: 'light', 
-      letterSpacing: 1
-    }).setOrigin(0.5).setStroke('#000000', 3).setShadow(2, 2, 'rgba(0,0,0,0.5)', 4).setDepth(20);
+      fontSize: isPortrait ? (isSmallScreen ? '20px' : '25px') : '30px',
+      color: '#E0E6ED',
+      fontStyle: 'bold',
+      letterSpacing: 6
+    }).setOrigin(0.5).setStroke('#000000', 2).setShadow(1, 2, 'rgba(0,0,0,0.5)', 3).setDepth(20);
 
     // 4. Icons — 3x3 Grid (9 itens) + CTA Reserva Direta abaixo
     const items = [
@@ -118,11 +117,11 @@ export default class WelcomeScene extends Phaser.Scene {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('CheckoutScene'));
       }},
-      { label: 'CONTATO', icon: 'welcome_host', callback: () => {
+      { label: 'CONTATO', icon: 'welcome_host', iconStyle: 'width:160%;height:160%;margin-top:-28px;', callback: () => {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('ContactScene'));
       }},
-      { label: 'GUIA\nTURÍSTICO', icon: 'welcome_visit', callback: () => {
+      { label: 'GUIA\nTURÍSTICO', icon: 'welcome_visit', iconStyle: 'width:160%;height:160%;margin-top:-28px;', callback: () => {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('LocalGuideScene'));
       }},
@@ -168,7 +167,7 @@ export default class WelcomeScene extends Phaser.Scene {
 
       iconItem.innerHTML = `
         <div class="welcome-icon-container">
-          <img src="${iconPath}" alt="${item.label}" style="opacity: ${isLocked ? '0.4' : '1'}">
+          <img src="${iconPath}" alt="${item.label}" style="opacity: ${isLocked ? '0.4' : '1'};${item.iconStyle || ''}">
           ${isLocked ? '<span class="welcome-icon-lock">🔒</span>' : ''}
         </div>
         <div class="welcome-icon-label">${item.label.replace(/\n/g, '<br>')}</div>
