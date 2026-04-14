@@ -328,3 +328,121 @@ html {
     padding-top: 20px;
   }
 }
+
+/* ============================================
+   📱 5x2 ICON GRID — Stay Verse Premium UI
+   3D Pop-out Effect: ícone extravasa a borda
+   ============================================ */
+
+.welcome-selection-wrapper {
+  position: absolute;
+  top: 20%; /* Começa logo após o bloco de títulos comprimido */
+  left: 0;
+  width: 100% !important;
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  padding: 0 24px !important;
+  z-index: 50;
+  pointer-events: auto;
+}
+
+.welcome-selection-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 3.5vh 16px !important;
+  width: 100% !important;
+}
+
+.welcome-icon-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  cursor: pointer;
+  transition: transform 0.18s ease;
+  gap: 8px;
+  /* Espaço extra acima para o ícone que "vaza" */
+  padding-top: 12px;
+}
+
+.welcome-icon-item:active {
+  transform: scale(0.93);
+}
+
+/* A Borda/Anel — círculo menor */
+.welcome-icon-container {
+  width: 72px !important;
+  height: 72px !important;
+  aspect-ratio: 1 / 1 !important;
+  background: rgba(10, 10, 20, 0.50) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 2px solid rgba(212, 175, 55, 0.55) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-bottom: 0 !important;
+  /* Overflow visível para o efeito 3D */
+  overflow: visible !important;
+  position: relative !important;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(212, 175, 55, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+}
+
+/* O Ícone — maior que o círculo, cria o efeito 3D "saindo" */
+.welcome-icon-container img {
+  width: 130% !important;
+  height: 130% !important;
+  object-fit: contain !important;
+  display: block !important;
+  /* Sombra para dar profundidade/3D */
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)) !important;
+  /* Deslocamento leve para cima para o efeito "pop-out" */
+  margin-top: -20px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Label */
+.welcome-icon-label {
+  width: 100% !important;
+  text-align: center !important;
+  word-break: break-word !important;
+  hyphens: auto !important;
+  color: #E8DCC8;
+  font-family: 'Outfit', 'Montserrat', sans-serif;
+  font-size: 0.72rem !important;
+  line-height: 1.25 !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.95);
+}
+
+.welcome-icon-lock {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 50%;
+  padding: 2px;
+  z-index: 3;
+}
+
+.welcome-icon-item.locked {
+  opacity: 0.55;
+}
+
+/* Placeholder: ícone vazio (Reserva Direta) */
+.welcome-icon-item.placeholder {
+  cursor: default;
+}
+.welcome-icon-item.placeholder .welcome-icon-container {
+  border-color: rgba(212, 175, 55, 0.2) !important;
+  box-shadow: none !important;
+}

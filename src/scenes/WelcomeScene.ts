@@ -49,11 +49,12 @@ export default class WelcomeScene extends Phaser.Scene {
     const isSmallScreen = height < 680;
     
     // 🎨 UI Expert: Stayverse Branding
-    let headerYOffset = isPortrait ? (isSmallScreen ? 0.03 : 0.05) : 0.04;
+    // Offset mínimo seguro: capsule de 48px precisa de pelo menos 4% de margem
+    let headerYOffset = isPortrait ? (isSmallScreen ? 0.04 : 0.04) : 0.03;
     if (this.textures.exists('logo_stayverse')) {
       const logoY = height * headerYOffset;
       const capsuleW = width * (isPortrait ? 0.5 : 0.22);
-      const capsuleH = isSmallScreen ? 50 : 60;
+      const capsuleH = isSmallScreen ? 40 : 48;
       const capsule = this.add.graphics().setDepth(19);
       capsule.fillStyle(0x000000, 0.6);
       capsule.fillRoundedRect(width / 2 - capsuleW / 2, logoY - capsuleH / 2, capsuleW, capsuleH, capsuleH / 2);
@@ -66,7 +67,7 @@ export default class WelcomeScene extends Phaser.Scene {
         window.open('https://www.instagram.com/stayverse.br/', '_blank');
       });
       logo.setTintFill(0xffffff);
-      const targetWidth = width * (isPortrait ? (isSmallScreen ? 0.38 : 0.45) : 0.18);
+      const targetWidth = width * (isPortrait ? (isSmallScreen ? 0.38 : 0.42) : 0.18);
       const responsiveScale = logo.width > 0 ? targetWidth / logo.width : (isPortrait ? 0.3 : 0.4);
       logo.setScale(responsiveScale);
       
@@ -78,20 +79,21 @@ export default class WelcomeScene extends Phaser.Scene {
         repeat: -1,
         ease: 'Sine.easeInOut'
       });
-      headerYOffset += isPortrait ? (isSmallScreen ? 0.06 : 0.08) : 0.09;
+      // Textos grudados logo abaixo da logo (comprimido para subir o bloco)
+      headerYOffset += isPortrait ? (isSmallScreen ? 0.045 : 0.05) : 0.055;
     }
 
     const titlePadding = headerYOffset;
-    
+
     // Header 1 (Top): ITAIPAVA 201
-    this.add.text(width / 2, height * (titlePadding + 0.01), 'ITAIPAVA 201', {
-      fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '14px' : '16px') : '18px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
+    this.add.text(width / 2, height * (titlePadding + 0.005), 'ITAIPAVA 201', {
+      fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '13px' : '14px') : '16px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
     }).setOrigin(0.5).setShadow(1, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1).setDepth(20);
 
     // Header 2 (Middle/Main): TEMPORADA NA PRAIA (Premium Bronze Script)
-    const mainTitle = this.add.text(width / 2, height * (titlePadding + 0.05), 'Temporada na Praia', {
+    const mainTitle = this.add.text(width / 2, height * (titlePadding + 0.04), 'Temporada na Praia', {
       fontFamily: '"Dancing Script", "Pacifico", "Brush Script MT", cursive', 
-      fontSize: isPortrait ? (isSmallScreen ? '38px' : '44px') : '56px', 
+      fontSize: isPortrait ? (isSmallScreen ? '34px' : '38px') : '48px', 
       color: '#f0c48e',
       fontStyle: 'normal'
     }).setOrigin(0.5).setDepth(20);
@@ -100,15 +102,20 @@ export default class WelcomeScene extends Phaser.Scene {
     mainTitle.setShadow(2, 4, 'rgba(0,0,0,0.6)', 8);
 
     // Header 3 (Bottom): CENTRAL DO HÓSPEDE
-    this.add.text(width / 2, height * (titlePadding + 0.115), 'CENTRAL DO HÓSPEDE', {
+    this.add.text(width / 2, height * (titlePadding + 0.09), 'CENTRAL DO HÓSPEDE', {
       fontFamily: 'Montserrat', 
-      fontSize: isPortrait ? (isSmallScreen ? '24px' : '30px') : '36px', 
+      fontSize: isPortrait ? (isSmallScreen ? '20px' : '23px') : '30px', 
       color: '#E0E6ED', 
       fontStyle: 'light', 
-      letterSpacing: 5
+      letterSpacing: 4
     }).setOrigin(0.5).setStroke('#000000', 3).setShadow(2, 2, 'rgba(0,0,0,0.5)', 4).setDepth(20);
 
-    // 4. Icons (Professional Phaser Distribuition)
+    // 4. Icons — 5x2 Grid (10 items)
+    // Row 1: Regras / Wi-Fi
+    // Row 2: Check-in / Contato
+    // Row 3: Guia Turístico / Mercados
+    // Row 4: Padarias / Bares
+    // Row 5: Reserva Direta (placeholder) / Benefício VIP
     const items = [
       { label: 'REGRAS\nDA CASA', icon: 'welcome_rules', callback: () => {
         this.cameras.main.fadeOut(500, 0, 0, 0);
@@ -122,9 +129,17 @@ export default class WelcomeScene extends Phaser.Scene {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('CheckoutScene'));
       }},
+      { label: 'CONTATO', icon: 'welcome_host', callback: () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('ContactScene'));
+      }},
       { label: 'GUIA\nTURÍSTICO', icon: 'welcome_visit', callback: () => {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('LocalGuideScene'));
+      }},
+      { label: 'MERCADOS', icon: 'welcome_market', callback: () => {
+        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('MarketScene'));
       }},
       { label: 'PADARIAS\n& CAFÉS', icon: 'welcome_bakery', callback: () => {
         this.cameras.main.fadeOut(500, 0, 0, 0);
@@ -134,56 +149,12 @@ export default class WelcomeScene extends Phaser.Scene {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('RestaurantScene'));
       }},
+      // Row 5: Novo placeholder + VIP
+      { label: 'RESERVA\nDIRETA', icon: '', placeholder: true, callback: () => {} },
       { label: 'BENEFÍCIO\nVIP', icon: 'welcome_game', callback: () => this.startGame(), locked: true },
-      { label: 'MERCADOS', icon: 'welcome_market', callback: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('MarketScene'));
-      }},
-      { label: 'CONTATO', icon: 'welcome_host', callback: () => {
-        this.cameras.main.fadeOut(500, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('ContactScene'));
-      }},
     ];
 
-    const cols = isPortrait ? 3 : 5;
-    // UI Professional: Better StartY to clear Logo and Spacing for Breathing Room
-    const startY = isPortrait ? (isSmallScreen ? height * 0.38 : height * 0.40) : height * 0.42;
-    const spacingY = isPortrait ? (isSmallScreen ? height * 0.21 : height * 0.22) : height * 0.24;
-    // UI Professional: marginX 12% is the "Magic Number" to prevent cutting on curved screens
-    const marginX = isPortrait ? (width * 0.12) : (width * 0.14);
-    const availableWidth = width - (marginX * 2);
-
-    items.forEach((item, index) => {
-      const col = index % cols;
-      const row = Math.floor(index / cols);
-      
-      const x = marginX + (col * (availableWidth / (cols - 1)));
-      const y = startY + row * spacingY;
-      
-      const wrapWidth = isPortrait ? 130 : 150;
-
-      const isGame = item.icon === 'welcome_game';
-      const isJustUnlocked = isGame && this.game.registry.get('justUnlocked');
-      const visualLocked = (item.locked && !this.hasReadRules) || isJustUnlocked;
-
-      const container = this.createProfessionalIcon(x, y, item.label, !!visualLocked, item.icon, wrapWidth, isGame);
-      if (isGame) this.gameIcon = container;
-
-      container.setInteractive(new Phaser.Geom.Circle(0, 0, 50), Phaser.Geom.Circle.Contains);
-      container.on('pointerdown', () => {
-        if (item.locked && !this.hasReadRules) {
-          this.showToast('Leia as Regras da Casa para Desbloquear!');
-          this.tweens.add({ targets: container, x: x + 6, yoyo: true, duration: 60, repeat: 2 });
-          return;
-        }
-        item.callback();
-      });
-
-      container.setAlpha(0).setY(y + 30);
-      this.time.delayedCall(index * 60, () => {
-        this.tweens.add({ targets: container, alpha: 1, y: y, duration: 450, ease: 'Back.easeOut' });
-      });
-    });
+    this.createDomGrid(items);
 
     if (this.game.registry.get('justUnlocked')) {
       this.game.registry.set('justUnlocked', false);
@@ -191,89 +162,72 @@ export default class WelcomeScene extends Phaser.Scene {
     }
   }
 
-  private createProfessionalIcon(x: number, y: number, label: string, isLocked: boolean, iconKey: string, wrapWidth: number, isGame: boolean = false) {
-    const container = this.add.container(x, y);
-    const baseGraphics = this.add.graphics();
-    baseGraphics.fillStyle(0x000000, 0.4).fillCircle(1, 4, 38);
-    if (isGame) {
-      baseGraphics.fillStyle(0x111115, 0.3).fillCircle(0, 0, 40);
-      baseGraphics.lineStyle(2, 0xffaa00, 0.8).strokeCircle(0, 0, 40);
-    } else {
-      baseGraphics.fillStyle(0xffffff, 0.15).fillCircle(0, 0, 40);
-      baseGraphics.lineStyle(1.5, 0xffffff, 0.3).strokeCircle(0, 0, 40);
-    }
-    container.add(baseGraphics);
+  private createDomGrid(items: any[]) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'welcome-selection-wrapper';
 
-    let size = 110;
-    let offsetY = -8;
-    // UI Expert Fine-tuning for each icon type
-    switch (iconKey) {
-      case 'welcome_rules': size = 110; offsetY = -15; break;
-      case 'welcome_check_in_out':
-      case 'welcome_wifi': size = 110; offsetY = -8; break;
-      case 'welcome_market': size = 120; offsetY = -8; break;
-      case 'welcome_game': size = 125; offsetY = -15; break;
-      case 'welcome_visit': size = 135; offsetY = -10; break;
-      case 'welcome_restaurant': size = 140; offsetY = -10; break;
-      case 'welcome_bakery': size = 145; offsetY = -12; break;
-      case 'welcome_host': size = 145; offsetY = -15; break;
-    }
+    const grid = document.createElement('div');
+    grid.className = 'welcome-selection-grid';
 
-    const iconImg = this.add.image(0, offsetY, iconKey).setOrigin(0.5);
-    const scale = Math.min(size / iconImg.width, size / iconImg.height);
-    iconImg.setScale(scale);
-    const iconShadow = this.add.image(0, offsetY + 4, iconKey).setOrigin(0.5).setScale(scale).setTintFill(0x000000).setAlpha(0.2);
-    container.add(iconShadow);
-    container.add(iconImg);
+    items.forEach(item => {
+      const iconItem = document.createElement('div');
+      const isLocked = item.locked && !this.hasReadRules;
+      const isPlaceholder = !!item.placeholder;
 
-    const isSmallScreen = this.scale.height < 680;
-    const labelY = 65;
-    const labelText = this.add.text(0, labelY, label.toUpperCase(), { 
-      fontFamily: 'Outfit', fontSize: isSmallScreen ? '11px' : '12px', color: '#ffffff', fontStyle: '900', letterSpacing: 1, align: 'center', wordWrap: { width: wrapWidth, useAdvancedWrap: true }, lineSpacing: -3
-    }).setOrigin(0.5, 0);
-    labelText.setStroke('#000000', 3).setShadow(2, 2, 'rgba(0,0,0,0.8)', 4);
-    container.add(labelText);
+      iconItem.className = `welcome-icon-item${isLocked ? ' locked' : ''}${isPlaceholder ? ' placeholder' : ''}`;
+      if (item.icon === 'welcome_game') iconItem.id = 'btn-game';
 
-    if (isLocked) {
-      const lockOverlay = this.add.graphics().fillStyle(0x000000, 0.2).fillCircle(0, 0, 40);
-      lockOverlay.setName('lock_overlay');
-      container.add(lockOverlay);
-      const lock = this.add.text(28, 28, '🔒', { fontSize: '14px' }).setOrigin(0.5).setName('lock_icon');
-      container.add(lock);
-    }
+      if (isPlaceholder) {
+        // Ícone placeholder: círculo vazio + label
+        iconItem.innerHTML = `
+          <div class="welcome-icon-container"></div>
+          <div class="welcome-icon-label">${item.label.replace(/\n/g, '<br>')}</div>
+        `;
+        // Sem onclick
+      } else {
+        const assetKey = item.icon.replace('welcome_', '');
+        const iconPath = `/assets/icons/${assetKey}.png`;
 
-    container.on('pointerover', () => {
-        if (isLocked && !this.hasReadRules) return;
-        this.tweens.add({ targets: container, scale: 1.15, angle: 2, duration: 250, ease: 'Back.easeOut' });
-    });
-    container.on('pointerout', () => {
-        this.tweens.add({ targets: container, scale: 1.0, angle: 0, duration: 200, ease: 'Cubic.easeOut' });
+        iconItem.innerHTML = `
+          <div class="welcome-icon-container">
+            <img src="${iconPath}" alt="${item.label}" style="opacity: ${isLocked ? '0.4' : '1'}">
+            ${isLocked ? '<span class="welcome-icon-lock">🔒</span>' : ''}
+          </div>
+          <div class="welcome-icon-label">${item.label.replace(/\n/g, '<br>')}</div>
+        `;
+
+        iconItem.onclick = () => {
+          if (isLocked) {
+            this.showToast('Leia as Regras da Casa para Desbloquear!');
+            return;
+          }
+          item.callback();
+        };
+      }
+
+      grid.appendChild(iconItem);
     });
 
-    return container;
+    wrapper.appendChild(grid);
+    this.add.dom(0, 0, wrapper).setOrigin(0, 0);
   }
 
   private animateUnlockSequence() {
-    if (!this.gameIcon) return;
-    const lock = this.gameIcon.getByName('lock_icon') as Phaser.GameObjects.Text;
-    const overlay = this.gameIcon.getByName('lock_overlay') as Phaser.GameObjects.Graphics;
-    this.tweens.add({
-        targets: this.gameIcon, x: this.gameIcon.x + 8, duration: 80, yoyo: true, repeat: 4,
-        onComplete: () => {
-            this.tweens.add({
-                targets: this.gameIcon, scale: 1.4, duration: 450, ease: 'Cubic.easeOut',
-                onStart: () => {
-                    if (lock) this.tweens.add({ targets: lock, alpha: 0, y: lock.y - 60, scale: 3, rotation: 0.5, duration: 700, ease: 'Power2.easeIn', onComplete: () => lock.destroy() });
-                    if (overlay) this.tweens.add({ targets: overlay, alpha: 0, scale: 2, duration: 600, onComplete: () => overlay.destroy() });
-                },
-                onComplete: () => {
-                    this.tweens.add({ targets: this.gameIcon, scale: 1.15, duration: 800, ease: 'Elastic.easeOut' });
-                    const flash = this.add.graphics({ x: this.gameIcon.x, y: this.gameIcon.y }).fillStyle(0xffd700, 0.6) .fillCircle(0, 0, 60);
-                    this.tweens.add({ targets: flash, alpha: 0, scale: 2.5, duration: 1000, onComplete: () => flash.destroy() });
-                }
-            });
-        }
-    });
+    const btnVip = document.getElementById('btn-game');
+    if (!btnVip) return;
+
+    btnVip.classList.remove('locked');
+    const lock = btnVip.querySelector('.welcome-icon-lock');
+    if (lock) lock.remove();
+
+    btnVip.style.animation = 'shake 0.8s ease infinite';
+    setTimeout(() => { btnVip.style.animation = 'none'; }, 3000);
+    
+    const img = btnVip.querySelector('img');
+    if (img) {
+      img.style.transition = 'opacity 1s ease';
+      img.style.opacity = '1';
+    }
   }
 
   update() {
@@ -370,21 +324,6 @@ export default class WelcomeScene extends Phaser.Scene {
         bird.baseYSine = y;
         this.birds.push(bird);
         this.birdLayer.add(bird);
-    }
-  }
-
-  private animateUnlockSequence() {
-    const btnVip = document.getElementById('btn-game');
-    if (btnVip) {
-      const img = btnVip.querySelector('img');
-      if (img) {
-        this.tweens.addCounter({
-          from: 0.4, to: 1, duration: 1000,
-          onUpdate: tween => { img.style.opacity = tween.getValue().toString(); }
-        });
-      }
-      btnVip.style.animation = 'shake 0.8s ease infinite';
-      setTimeout(() => { btnVip.style.animation = 'none'; }, 3000);
     }
   }
 
