@@ -46,8 +46,8 @@ export default class WelcomeScene extends Phaser.Scene {
     let headerYOffset = isPortrait ? (isSmallScreen ? 0.04 : 0.04) : 0.03;
     if (this.textures.exists('logo_stayverse')) {
       const logoY = height * headerYOffset;
-      const capsuleW = width * (isPortrait ? 0.5 : 0.22);
-      const capsuleH = isSmallScreen ? 40 : 48;
+      const capsuleW = width * (isPortrait ? 0.66 : 0.28);
+      const capsuleH = isSmallScreen ? 60 : 72;
       const capsule = this.add.graphics().setDepth(19);
       capsule.fillStyle(0x000000, 0.6);
       capsule.fillRoundedRect(width / 2 - capsuleW / 2, logoY - capsuleH / 2, capsuleW, capsuleH, capsuleH / 2);
@@ -60,7 +60,7 @@ export default class WelcomeScene extends Phaser.Scene {
         window.open('https://www.instagram.com/stayverse.br/', '_blank');
       });
       logo.setTintFill(0xffffff);
-      const targetWidth = width * (isPortrait ? (isSmallScreen ? 0.38 : 0.42) : 0.18);
+      const targetWidth = width * (isPortrait ? (isSmallScreen ? 0.48 : 0.56) : 0.22);
       const responsiveScale = logo.width > 0 ? targetWidth / logo.width : (isPortrait ? 0.3 : 0.4);
       logo.setScale(responsiveScale);
       
@@ -72,21 +72,21 @@ export default class WelcomeScene extends Phaser.Scene {
         repeat: -1,
         ease: 'Sine.easeInOut'
       });
-      // Textos grudados logo abaixo da logo (comprimido para subir o bloco)
-      headerYOffset += isPortrait ? (isSmallScreen ? 0.045 : 0.05) : 0.055;
+      // Espaçamento maior entre logo e títulos para preencher topo
+      headerYOffset += isPortrait ? (isSmallScreen ? 0.06 : 0.075) : 0.08;
     }
 
     const titlePadding = headerYOffset;
 
     // Header 1 (Top): ITAIPAVA 201
-    this.add.text(width / 2, height * (titlePadding + 0.005), 'ITAIPAVA 201', {
-      fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '13px' : '14px') : '16px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
+    this.add.text(width / 2, height * (titlePadding + 0.01), 'ITAIPAVA 201', {
+      fontFamily: 'Montserrat', fontSize: isPortrait ? (isSmallScreen ? '15px' : '17px') : '19px', color: '#ffaa00', fontStyle: 'bold', letterSpacing: 2
     }).setOrigin(0.5).setShadow(1, 2, 'rgba(0,0,0,0.3)', 2).setAlpha(1).setDepth(20);
 
     // Header 2 (Middle/Main): TEMPORADA NA PRAIA (Premium Bronze Script)
-    const mainTitle = this.add.text(width / 2, height * (titlePadding + 0.04), 'Temporada na Praia', {
+    const mainTitle = this.add.text(width / 2, height * (titlePadding + 0.06), 'Temporada na Praia', {
       fontFamily: '"Dancing Script", "Pacifico", "Brush Script MT", cursive', 
-      fontSize: isPortrait ? (isSmallScreen ? '34px' : '38px') : '48px', 
+      fontSize: isPortrait ? (isSmallScreen ? '38px' : '46px') : '52px', 
       color: '#f0c48e',
       fontStyle: 'normal'
     }).setOrigin(0.5).setDepth(20);
@@ -94,21 +94,17 @@ export default class WelcomeScene extends Phaser.Scene {
     mainTitle.setStroke('#8b4513', 3); 
     mainTitle.setShadow(2, 4, 'rgba(0,0,0,0.6)', 8);
 
-    // Header 3 (Bottom): CENTRAL DO HÓSPEDE
-    this.add.text(width / 2, height * (titlePadding + 0.09), 'CENTRAL DO HÓSPEDE', {
+    // Header 3 (Bottom): CENTRAL DO HÓSPEDE — grande, extenso perto das bordas
+    const centralFontSize = Math.floor(width * 0.22); // grande para preencher a tela
+    this.add.text(width / 2, height * (titlePadding + 0.14), 'CENTRAL DO HÓSPEDE', {
       fontFamily: 'Montserrat', 
-      fontSize: isPortrait ? (isSmallScreen ? '20px' : '23px') : '30px', 
+      fontSize: `${centralFontSize}px`, 
       color: '#E0E6ED', 
       fontStyle: 'light', 
-      letterSpacing: 4
+      letterSpacing: 1
     }).setOrigin(0.5).setStroke('#000000', 3).setShadow(2, 2, 'rgba(0,0,0,0.5)', 4).setDepth(20);
 
-    // 4. Icons — 5x2 Grid (10 items)
-    // Row 1: Regras / Wi-Fi
-    // Row 2: Check-in / Contato
-    // Row 3: Guia Turístico / Mercados
-    // Row 4: Padarias / Bares
-    // Row 5: Reserva Direta (placeholder) / Benefício VIP
+    // 4. Icons — 3x3 Grid (9 itens) + CTA Reserva Direta abaixo
     const items = [
       { label: 'REGRAS\nDA CASA', icon: 'welcome_rules', callback: () => {
         this.cameras.main.fadeOut(500, 0, 0, 0);
@@ -142,8 +138,6 @@ export default class WelcomeScene extends Phaser.Scene {
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('RestaurantScene'));
       }},
-      // Row 5: Novo placeholder + VIP
-      { label: 'RESERVA\nDIRETA', icon: '', placeholder: true, callback: () => {} },
       { label: 'BENEFÍCIO\nVIP', icon: 'welcome_game', callback: () => this.startGame(), locked: true },
     ];
 
@@ -159,49 +153,46 @@ export default class WelcomeScene extends Phaser.Scene {
     const wrapper = document.createElement('div');
     wrapper.className = 'welcome-selection-wrapper';
 
+    // Grid 3x3
     const grid = document.createElement('div');
     grid.className = 'welcome-selection-grid';
 
     items.forEach(item => {
       const iconItem = document.createElement('div');
       const isLocked = item.locked && !this.hasReadRules;
-      const isPlaceholder = !!item.placeholder;
-
-      iconItem.className = `welcome-icon-item${isLocked ? ' locked' : ''}${isPlaceholder ? ' placeholder' : ''}`;
+      iconItem.className = `welcome-icon-item${isLocked ? ' locked' : ''}`;
       if (item.icon === 'welcome_game') iconItem.id = 'btn-game';
 
-      if (isPlaceholder) {
-        // Ícone placeholder: círculo vazio + label
-        iconItem.innerHTML = `
-          <div class="welcome-icon-container"></div>
-          <div class="welcome-icon-label">${item.label.replace(/\n/g, '<br>')}</div>
-        `;
-        // Sem onclick
-      } else {
-        const assetKey = item.icon.replace('welcome_', '');
-        const iconPath = `/assets/icons/${assetKey}.png`;
+      const assetKey = item.icon.replace('welcome_', '');
+      const iconPath = `/assets/icons/${assetKey}.png`;
 
-        iconItem.innerHTML = `
-          <div class="welcome-icon-container">
-            <img src="${iconPath}" alt="${item.label}" style="opacity: ${isLocked ? '0.4' : '1'}">
-            ${isLocked ? '<span class="welcome-icon-lock">🔒</span>' : ''}
-          </div>
-          <div class="welcome-icon-label">${item.label.replace(/\n/g, '<br>')}</div>
-        `;
+      iconItem.innerHTML = `
+        <div class="welcome-icon-container">
+          <img src="${iconPath}" alt="${item.label}" style="opacity: ${isLocked ? '0.4' : '1'}">
+          ${isLocked ? '<span class="welcome-icon-lock">🔒</span>' : ''}
+        </div>
+        <div class="welcome-icon-label">${item.label.replace(/\n/g, '<br>')}</div>
+      `;
 
-        iconItem.onclick = () => {
-          if (isLocked) {
-            this.showToast('Leia as Regras da Casa para Desbloquear!');
-            return;
-          }
-          item.callback();
-        };
-      }
+      iconItem.onclick = () => {
+        if (isLocked) {
+          this.showToast('Leia as Regras da Casa para Desbloquear!');
+          return;
+        }
+        item.callback();
+      };
 
       grid.appendChild(iconItem);
     });
 
     wrapper.appendChild(grid);
+
+    // Banner CTA — Reserva Direta (retangular, abaixo do grid)
+    const cta = document.createElement('div');
+    cta.className = 'direct-booking-cta';
+    cta.innerHTML = `<span class="cta-label">RESERVA DIRETA</span>`;
+    wrapper.appendChild(cta);
+
     this.add.dom(0, 0, wrapper).setOrigin(0, 0);
   }
 
