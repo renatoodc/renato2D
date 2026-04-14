@@ -57,7 +57,14 @@ export default class WelcomeScene extends Phaser.Scene {
       const logo = this.add.image(width / 2, logoY, 'logo_stayverse').setDepth(20);
       logo.setInteractive({ useHandCursor: true });
       logo.on('pointerdown', () => {
-        window.open('https://www.instagram.com/stayverse.br/', '_blank');
+        // Anchor programático: funciona no mobile sem ser bloqueado como popup
+        const a = document.createElement('a');
+        a.href = 'https://www.instagram.com/stayverse.br/';
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
       });
       logo.setTintFill(0xffffff);
       const targetWidth = width * (isPortrait ? (isSmallScreen ? 0.48 : 0.56) : 0.22);
@@ -97,7 +104,7 @@ export default class WelcomeScene extends Phaser.Scene {
     // Header 3 (Bottom): CENTRAL DO HÓSPEDE — 30px bold
     this.add.text(width / 2, height * (titlePadding + 0.14), 'CENTRAL DO HÓSPEDE', {
       fontFamily: 'Montserrat', 
-      fontSize: isPortrait ? (isSmallScreen ? '20px' : '25px') : '30px',
+      fontSize: isPortrait ? (isSmallScreen ? '19px' : '23px') : '28px',
       color: '#E0E6ED',
       fontStyle: 'bold',
       letterSpacing: 6
@@ -140,11 +147,21 @@ export default class WelcomeScene extends Phaser.Scene {
       { label: 'BENEFÍCIO\nVIP', icon: 'welcome_game', callback: () => this.startGame(), locked: true },
     ];
 
+    // 🔑 Detecção de desbloqueio: se justUnlocked=true, força o cadeado
+    // a aparecer no DOM para que a animação de unlock funcione corretamente
+    const isJustUnlocked = !!this.game.registry.get('justUnlocked');
+    if (isJustUnlocked) {
+      this.hasReadRules = false; // força render com cadeado para a animação
+    }
+
     this.createDomGrid(items);
 
-    if (this.game.registry.get('justUnlocked')) {
+    if (isJustUnlocked) {
       this.game.registry.set('justUnlocked', false);
-      this.time.delayedCall(1200, () => this.animateUnlockSequence());
+      this.time.delayedCall(1200, () => {
+        this.hasReadRules = true; // restaura o estado real
+        this.animateUnlockSequence();
+      });
     }
   }
 
@@ -186,10 +203,10 @@ export default class WelcomeScene extends Phaser.Scene {
 
     wrapper.appendChild(grid);
 
-    // Banner CTA — Reserva Direta (retangular, abaixo do grid)
+    // Banner CTA — RESERVAR COM DESCONTO (retangular, abaixo do grid)
     const cta = document.createElement('div');
     cta.className = 'direct-booking-cta';
-    cta.innerHTML = `<span class="cta-label">RESERVA DIRETA</span>`;
+    cta.innerHTML = `<span class="cta-label">🎟 RESERVAR COM DESCONTO</span>`;
     wrapper.appendChild(cta);
 
     this.add.dom(0, 0, wrapper).setOrigin(0, 0);
@@ -199,17 +216,30 @@ export default class WelcomeScene extends Phaser.Scene {
     const btnVip = document.getElementById('btn-game');
     if (!btnVip) return;
 
-    btnVip.classList.remove('locked');
-    const lock = btnVip.querySelector('.welcome-icon-lock');
-    if (lock) lock.remove();
+    const lock = btnVip.querySelector('.welcome-icon-lock') as HTMLElement | null;
+    if (lock) {
+      // Muda para cadeado aberto e dispara animação de voo
+      lock.textContent = '🔓';
+      lock.classList.add('flying');
+      // Após o voo (700ms): remove cadeado, revela ícone VIP com pop
+      setTimeout(() => {
+        lock.remove();
+        btnVip.classList.remove('locked');
+        const img = btnVip.querySelector('img') as HTMLImageElement | null;
+        if (img) {
+          img.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.34,1.56,0.64,1)';
+          img.style.opacity = '1';
+          img.style.transform = 'scale(1.35)';
+          setTimeout(() => { img.style.transform = 'scale(1)'; }, 400);
+        }
+        btnVip.style.animation = 'shake 0.6s ease';
+        setTimeout(() => { btnVip.style.animation = 'none'; }, 800);
 
-    btnVip.style.animation = 'shake 0.8s ease infinite';
-    setTimeout(() => { btnVip.style.animation = 'none'; }, 3000);
-    
-    const img = btnVip.querySelector('img');
-    if (img) {
-      img.style.transition = 'opacity 1s ease';
-      img.style.opacity = '1';
+        // Toast de celebração
+        this.showToast('🎉 BENEFÍCIO VIP DESBLOQUEADO!');
+      }, 700);
+    } else {
+      btnVip.classList.remove('locked');
     }
   }
 

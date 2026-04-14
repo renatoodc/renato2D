@@ -336,7 +336,7 @@ html {
 
 .welcome-selection-wrapper {
   position: absolute;
-  top: 28%; /* ajustado para o header expandido */
+  top: 30%; /* margem abaixo do CENTRAL DO HÓSPEDE */
   bottom: 24px; /* ancora no fundo preservando borda */
   left: 0;
   width: 100% !important;
@@ -427,15 +427,39 @@ html {
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.95);
 }
 
+/* Cadeado VIP — grande, centralizado, pulsando em vermelho/âmbar */
 .welcome-icon-lock {
   position: absolute;
-  bottom: 2px;
-  right: 2px;
-  font-size: 11px;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 50%;
-  padding: 2px;
-  z-index: 3;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  z-index: 10;
+  pointer-events: none;
+  animation: lockPulse 1.1s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 80, 0, 1)) drop-shadow(0 0 4px rgba(255, 200, 0, 0.8));
+}
+
+@keyframes lockPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    filter: drop-shadow(0 0 6px rgba(255, 80, 0, 0.9));
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.25);
+    filter: drop-shadow(0 0 18px rgba(255, 30, 0, 1)) drop-shadow(0 0 8px rgba(255, 220, 0, 0.9));
+  }
+}
+
+/* Animação de desbloqueio: cadeado abre e sobe */
+.welcome-icon-lock.flying {
+  animation: lockFly 0.7s ease-in forwards !important;
+}
+
+@keyframes lockFly {
+  0%   { transform: translate(-50%, -50%) scale(1);   opacity: 1; filter: drop-shadow(0 0 8px rgba(80,255,80,1)); }
+  40%  { transform: translate(-50%, -90%) scale(1.4); opacity: 1; filter: drop-shadow(0 0 24px rgba(100,255,60,1)); }
+  100% { transform: translate(-50%, -260%) scale(0.3); opacity: 0; }
 }
 
 .welcome-icon-item.locked {
