@@ -4,19 +4,12 @@ export default class WelcomeScene extends Phaser.Scene {
   public hasReadRules: boolean = false;
   private skyLayer!: Phaser.GameObjects.Image;
   private sunLayer!: Phaser.GameObjects.Container;
-  private seaLayer!: Phaser.GameObjects.Image;
-  private sandLayer!: Phaser.GameObjects.Image;
-  private wetSandLayer!: Phaser.GameObjects.Image;
-  private glossLayer!: Phaser.GameObjects.Image;
-  private tideLayer!: Phaser.GameObjects.Image;
   private birdLayer!: Phaser.GameObjects.Container;
-  private vesselLayer!: Phaser.GameObjects.Image;
   private birds: (Phaser.GameObjects.Graphics & { speed: number, lift: number, phase: number, baseYSine: number })[] = [];
   private targetParallaxX = 0;
   private targetParallaxY = 0;
   private currentParallaxX = 0;
   private currentParallaxY = 0;
-  private gameIcon!: Phaser.GameObjects.Container;
 
   constructor() {
     super('WelcomeScene');
