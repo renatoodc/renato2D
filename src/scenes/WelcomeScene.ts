@@ -207,6 +207,10 @@ export default class WelcomeScene extends Phaser.Scene {
     const cta = document.createElement('div');
     cta.className = 'direct-booking-cta';
     cta.innerHTML = `<span class="cta-label">🎟 RESERVAR COM DESCONTO</span>`;
+    cta.onclick = () => {
+      this.cameras.main.fadeOut(500, 0, 0, 0);
+      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('BookingScene'));
+    };
     wrapper.appendChild(cta);
 
     this.add.dom(0, 0, wrapper).setOrigin(0, 0);
