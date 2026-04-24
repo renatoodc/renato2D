@@ -39,8 +39,8 @@ export class BakeryScene extends Phaser.Scene {
     // 🚀 Inject into Phaser
     this.add.dom(width / 2, height / 2, container);
     
-    // 🕵️ UI Expert: Manual Scrolling
-    this.setupManualScroll(container, content);
+    // 🕵️ UI Expert: Touch Scroll — identical to LocalGuideScene
+    this.setupManualScroll(container, container);
 
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
@@ -75,7 +75,7 @@ export class BakeryScene extends Phaser.Scene {
   private createCategoryMenu() {
     const menu = document.createElement('div');
     menu.className = 'anchor-menu';
-    menu.style.gridTemplateColumns = '1fr 1fr'; // 2 columns for 2 categories
+    menu.style.gridTemplateColumns = '1fr 1fr';
     menu.innerHTML = `
         <button data-target="padarias">🥐 Padarias</button>
         <button data-target="cafes">☕ Cafeterias</button>
@@ -85,16 +85,13 @@ export class BakeryScene extends Phaser.Scene {
         btn.addEventListener('click', (e) => {
             const btnEl = e.target as HTMLElement;
             const target = btnEl.getAttribute('data-target');
-            
             const element = document.getElementById(`section-${target}`);
-            if (element) {
-                const container = document.getElementById('bakery-pro-page');
-                if (container) {
-                    container.scrollTo({
-                        top: element.offsetTop - 120,
-                        behavior: 'smooth'
-                    });
-                }
+            const scrollContainer = document.getElementById('bakery-pro-page');
+            if (element && scrollContainer) {
+                scrollContainer.scrollTo({
+                    top: element.offsetTop - 120,
+                    behavior: 'smooth'
+                });
             }
         });
     });
@@ -113,8 +110,8 @@ export class BakeryScene extends Phaser.Scene {
                     name: 'Padaria Peter Pão',
                     desc: 'A nossa vizinha de porta! Saia pelo portão de cima e vire à esquerda. Ótima variedade de pães, doces e salgados frescos. Possui almoço self-service.',
                     address: 'Av. Fortaleza, 1200 - Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Padaria+Peter+Pao+Vila+Velha',
-                    instagram: 'https://www.instagram.com/peterpao/',
+                    maps: 'https://maps.app.goo.gl/dcKuzVeDB76WTEvk8',
+                    instagram: 'https://www.instagram.com/peter.pao/',
                     img: 'peter_pao.jpg'
                 },
                 {
@@ -141,11 +138,11 @@ export class BakeryScene extends Phaser.Scene {
                     img: 'the_coffee.jpg'
                 },
                 {
-                    name: 'Caffè Lorenzon',
+                    name: 'Coffeetown Praia da Costa',
                     desc: 'Aconchegante e sofisticado. Oferece grãos selecionados e uma confeitaria impecável. Ótimo lugar para relaxar ou trabalhar um pouco.',
                     address: 'Av. Hugo Musso, 1243 - Praia da Costa',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Caffe+Lorenzon+Vila+Velha',
-                    instagram: 'https://www.instagram.com/caffelorenzon/',
+                    maps: 'https://maps.app.goo.gl/qJ1gFNiHaZivYz1X8',
+                    instagram: 'https://coffeetownpraiadacosta.com/',
                     img: 'lorenzon.jpg'
                 },
                 {
@@ -208,6 +205,7 @@ export class BakeryScene extends Phaser.Scene {
         startY = e.touches[0].pageY;
         startScrollTop = scrollTarget.scrollTop;
         isDragging = true;
+        container.style.transition = 'none';
     }, { passive: true });
  
     container.addEventListener('touchmove', (e) => {
@@ -215,10 +213,15 @@ export class BakeryScene extends Phaser.Scene {
         const pageY = e.touches[0].pageY;
         const deltaY = pageY - startY;
         scrollTarget.scrollTop = startScrollTop - deltaY;
+        container.style.transform = 'translateY(0)';
+        container.style.opacity = '1';
     }, { passive: true });
 
     container.addEventListener('touchend', () => {
         isDragging = false;
+        container.style.transition = 'none';
+        container.style.transform = 'translateY(0)';
+        container.style.opacity = '1';
     });
   }
 
@@ -230,6 +233,7 @@ export class BakeryScene extends Phaser.Scene {
             width: 100%;
             height: 100dvh;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
             font-family: 'Outfit', sans-serif;
             color: #333;
@@ -238,16 +242,15 @@ export class BakeryScene extends Phaser.Scene {
         .market-header {
             position: sticky;
             top: 0;
-            z-index: 2000;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(15px);
-            padding: 12px 15px;
+            z-index: 1000;
+            background: white;
+            padding: 15px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             box-sizing: border-box;
+            height: 60px;
         }
 
         .back-button {
@@ -284,11 +287,15 @@ export class BakeryScene extends Phaser.Scene {
         }
 
         .anchor-menu {
-            padding: 15px;
+            position: sticky;
+            top: 60px;
+            z-index: 900;
+            padding: 12px 15px;
             display: grid;
             gap: 10px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px);
+            background: rgba(30, 60, 114, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
         .anchor-menu button {
@@ -313,10 +320,6 @@ export class BakeryScene extends Phaser.Scene {
         }
 
         .market-guide-content {
-            position: absolute;
-            top: 60px; left: 0; right: 0; bottom: 0;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
             padding: 20px 20px 80px;
             max-width: 600px;
             margin: 0 auto;
@@ -351,8 +354,6 @@ export class BakeryScene extends Phaser.Scene {
         .card-img {
             height: 180px;
             background-color: #f0f2f5;
-            position: relative;
-            overflow: hidden;
             background-size: cover;
             background-position: center;
         }
@@ -412,6 +413,6 @@ export class BakeryScene extends Phaser.Scene {
             color: white;
         }
     `;
-    document.head.appendChild(style);
+    _container.appendChild(style);
   }
 }

@@ -39,8 +39,8 @@ export class RestaurantScene extends Phaser.Scene {
     // 🚀 Inject into Phaser
     this.add.dom(width / 2, height / 2, container);
     
-    // 🕵️ UI Expert: Manual Scrolling
-    this.setupManualScroll(container, content);
+    // 🕵️ UI Expert: Touch Scroll — identical to LocalGuideScene
+    this.setupManualScroll(container, container);
 
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
@@ -75,7 +75,7 @@ export class RestaurantScene extends Phaser.Scene {
     menu.innerHTML = `
         <button data-target="almoco">☀️ Almoço</button>
         <button data-target="jantar">🌙 Jantar</button>
-        <button data-target="bares">🍻 Bares & Petiscos</button>
+        <button data-target="bares">🍻 Bares &amp; Petiscos</button>
         <button data-target="gastro">🍔 Food Parks</button>
     `;
 
@@ -83,16 +83,13 @@ export class RestaurantScene extends Phaser.Scene {
         btn.addEventListener('click', (e) => {
             const btnEl = e.target as HTMLElement;
             const target = btnEl.getAttribute('data-target');
-            
             const element = document.getElementById(`section-${target}`);
-            if (element) {
-                const container = document.getElementById('restaurant-pro-page');
-                if (container) {
-                    container.scrollTo({
-                        top: element.offsetTop - 120,
-                        behavior: 'smooth'
-                    });
-                }
+            const scrollContainer = document.getElementById('restaurant-pro-page');
+            if (element && scrollContainer) {
+                scrollContainer.scrollTo({
+                    top: element.offsetTop - 120,
+                    behavior: 'smooth'
+                });
             }
         });
     });
@@ -111,8 +108,8 @@ export class RestaurantScene extends Phaser.Scene {
                     name: 'Restaurante Nona Lu',
                     desc: 'Referência em comida caseira na região. Comida por quilo bem temperada, farta, e ideal para o almoço após uma manhã de onda.',
                     address: 'Rua São Paulo, Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Nona+Lu+Vila+Velha',
-                    instagram: 'https://www.instagram.com/restaurantenonalu/',
+                    maps: 'https://maps.app.goo.gl/P94xCnCrWmugGsZW7',
+                    instagram: 'https://www.instagram.com/nonalurestaurantes/',
                     img: 'nona_lu.jpg' 
                 },
                 {
@@ -120,7 +117,7 @@ export class RestaurantScene extends Phaser.Scene {
                     desc: 'Comida vibrante, opções saudáveis e tropicais. Os pratos são leves e o ambiente exala o verdadeiro clima de praia.',
                     address: 'Orla de Itapuã',
                     maps: 'https://www.google.com/maps/search/?api=1&query=Aloha+Vila+Velha',
-                    instagram: 'https://www.instagram.com/alohaitapua/',
+                    instagram: 'https://www.instagram.com/alohavilavelha/',
                     img: 'aloha.jpg'
                 }
             ]
@@ -131,27 +128,27 @@ export class RestaurantScene extends Phaser.Scene {
             intro: 'Após o pôr do sol, o bairro te convida a jantar bons pratos, carnes ou deliciosos rodízios e massas.',
             items: [
                 {
-                    name: 'Rusticana Pizzaria',
+                    name: 'Vila Rusticana Pizzaria',
                     desc: 'Pizzas maravilhosas com massa fininha e ingredientes selecionados e muito chopp gelado. Ambiente super acolhedor.',
                     address: 'Av. Hugo Musso',
                     maps: 'https://www.google.com/maps/search/?api=1&query=Rusticana+Pizzaria+Vila+Velha',
-                    instagram: 'https://www.instagram.com/rusticanapizzaria/',
+                    instagram: 'https://www.instagram.com/vilarusticana/?hl=pt',
                     img: 'rusticana.jpg'
                 },
                 {
-                    name: 'Naha Temakeria',
-                    desc: 'Se a vontade for de culinária oriental, o Naha oferece sushis e temakis super frescos e variados. Perfeito e rápido.',
+                    name: 'Naha Lounge Sushi',
+                    desc: 'Rodízio de sushi e temaki com excelente custo-benefício! Variedade enorme de peças frescas e criativas, ótimo para grupos. Uma surpresa gastronômica no bairro.',
                     address: 'Rua Jair de Andrade',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Naha+Temakeria+Itapua',
-                    instagram: 'https://www.instagram.com/nahatemakeria/',
+                    maps: 'https://maps.app.goo.gl/ou4yuUE3Nb8ujgGY9',
+                    instagram: 'https://www.instagram.com/vilarusticana/?hl=pt',
                     img: 'naha.jpg'
                 },
                 {
                     name: 'La Cuchilla',
                     desc: 'Para quem não abre mão da boa carne! Carnes nobres feitas na parrilla com o clássico tempero argentino e uruguaio.',
                     address: 'Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=La+Cuchilla+Vila+Velha',
-                    instagram: 'https://www.instagram.com/lacuchillaparrilla/',
+                    maps: 'https://maps.app.goo.gl/abRczzBjUc5nVxdz6',
+                    instagram: 'https://www.instagram.com/lacuchillabrasil/',
                     img: 'lacuchilla.jpg'
                 }
             ]
@@ -178,11 +175,11 @@ export class RestaurantScene extends Phaser.Scene {
                     img: 'sheiks.jpg'
                 },
                 {
-                    name: 'Os Meninos Bar',
+                    name: 'Bar dos Meninos',
                     desc: 'Clima descontraído, som ao vivo em alguns dias e um cardápio de dar água na boca com carnes de sol e fritas.',
                     address: 'Vila Velha',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Os+Meninos+Bar+Vila+Velha',
-                    instagram: 'https://www.instagram.com/osmeninosbar/',
+                    maps: 'https://maps.app.goo.gl/uwxvAfAujFFHsdKu8',
+                    instagram: 'https://www.instagram.com/bardosmeninos/',
                     img: 'meninos.jpg'
                 }
             ]
@@ -193,11 +190,11 @@ export class RestaurantScene extends Phaser.Scene {
             intro: 'Para a família inteira: os Food Parks em Vila Velha oferecem muita diversidade de lanches e entretenimento.',
             items: [
                 {
-                    name: 'Gran Park Food Park',
+                    name: 'Itapuã Gran Park',
                     desc: 'Diversas opções de food trucks: do hambúrguer artesanal às sobremesas insanas, passando por crepes e culinária internacional.',
                     address: 'Itapuã',
-                    maps: 'https://www.google.com/maps/search/?api=1&query=Gran+Park+Vila+Velha',
-                    instagram: 'https://www.instagram.com/granparkfoodpark/',
+                    maps: 'https://maps.app.goo.gl/EtSWNJDrRBZjZV1P6',
+                    instagram: 'https://www.instagram.com/itapuagranpark/',
                     img: 'gran_park.jpg'
                 },
                 {
@@ -260,6 +257,7 @@ export class RestaurantScene extends Phaser.Scene {
         startY = e.touches[0].pageY;
         startScrollTop = scrollTarget.scrollTop;
         isDragging = true;
+        container.style.transition = 'none';
     }, { passive: true });
  
     container.addEventListener('touchmove', (e) => {
@@ -267,10 +265,15 @@ export class RestaurantScene extends Phaser.Scene {
         const pageY = e.touches[0].pageY;
         const deltaY = pageY - startY;
         scrollTarget.scrollTop = startScrollTop - deltaY;
+        container.style.transform = 'translateY(0)';
+        container.style.opacity = '1';
     }, { passive: true });
 
     container.addEventListener('touchend', () => {
         isDragging = false;
+        container.style.transition = 'none';
+        container.style.transform = 'translateY(0)';
+        container.style.opacity = '1';
     });
   }
 
@@ -282,6 +285,7 @@ export class RestaurantScene extends Phaser.Scene {
             width: 100%;
             height: 100dvh;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
             font-family: 'Outfit', sans-serif;
             color: #333;
@@ -290,16 +294,15 @@ export class RestaurantScene extends Phaser.Scene {
         .market-header {
             position: sticky;
             top: 0;
-            z-index: 2000;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(15px);
-            padding: 12px 15px;
+            z-index: 1000;
+            background: white;
+            padding: 15px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             box-sizing: border-box;
+            height: 60px;
         }
 
         .back-button {
@@ -336,12 +339,16 @@ export class RestaurantScene extends Phaser.Scene {
         }
 
         .anchor-menu {
-            padding: 15px;
+            position: sticky;
+            top: 60px;
+            z-index: 900;
+            padding: 12px 15px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px);
+            background: rgba(30, 60, 114, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
         .anchor-menu button {
@@ -366,10 +373,6 @@ export class RestaurantScene extends Phaser.Scene {
         }
 
         .market-guide-content {
-            position: absolute;
-            top: 60px; left: 0; right: 0; bottom: 0;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
             padding: 20px 20px 80px;
             max-width: 600px;
             margin: 0 auto;
@@ -404,8 +407,8 @@ export class RestaurantScene extends Phaser.Scene {
         .card-img {
             height: 180px;
             background-color: #f0f2f5;
-            position: relative;
-            overflow: hidden;
+            background-size: cover;
+            background-position: center;
         }
 
         .card-body {
@@ -467,6 +470,6 @@ export class RestaurantScene extends Phaser.Scene {
             color: white;
         }
     `;
-    document.head.appendChild(style);
+    _container.appendChild(style);
   }
 }

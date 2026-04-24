@@ -63,7 +63,7 @@ export class MarketScene extends Phaser.Scene {
           name: 'Hipermercado Carrefour (Antigo Walmart)', 
           img: 'carrefour.jpg', 
           desc: 'Localizado dentro do Shopping Vila Velha, unindo a conveniência das compras com um passeio completo. Hipermercado gigantesco, ideal para grandes volumes. (Dica: por estar dentro do Shopping, é um dos únicos mercados aberto aos domingos).',
-          maps: 'https://www.google.com/maps/search/?api=1&query=Carrefour+Shopping+Vila+Velha'
+          maps: 'https://maps.app.goo.gl/jaxFqmLZmnPs6nKv7'
         }
       ]
     );
@@ -86,7 +86,7 @@ export class MarketScene extends Phaser.Scene {
         },
         { 
           name: 'Mercado de Peixes da Prainha', 
-          img: 'mercado_peixes.jpg', 
+          img: 'peixes_prainha.png', 
           desc: 'Sábados e domingos pela manhã (até as 13h), localizado no Parque da Prainha. O ponto mais tradicional da cidade para comprar pescados e frutos do mar super frescos, tanto no varejo quanto atacado.',
           maps: 'https://www.google.com/maps/search/?api=1&query=Mercado+de+Peixes+Vila+Velha'
         }
@@ -96,8 +96,8 @@ export class MarketScene extends Phaser.Scene {
     // 🚀 Inject into Phaser
     this.add.dom(width / 2, height / 2, container);
     
-    // 🕵️ UI Expert: Manual Scrolling
-    this.setupManualScroll(container, content);
+    // 🕵️ UI Expert: Touch Scroll — identical to LocalGuideScene
+    this.setupManualScroll(container, container);
 
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
@@ -141,14 +141,12 @@ export class MarketScene extends Phaser.Scene {
             (e.target as HTMLElement).classList.add('active');
             
             const element = document.getElementById(`section-${target}`);
-            if (element) {
-                const container = document.getElementById('market-pro-page');
-                if (container) {
-                    container.scrollTo({
-                        top: element.offsetTop - 120,
-                        behavior: 'smooth'
-                    });
-                }
+            const scrollContainer = document.getElementById('market-pro-page');
+            if (element && scrollContainer) {
+                scrollContainer.scrollTo({
+                    top: element.offsetTop - 120,
+                    behavior: 'smooth'
+                });
             }
         });
     });
@@ -199,6 +197,7 @@ export class MarketScene extends Phaser.Scene {
         startY = e.touches[0].pageY;
         startScrollTop = scrollTarget.scrollTop;
         isDragging = true;
+        container.style.transition = 'none';
     }, { passive: true });
  
     container.addEventListener('touchmove', (e) => {
@@ -206,10 +205,15 @@ export class MarketScene extends Phaser.Scene {
         const pageY = e.touches[0].pageY;
         const deltaY = pageY - startY;
         scrollTarget.scrollTop = startScrollTop - deltaY;
+        container.style.transform = 'translateY(0)';
+        container.style.opacity = '1';
     }, { passive: true });
 
     container.addEventListener('touchend', () => {
         isDragging = false;
+        container.style.transition = 'none';
+        container.style.transform = 'translateY(0)';
+        container.style.opacity = '1';
     });
   }
 
@@ -221,6 +225,7 @@ export class MarketScene extends Phaser.Scene {
             width: 100%;
             height: 100dvh;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
             font-family: 'Outfit', 'Inter', sans-serif;
             color: #333;
@@ -229,16 +234,15 @@ export class MarketScene extends Phaser.Scene {
         .market-header {
             position: sticky;
             top: 0;
-            z-index: 2000;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(15px);
-            padding: 12px 15px;
+            z-index: 1000;
+            background: white;
+            padding: 15px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             box-sizing: border-box;
+            height: 60px;
         }
 
         .back-button {
@@ -276,16 +280,16 @@ export class MarketScene extends Phaser.Scene {
 
         .market-category-menu {
             position: sticky;
-            top: 55px;
-            z-index: 1500;
-            background: rgba(11, 26, 19, 0.9);
-            backdrop-filter: blur(5px);
-            padding: 10px;
+            top: 60px;
+            z-index: 900;
+            padding: 12px 15px;
             display: flex;
             gap: 10px;
             overflow-x: auto;
             justify-content: center;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            background: rgba(30, 60, 114, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
         .cat-btn {
@@ -306,10 +310,6 @@ export class MarketScene extends Phaser.Scene {
         }
 
         .market-guide-content {
-            position: absolute;
-            top: 60px; left: 0; right: 0; bottom: 0;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
             padding: 20px 20px 80px;
             max-width: 600px;
             margin: 0 auto;
@@ -344,8 +344,6 @@ export class MarketScene extends Phaser.Scene {
             background-color: #f0f2f5;
             background-size: cover;
             background-position: center;
-            position: relative;
-            overflow: hidden;
         }
 
         .card-body {

@@ -22,14 +22,14 @@ export class LocalGuideScene extends Phaser.Scene {
     const header = this.createHeader();
     container.appendChild(header);
 
+    // 🔗 Anchor Menu (Quick-Jump) - Sticky, fora do scroll content
+    const anchorMenu = this.createAnchorMenu();
+    container.appendChild(anchorMenu);
+
     // 📄 Main Content Wrapper
     const content = document.createElement('div');
     content.className = 'guide-content';
     container.appendChild(content);
-
-    // 🔗 Anchor Menu (Quick-Jump)
-    const anchorMenu = this.createAnchorMenu();
-    content.appendChild(anchorMenu);
 
     // 🏛️ Histórico
     this.addCategorySection(content, "🏛️ Pontos Históricos", "section-historico",
@@ -62,13 +62,7 @@ export class LocalGuideScene extends Phaser.Scene {
         maps: "https://www.google.com/maps/search/Fabrica+Chocolates+Garoto",
         tag: "historico"
       },
-      {
-        name: "Casa da Memória de Vila Velha",
-        desc: "O guardião da rica história capixaba, situado em um casarão antigo preservado.",
-        trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d4377763-Reviews-Casa_da_Memoria_de_Vila_Velha-Vila_Velha_State_of_Espirito_Santo.html",
-        maps: "https://www.google.com/maps/search/Casa+da+Memoria+Vila+Velha",
-        tag: "historico"
-      },
+
       {
         name: "Parque da Prainha",
         desc: "A praça que marca o local exato onde a cidade foi fundada em 1535.",
@@ -92,7 +86,7 @@ export class LocalGuideScene extends Phaser.Scene {
         name: "Praia de Itapuã",
         desc: "A poucos passos do nosso apartamento! Ambiente familiar e ponto de partida para ilhas.",
         trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d2408105-Reviews-Praia_de_Itapua-Vila_Velha_State_of_Espirito_Santo.html",
-        maps: "https://www.google.com/maps/search/Praia+de+Itapua+Vila+Velha",
+        maps: "https://maps.app.goo.gl/njYUtMo56zbVAxyBA",
         tag: "praias"
       },
       {
@@ -118,7 +112,15 @@ export class LocalGuideScene extends Phaser.Scene {
         name: "Morro do Moreno",
         desc: "Mirante natural espetacular. Ideal para assistir ao nascer ou pôr do sol.",
         trip: "https://www.tripadvisor.com.br/Attraction_Review-g303319-d3536151-Reviews-Morro_do_Moreno-Vila_Velha_State_of_Espirito_Santo.html",
-        maps: "https://www.google.com/maps/search/Morro+do+Moreno",
+        maps: "https://maps.app.goo.gl/yu1UBCAifLFioLKv9",
+        tag: "natureza"
+      },
+      {
+        name: "Passeio nas Ilhas Itatiaia e Pituã",
+        desc: "Passeio de barco rápido até ilhas paradísíacas de águas transparentes. Ideal para mergulho, flutuação e contato com a natureza marinha.",
+        trip: "https://www.instagram.com/equipe_treembala/",
+        tripLabel: "📸 Instagram da equipe",
+        maps: "https://maps.app.goo.gl/BMxGCWig2qK5LArQ8",
         tag: "natureza"
       },
       {
@@ -165,8 +167,8 @@ export class LocalGuideScene extends Phaser.Scene {
     // 🚀 Inject into Phaser
     this.add.dom(width / 2, height / 2, container);
     
-    // 🕵️ UI Expert: Touch-to-Dismiss Logic
-    this.setupTouchDismiss(container, content);
+    // 🕵️ UI Expert: Touch-to-Scroll Logic (container is the scroll target)
+    this.setupTouchDismiss(container, container);
 
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
@@ -261,7 +263,7 @@ export class LocalGuideScene extends Phaser.Scene {
 
   private observer: IntersectionObserver | null = null;
 
-  private createAnchorMenu() {
+    private createAnchorMenu() {
     const menu = document.createElement('div');
     menu.className = 'anchor-menu';
     
@@ -277,7 +279,10 @@ export class LocalGuideScene extends Phaser.Scene {
         btn.innerText = cat.label;
         btn.onclick = () => {
             const el = document.getElementById(cat.id);
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
+            const scrollContainer = document.getElementById('guide-landing-page');
+            if (el && scrollContainer) {
+                scrollContainer.scrollTo({ top: el.offsetTop - 120, behavior: 'smooth' });
+            }
         };
         menu.appendChild(btn);
     });
@@ -350,7 +355,7 @@ export class LocalGuideScene extends Phaser.Scene {
     tripBtn.href = loc.trip;
     tripBtn.target = '_blank';
     tripBtn.className = 'btn-trip';
-    tripBtn.innerHTML = '⭐ TripAdvisor';
+    tripBtn.innerHTML = loc.tripLabel || '⭐ TripAdvisor';
 
     btns.appendChild(mapBtn);
     btns.appendChild(tripBtn);
@@ -390,9 +395,8 @@ export class LocalGuideScene extends Phaser.Scene {
         }
 
         .guide-header {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 60px;
+            position: sticky;
+            top: 0;
             z-index: 1000;
             background: white;
             padding: 15px 20px;
@@ -401,6 +405,7 @@ export class LocalGuideScene extends Phaser.Scene {
             justify-content: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             box-sizing: border-box;
+            height: 60px;
         }
 
         .back-button {
@@ -433,13 +438,18 @@ export class LocalGuideScene extends Phaser.Scene {
         }
 
         .anchor-menu {
+            position: sticky;
+            top: 60px;
+            z-index: 900;
             padding: 15px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            background: rgba(11, 26, 19, 0.1);
-            margin-bottom: 20px;
-            border-radius: 12px;
+            background: rgba(30, 60, 114, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            margin-bottom: 0;
+            border-radius: 0;
         }
 
         .anchor-menu button {
@@ -464,10 +474,6 @@ export class LocalGuideScene extends Phaser.Scene {
         }
 
         .guide-content {
-            position: absolute;
-            top: 60px; left: 0; right: 0; bottom: 0;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
             padding: 20px 20px 80px;
             max-width: 600px;
             margin: 0 auto;
